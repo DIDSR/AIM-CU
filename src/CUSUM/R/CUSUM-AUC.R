@@ -1,3 +1,9 @@
+
+#-----------------------------------------
+#--author: smriti.prathapan
+#-----------------------------------------
+
+
 library(cusumcharter)
 library(ggplot2)
 library(RcppCNPy)
