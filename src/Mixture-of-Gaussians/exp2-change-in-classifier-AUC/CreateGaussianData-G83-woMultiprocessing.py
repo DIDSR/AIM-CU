@@ -11,7 +11,7 @@ import sys
 sys.path.append("/home/smriti.prathapan/note1")
 
 sns.set_style('darkgrid')
-np.random.seed(42)
+#np.random.seed(42) #Comment this and include this in the gaussian_data function March14,2024
 #MLP Classifier
 # Load the required libraries
 import sklearn
@@ -47,8 +47,9 @@ def generate_surface(mean, covariance, d):
                 d, mean, covariance)
     return x1, x2, pdf  # x1, x2, pdf(x1,x2)
 
-def gaussian_data(n, mean11, mean21, covariance11, covariance21):
+def gaussian_data(n, mean11, mean21, covariance11, covariance21, new_seed):
     """Draw n samples from the Gaussian Distribution"""
+    np.random.seed(42 + new_seed)
     d = 2 # Number of dimensions per Gaussian
     # Define the mean for Gaussian in Class1
     #mean11 = np.matrix([[0.], [0.]])
@@ -138,7 +139,7 @@ def gaussian_data(n, mean11, mean21, covariance11, covariance21):
     #return data
     return Y_l0, Y_l1
 
-def createData(iter):
+def createData(num_iteration):
     # Define the mean1 for Gaussian in Class1
     mean11 = np.matrix([[0.], [0.]])
 
@@ -170,14 +171,15 @@ def createData(iter):
     #Create data for 1000 pre-change days - this takes about 5 minutes
     for i in range(0, pre_change_days):
         #Y_l0, Y_l1 = gaussian_data(n, mean11, mean21_86, covariance11, covariance21)
-        Y_l0, Y_l1 = gaussian_data(n, mean11, mean21_83, covariance11, covariance21)
+        new_seed = num_iteration + i
+        Y_l0, Y_l1 = gaussian_data(n, mean11, mean21_83, covariance11, covariance21, new_seed)
         #print ("i:",i)
         data = np.concatenate((Y_l0,Y_l1))
         GaussianSamples83 = np.append(GaussianSamples83, np.array(data), axis=0) 
     
     #Save the data
-    print ("Saving data for 1000 post-change days, 10Simulations, iteration#:",iter)
-    np.save(('/home/smriti.prathapan/note1/GaussData-March0724/D83-Mar10/%d-Gaussian83-10S-1000D.npy' %iter), GaussianSamples83) # save
+    print ("Saving data for 1000 post-change days, 10Simulations, iteration#:", num_iteration)
+    np.save(('/home/smriti.prathapan/note1/GaussData-March0724/Mar18-2024/D83/%d-Gaussian83-10S-1000D.npy' %num_iteration), GaussianSamples83) # save
 
 if __name__ == "__main__":
     #main()
@@ -186,7 +188,8 @@ if __name__ == "__main__":
 
     #control_limit, delta, change_days, samples_per_day = float(sys.argv[1]), float(sys.argv[2]), int(sys.argv[3]), int(sys.argv[4])
     #cusum_detection (control_limit,delta,change_days,samples_per_day)
-    num_iteration = float(sys.argv[1])
+    num_iteration = int(sys.argv[1])
+    #np.random.seed(42+num_iteration)
     createData(num_iteration)
 
 
