@@ -1,0 +1,8 @@
+matplotlib==3.6.2
+numpy
+pandas
+gradio
+datasets
+matplotlib
+plotly
+tomli

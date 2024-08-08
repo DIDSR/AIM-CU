@@ -1,0 +1,3 @@
+[path_input]
+path_df = "/home/dhaval.kadia/code/rst/cusum/main/20230803-091724__input_list_file_with_output_scores.csv"
+path_df_wavel7 = "/home/dhaval.kadia/code/rst/cusum/main/20231017-233737__input_list_file_with_output_scores.csv"
