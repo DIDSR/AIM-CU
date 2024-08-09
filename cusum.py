@@ -135,6 +135,7 @@ class CUSUM:
 
         return self.S_hi, self.S_lo, cusum
 
+    # [! provide a proper name]
     def change_detection(self):
         # Fetch 100 patients per day (day1-60) from df and days 61-120 from df_medk10 which is the out of control region
         # compute
@@ -520,6 +521,10 @@ class CUSUM:
 
         fig.update_layout(plot_bgcolor=self.config["color"]["blue_005"])
 
+        fig.update_layout(
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+        )
+
         # fig.show()
 
         return fig
@@ -600,6 +605,10 @@ class CUSUM:
         )
 
         fig.update_layout(plot_bgcolor=self.config["color"]["blue_005"])
+
+        fig.update_layout(
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+        )
 
         # fig.show()
 
@@ -699,6 +708,10 @@ class CUSUM:
         )
 
         fig.update_layout(plot_bgcolor=self.config["color"]["blue_005"])
+
+        fig.update_layout(
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+        )
 
         # fig.show()
 

@@ -1,42 +1,6 @@
 import gradio as gr
-import pandas as pd
-import matplotlib.pyplot as plt
 import tomli
 from cusum import CUSUM
-
-# load CSV file or use the example, and prepare plots
-def process_plot_csv(file, dataframe):
-    if file is not None:
-        # upload CSV file
-        df = pd.read_csv(file.name)
-    else:
-        # use the example CSV data
-        df = dataframe
-
-    # convert the data numeric (required when dataframe is edited)
-    df = df.map(lambda x: pd.to_numeric(x))
-
-    list_figure = []
-
-    plt.figure(figsize=(10, 10))
-    plt.plot(df[df.columns[0]], df[df.columns[1]])
-    plt.xlabel(df.columns[0])
-    plt.ylabel(df.columns[1])
-    plt.title("plot_1")
-    plt.savefig("plot_1.png")
-    plt.close()
-    list_figure.append("plot_1.png")
-
-    plt.figure(figsize=(10, 10))
-    plt.bar(df[df.columns[0]], df[df.columns[1]])
-    plt.xlabel(df.columns[0])
-    plt.ylabel(df.columns[1])
-    plt.title("plot_2")
-    plt.savefig("plot_2.png")
-    plt.close()
-    list_figure.append("plot_2.png")
-
-    return df, list_figure
 
 with open("config.toml", "rb") as file_config:
     config = tomli.load(file_config)
@@ -95,11 +59,12 @@ with gr.Blocks(
                            
                             CUSUM, which is a well-studied statistical process control method, can easily be adapted for monitoring the performance of AI models targeted for assisting in medical diagnosis. We demonstrate that the sensitivity of CUSUM can be controlled to balance between the mean time between false alarms versus the delay in detecting a true change in performance. The analysis method proposed in this study to monitor the performance of AI models applied to cancer detection on screening mammography may be generalized to practical situations where case-based information about whether a patient is cancer-positive or cancer-negative is not known.
                            """)
-
-        with gr.Column():
+            
             plot1 = gr.Plot(value=obj_cusum.plot_histogram_plotly(obj_cusum.AvgDD, "ADD"))
             plot2 = gr.Plot(value=obj_cusum.plot_histogram_plotly(obj_cusum.h_1000, "H"))
             plot3 = gr.Plot(value=obj_cusum.plot_histogram_plotly(obj_cusum.k_1000, "K"))
+
+        with gr.Column():
             plot4 = gr.Plot(value=obj_cusum.plot_input_aucs_plotly())
             plot5 = gr.Plot(value=obj_cusum.plot_histogram_aucs_plotly())
             plot6 = gr.Plot(value=obj_cusum.plot_cusum_plotly())
