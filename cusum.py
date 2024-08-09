@@ -4,29 +4,18 @@ CUSUM
 @author: smriti.prathapan
 """
 
-import os
-import sys
 import numpy as np
 import random
 import pandas as pd
-from datetime import datetime
 import warnings
 
-import matplotlib
 import matplotlib.pyplot as plt
-from matplotlib import cm  # Colormaps
 from matplotlib import rcParams
-import matplotlib.gridspec as gridspec
-from mpl_toolkits.axes_grid1 import make_axes_locatable
-from matplotlib.ticker import StrMethodFormatter
-import plotly.express as px
 import plotly.graph_objects as go
 
-# import seaborn as sns
 import tomli
 
 warnings.filterwarnings("ignore")
-# sns.set_style("darkgrid")
 random.seed(58)
 
 
@@ -184,7 +173,7 @@ class CUSUM:
         # delta            = 1 #0.616  #0.1481 #0.318
         ref_val = 0.5
         control_limit = 4
-        while runs < 10:  # 1000
+        while runs < 1000:  # 1000
             days = 0
             start_in = 0
             end_in = sample_size
@@ -450,6 +439,7 @@ class CUSUM:
         plt.grid(visible=None)
         plt.show()
 
+    # Plot the input AUCs
     def plot_input_aucs_plotly(self):
         pre_change_days = 60
         post_change_days = 60
@@ -561,6 +551,7 @@ class CUSUM:
         plt.xticks(fontsize=16)
         plt.show()
 
+    # PLOT THE HISTOGRAM OF all AUCs - all the AUCs for 1000 simulations * 1000 days
     def plot_histogram_aucs_plotly(self):
         fig = go.Figure()
 
@@ -648,6 +639,7 @@ class CUSUM:
         rcParams["legend.loc"] = "upper left"
         plt.show()
 
+    # plot CUSUM value
     def plot_cusum_plotly(self):
         fig = go.Figure()
 
