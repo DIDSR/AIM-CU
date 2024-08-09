@@ -383,7 +383,7 @@ class CUSUM:
 
     # histogram using plotly
     def plot_histogram_plotly(self, data, xlabel, title=""):
-        fig = go.Figure(data=[go.Histogram(x=data)])
+        fig = go.Figure(data=[go.Histogram(x=data, nbinsx=30)])
         fig.update_layout(title="[TITLE=?]", xaxis_title=xlabel, yaxis_title="Count")
         fig.update_layout(plot_bgcolor=self.config["color"]["blue_005"])
         fig.show()
@@ -466,7 +466,6 @@ class CUSUM:
 
         fig = go.Figure()
 
-        # [! addsize, alpha]
         # add subplots
         fig.add_trace(
             go.Scatter(
@@ -509,6 +508,7 @@ class CUSUM:
             )
         )
 
+        # add vertical line
         fig.add_trace(
             go.Scatter(
                 x=[pre_change_days, pre_change_days],
@@ -523,6 +523,7 @@ class CUSUM:
             title="[TITLE=?]",
             xaxis_title="Length of Simulation (days)",
             yaxis_title="AI model Specificity",
+            xaxis=dict(dtick=20),
         )
 
         fig.update_layout(plot_bgcolor=self.config["color"]["blue_005"])
@@ -559,6 +560,53 @@ class CUSUM:
         plt.yticks(fontsize=16)
         plt.xticks(fontsize=16)
         plt.show()
+
+    def plot_histogram_aucs_plotly(self):
+        fig = go.Figure()
+
+        # add subplots
+        fig.add_trace(
+            go.Histogram(
+                x=self.sp_pre,
+                nbinsx=30,
+                name="Pre-change $S_p$",
+                marker=dict(color="mediumturquoise"),
+                opacity=0.5,
+            )
+        )
+
+        fig.add_trace(
+            go.Histogram(
+                x=self.sp_post,
+                nbinsx=30,
+                name="Post-change $S_p$",
+                marker=dict(color="coral"),
+                opacity=0.5,
+            )
+        )
+
+        fig.add_trace(
+            go.Scatter(
+                x=[np.mean(self.sp_pre), np.mean(self.sp_pre)],
+                y=[0, 100],  # [! y_max is not working]
+                mode="lines",
+                name="Reference mean",
+                line=dict(color="grey", dash="dash"),
+            )
+        )
+
+        fig.add_vline(x=np.mean(self.sp_pre), line_dash="dash", line_color="grey")
+
+        fig.update_layout(
+            title="[TITLE=?]",
+            xaxis_title="AI model Specificity",
+            yaxis_title="Count",
+            xaxis=dict(dtick=0.2, range=[0, 1]),
+        )
+
+        fig.update_layout(plot_bgcolor=self.config["color"]["blue_005"])
+
+        fig.show()
 
     # plot CUSUM value
     def plot_cusum(self):
@@ -600,6 +648,62 @@ class CUSUM:
         rcParams["legend.loc"] = "upper left"
         plt.show()
 
+    def plot_cusum_plotly(self):
+        fig = go.Figure()
+
+        # add subplots
+        fig.add_trace(
+            go.Scatter(
+                x=list(range(len(self.S_hi))),
+                y=self.S_hi / self.in_std,
+                mode="lines",
+                name="Positive changes ($S_{hi}$)",
+                marker=dict(color="greenyellow", size=10),
+            )
+        )
+        fig.add_trace(
+            go.Scatter(
+                x=list(range(len(self.S_lo))),
+                y=self.S_lo / self.in_std,
+                mode="lines",
+                name="Negative changes ($S_{lo}$)",
+                marker=dict(color="darkcyan", size=10),
+            )
+        )
+
+        # add horizontal lines
+        fig.add_trace(
+            go.Scatter(
+                x=[0, len(self.S_lo)],
+                y=[self.h / self.in_std, self.h / self.in_std],
+                mode="lines",
+                name="Threshold (H)",
+                line=dict(color="firebrick", dash="dash"),
+            )
+        )
+
+        # add vertical line
+        fig.add_trace(
+            go.Scatter(
+                x=[60, 60],  # [! this is constant!]
+                y=[0, np.max(self.S_lo / self.in_std)],
+                mode="lines",
+                name="Change-point",
+                line=dict(color="grey", dash="dash"),
+            )
+        )
+
+        fig.update_layout(
+            title="[TITLE=?]",
+            xaxis_title="Length of Simulation (Days)",
+            yaxis_title="CUSUM value",
+            xaxis=dict(dtick=20),
+        )
+
+        fig.update_layout(plot_bgcolor=self.config["color"]["blue_005"])
+
+        fig.show()
+
 
 obj_cusum = CUSUM()
 obj_cusum.initialize()
@@ -614,7 +718,9 @@ obj_cusum.plot_histogram_plotly(obj_cusum.k_1000, "K")
 obj_cusum.plot_input_aucs()
 obj_cusum.plot_input_aucs_plotly()
 obj_cusum.plot_histogram_aucs()
+obj_cusum.plot_histogram_aucs_plotly()
 obj_cusum.plot_cusum()
+obj_cusum.plot_cusum_plotly()
 
 
 # code to add later
