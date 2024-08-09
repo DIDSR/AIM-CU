@@ -19,6 +19,8 @@ from matplotlib import rcParams
 import matplotlib.gridspec as gridspec
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from matplotlib.ticker import StrMethodFormatter
+import plotly.express as px
+import plotly.graph_objects as go
 
 # import seaborn as sns
 import tomli
@@ -51,12 +53,14 @@ class CUSUM:
         self.S_hi = None
         self.S_lo = None
 
+        self.config = None
+
     def initialize(self):
         with open("config.toml", "rb") as file_config:
-            config = tomli.load(file_config)
+            self.config = tomli.load(file_config)
 
-        self.df = pd.read_csv(config["path_input"]["path_df"])
-        self.df_wavel7 = pd.read_csv(config["path_input"]["path_df_wavel7"])
+        self.df = pd.read_csv(self.config["path_input"]["path_df"])
+        self.df_wavel7 = pd.read_csv(self.config["path_input"]["path_df_wavel7"])
 
     # The function displays dataframe size, countings of unique patients and unique exams
     def stats(self):
@@ -363,13 +367,13 @@ class CUSUM:
         print("Mean Displacement:", np.mean(D))
 
     # histogram using matplotlib
-    def plot_histogram_mpl(self, data, title=""):
+    def plot_histogram_mpl(self, data, xlabel, title=""):
         fig, ax = plt.subplots(figsize=(10, 6))
         rcParams["font.weight"] = "bold"
         count, bins, ignored = plt.hist(data, 30, color="limegreen", alpha=0.5)
         plt.rcParams["axes.facecolor"] = "white"
         plt.grid(visible=None)
-        ax.set_xlabel("H", fontsize=18, fontweight="bold")
+        ax.set_xlabel(xlabel, fontsize=18, fontweight="bold")
         ax.set_ylabel("Count", fontsize=18, fontweight="bold")
         ax.xaxis.set_tick_params(labelsize=16)
         ax.yaxis.set_tick_params(labelsize=16)
@@ -377,7 +381,14 @@ class CUSUM:
         plt.title(title, fontsize=14)
         plt.show()
 
-    # Plot the input  AUCs
+    # histogram using plotly
+    def plot_histogram_plotly(self, data, xlabel, title=""):
+        fig = go.Figure(data=[go.Histogram(x=data)])
+        fig.update_layout(title="[TITLE=?]", xaxis_title=xlabel, yaxis_title="Count")
+        fig.update_layout(plot_bgcolor=self.config["color"]["blue_005"])
+        fig.show()
+
+    # Plot the input AUCs
     def plot_input_aucs(self):
         fig, ax = plt.subplots(figsize=(13, 6))
         rcParams["font.weight"] = "bold"
@@ -438,6 +449,85 @@ class CUSUM:
         plt.xticks(fontsize=16)
         plt.grid(visible=None)
         plt.show()
+
+    def plot_input_aucs_plotly(self):
+        pre_change_days = 60
+        post_change_days = 60
+        total_days = pre_change_days + post_change_days
+
+        # [! NOTE: x and y are interchanged from the original code]
+        x1 = np.arange(pre_change_days)
+        y1 = self.data[:pre_change_days]
+        mean_y1 = np.mean(y1)
+
+        x2 = np.arange(pre_change_days, total_days, 1)
+        y2 = self.data[pre_change_days:total_days]
+        mean_y2 = np.mean(y2)
+
+        fig = go.Figure()
+
+        # [! addsize, alpha]
+        # add subplots
+        fig.add_trace(
+            go.Scatter(
+                x=x1,
+                y=y1,
+                mode="markers",
+                name="In-control $S_p$",
+                marker=dict(color="darkturquoise", size=10),
+                opacity=0.4,
+            )
+        )
+        fig.add_trace(
+            go.Scatter(
+                x=x2,
+                y=y2,
+                mode="markers",
+                name="Out-of-control $S_p$",
+                marker=dict(color="coral", size=10),
+                opacity=0.4,
+            )
+        )
+
+        # add horizontal lines
+        fig.add_trace(
+            go.Scatter(
+                x=[min(x1), max(x1)],
+                y=[mean_y1, mean_y1],
+                mode="lines",
+                name="In-control mean",
+                line=dict(color="darkturquoise", dash="dash"),
+            )
+        )
+        fig.add_trace(
+            go.Scatter(
+                x=[min(x2), max(x2)],
+                y=[mean_y2, mean_y2],
+                mode="lines",
+                name="Out-of-control mean",
+                line=dict(color="coral", dash="dash"),
+            )
+        )
+
+        fig.add_trace(
+            go.Scatter(
+                x=[pre_change_days, pre_change_days],
+                y=[np.min(self.data), np.max(self.data)],
+                mode="lines",
+                name="Change-point",
+                line=dict(color="grey", dash="dash"),
+            )
+        )
+
+        fig.update_layout(
+            title="[TITLE=?]",
+            xaxis_title="Length of Simulation (days)",
+            yaxis_title="AI model Specificity",
+        )
+
+        fig.update_layout(plot_bgcolor=self.config["color"]["blue_005"])
+
+        fig.show()
 
     # PLOT THE HISTOGRAM OF all AUCs - all the AUCs for 1000 simulations * 1000 days
     def plot_histogram_aucs(self):
@@ -515,10 +605,14 @@ obj_cusum = CUSUM()
 obj_cusum.initialize()
 obj_cusum.stats()
 obj_cusum.change_detection()
-obj_cusum.plot_histogram_mpl(obj_cusum.AvgDD)
-obj_cusum.plot_histogram_mpl(obj_cusum.h_1000)
-obj_cusum.plot_histogram_mpl(obj_cusum.k_1000)
+obj_cusum.plot_histogram_mpl(obj_cusum.AvgDD, "ADD")
+obj_cusum.plot_histogram_plotly(obj_cusum.AvgDD, "ADD")
+obj_cusum.plot_histogram_mpl(obj_cusum.h_1000, "H")
+obj_cusum.plot_histogram_plotly(obj_cusum.h_1000, "H")
+obj_cusum.plot_histogram_mpl(obj_cusum.k_1000, "K")
+obj_cusum.plot_histogram_plotly(obj_cusum.k_1000, "K")
 obj_cusum.plot_input_aucs()
+obj_cusum.plot_input_aucs_plotly()
 obj_cusum.plot_histogram_aucs()
 obj_cusum.plot_cusum()
 
