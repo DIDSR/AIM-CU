@@ -173,7 +173,7 @@ class CUSUM:
         # delta            = 1 #0.616  #0.1481 #0.318
         ref_val = 0.5
         control_limit = 4
-        while runs < 1000:  # 1000
+        while runs < 10:  # 1000
             days = 0
             start_in = 0
             end_in = sample_size
@@ -375,7 +375,9 @@ class CUSUM:
         fig = go.Figure(data=[go.Histogram(x=data, nbinsx=30)])
         fig.update_layout(title="[TITLE=?]", xaxis_title=xlabel, yaxis_title="Count")
         fig.update_layout(plot_bgcolor=self.config["color"]["blue_005"])
-        fig.show()
+        # fig.show()
+
+        return fig
 
     # Plot the input AUCs
     def plot_input_aucs(self):
@@ -518,7 +520,9 @@ class CUSUM:
 
         fig.update_layout(plot_bgcolor=self.config["color"]["blue_005"])
 
-        fig.show()
+        # fig.show()
+
+        return fig
 
     # PLOT THE HISTOGRAM OF all AUCs - all the AUCs for 1000 simulations * 1000 days
     def plot_histogram_aucs(self):
@@ -597,7 +601,9 @@ class CUSUM:
 
         fig.update_layout(plot_bgcolor=self.config["color"]["blue_005"])
 
-        fig.show()
+        # fig.show()
+
+        return fig
 
     # plot CUSUM value
     def plot_cusum(self):
@@ -694,25 +700,27 @@ class CUSUM:
 
         fig.update_layout(plot_bgcolor=self.config["color"]["blue_005"])
 
-        fig.show()
+        # fig.show()
+
+        return fig
 
 
-obj_cusum = CUSUM()
-obj_cusum.initialize()
-obj_cusum.stats()
-obj_cusum.change_detection()
-obj_cusum.plot_histogram_mpl(obj_cusum.AvgDD, "ADD")
-obj_cusum.plot_histogram_plotly(obj_cusum.AvgDD, "ADD")
-obj_cusum.plot_histogram_mpl(obj_cusum.h_1000, "H")
-obj_cusum.plot_histogram_plotly(obj_cusum.h_1000, "H")
-obj_cusum.plot_histogram_mpl(obj_cusum.k_1000, "K")
-obj_cusum.plot_histogram_plotly(obj_cusum.k_1000, "K")
-obj_cusum.plot_input_aucs()
-obj_cusum.plot_input_aucs_plotly()
-obj_cusum.plot_histogram_aucs()
-obj_cusum.plot_histogram_aucs_plotly()
-obj_cusum.plot_cusum()
-obj_cusum.plot_cusum_plotly()
+# obj_cusum = CUSUM()
+# obj_cusum.initialize()
+# obj_cusum.stats()
+# obj_cusum.change_detection()
+# obj_cusum.plot_histogram_mpl(obj_cusum.AvgDD, "ADD")
+# obj_cusum.plot_histogram_plotly(obj_cusum.AvgDD, "ADD")
+# obj_cusum.plot_histogram_mpl(obj_cusum.h_1000, "H")
+# obj_cusum.plot_histogram_plotly(obj_cusum.h_1000, "H")
+# obj_cusum.plot_histogram_mpl(obj_cusum.k_1000, "K")
+# obj_cusum.plot_histogram_plotly(obj_cusum.k_1000, "K")
+# obj_cusum.plot_input_aucs()
+# obj_cusum.plot_input_aucs_plotly()
+# obj_cusum.plot_histogram_aucs()
+# obj_cusum.plot_histogram_aucs_plotly()
+# obj_cusum.plot_cusum()
+# obj_cusum.plot_cusum_plotly()
 
 
 # code to add later
