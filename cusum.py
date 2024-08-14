@@ -9,8 +9,8 @@ import random
 import pandas as pd
 import warnings
 
-import matplotlib.pyplot as plt
-from matplotlib import rcParams
+# import matplotlib.pyplot as plt
+# from matplotlib import rcParams
 import plotly.graph_objects as go
 
 import tomli

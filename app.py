@@ -1,6 +1,7 @@
 import gradio as gr
 import tomli
 from cusum import CUSUM
+from ARLTheoretical import get_ref_value, get_ARL_1
 
 with open("config.toml", "rb") as file_config:
     config = tomli.load(file_config)
@@ -9,6 +10,10 @@ obj_cusum = CUSUM()
 obj_cusum.initialize()
 obj_cusum.stats()
 obj_cusum.change_detection()
+
+
+def populate_table(h, k, mu1, ref_val, hshift_in_mean_start, hshift_in_mean_increament, hshift_in_mean_end):
+    return get_ref_value(h), get_ARL_1(h, k, mu1, [ref_val], range(hshift_in_mean_start, hshift_in_mean_end + hshift_in_mean_increament, hshift_in_mean_increament))
 
 with gr.Blocks(
     theme=gr.themes.Base(
@@ -48,25 +53,47 @@ with gr.Blocks(
 
     gr.Markdown(f"""
                 # AIM-CU: A CUSUM-based tool for AI Monitoring
-                {text_with_link(link='mailto:Ravi.Samala@fda.hhs.gov', text='Ravi Samala')} and {text_with_link(link='mailto:Smriti.Prathapan@fda.hhs.gov', text='Smriti Prathapan')}; DIDSR/OSEL/CDRH/FDA.
-                """)
+                """)  # noqa: F541
 
     with gr.Row():
         with gr.Column():
-            intro = gr.Markdown(f"""
-                           # Introduction:
-                           In this study, we investigate how a change in the performance of an AI model caused by an abrupt data drift can be detected by using a cumulative sum (CUSUM) control chart
-                           
-                            CUSUM, which is a well-studied statistical process control method, can easily be adapted for monitoring the performance of AI models targeted for assisting in medical diagnosis. We demonstrate that the sensitivity of CUSUM can be controlled to balance between the mean time between false alarms versus the delay in detecting a true change in performance. The analysis method proposed in this study to monitor the performance of AI models applied to cancer detection on screening mammography may be generalized to practical situations where case-based information about whether a patient is cancer-positive or cancer-negative is not known.
-                           """)
-            
-            plot1 = gr.Plot(value=obj_cusum.plot_histogram_plotly(obj_cusum.AvgDD, "ADD"))
-            plot2 = gr.Plot(value=obj_cusum.plot_histogram_plotly(obj_cusum.h_1000, "H"))
-            plot3 = gr.Plot(value=obj_cusum.plot_histogram_plotly(obj_cusum.k_1000, "K"))
+            h = gr.Textbox(label="h", placeholder="Enter the value h")
+            k = gr.Textbox(label="k", placeholder="Enter the value k")
+            mu1 = gr.Textbox(label="mu1", placeholder="Enter the value mu1")
+            ref_val = gr.Textbox(label="ref_val", placeholder="Enter the value ref_val")
+            hshift_in_mean_start = gr.Textbox(
+                label="shift_in_mean: start", placeholder="Enter the value"
+            )
+            hshift_in_mean_increament = gr.Textbox(
+                label="shift_in_mean: increament", placeholder="Enter the value"
+            )
+            hshift_in_mean_end = gr.Textbox(
+                label="shift_in_mean: end", placeholder="Enter the value"
+            )
+
+            dataftame_ref_value = gr.Dataframe(
+                label="Reference Values",
+                col_count=2,
+                headers=["ARL0", "k"],
+            )
+
+            dataftame_ARL0 = gr.Dataframe(
+                label="ARL1",
+                col_count=2,
+                headers=["Shift in mean", "k"],
+            )
+
+            button_populate_table = gr.Button('Populate Tables')
 
         with gr.Column():
-            plot4 = gr.Plot(value=obj_cusum.plot_input_aucs_plotly())
-            plot5 = gr.Plot(value=obj_cusum.plot_histogram_aucs_plotly())
-            plot6 = gr.Plot(value=obj_cusum.plot_cusum_plotly())
+            plot1 = gr.Plot(value=obj_cusum.plot_input_aucs_plotly())
+            plot2 = gr.Plot(value=obj_cusum.plot_histogram_aucs_plotly())
+            plot3 = gr.Plot(value=obj_cusum.plot_cusum_plotly())
+
+    button_populate_table.click(
+        fn=populate_table,
+        inputs=[h, k, mu1, ref_val, hshift_in_mean_start, hshift_in_mean_increament, hshift_in_mean_end],
+        outputs=[dataftame_ref_value, dataftame_ARL0]
+    )
 
 demo.launch()
