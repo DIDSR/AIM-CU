@@ -1,7 +1,7 @@
 import gradio as gr
 import tomli
 from cusum import CUSUM
-from ARLTheoretical import get_ref_value, get_ARL_1
+from ARLTheoretical import get_ref_value, get_ARL_1, table_4, table_5
 
 with open("config.toml", "rb") as file_config:
     config = tomli.load(file_config)
@@ -12,8 +12,28 @@ obj_cusum.stats()
 obj_cusum.change_detection()
 
 
-def populate_table(h, k, mu1, ref_val, hshift_in_mean_start, hshift_in_mean_increament, hshift_in_mean_end):
-    return get_ref_value(h), get_ARL_1(h, k, mu1, [ref_val], range(hshift_in_mean_start, hshift_in_mean_end + hshift_in_mean_increament, hshift_in_mean_increament))
+def populate_table(
+    h,
+    k,
+    mu1,
+    ref_val,
+    hshift_in_mean_start,
+    hshift_in_mean_increament,
+    hshift_in_mean_end,
+):
+    return table_4, table_5
+    return get_ref_value(h), get_ARL_1(
+        h,
+        k,
+        mu1,
+        [ref_val],
+        range(
+            hshift_in_mean_start,
+            hshift_in_mean_end + hshift_in_mean_increament,
+            hshift_in_mean_increament,
+        ),
+    )
+
 
 with gr.Blocks(
     theme=gr.themes.Base(
@@ -83,7 +103,7 @@ with gr.Blocks(
                 headers=["Shift in mean", "k"],
             )
 
-            button_populate_table = gr.Button('Populate Tables')
+            button_populate_table = gr.Button("Populate Tables")
 
         with gr.Column():
             plot1 = gr.Plot(value=obj_cusum.plot_input_aucs_plotly())
@@ -92,8 +112,16 @@ with gr.Blocks(
 
     button_populate_table.click(
         fn=populate_table,
-        inputs=[h, k, mu1, ref_val, hshift_in_mean_start, hshift_in_mean_increament, hshift_in_mean_end],
-        outputs=[dataftame_ref_value, dataftame_ARL0]
+        inputs=[
+            h,
+            k,
+            mu1,
+            ref_val,
+            hshift_in_mean_start,
+            hshift_in_mean_increament,
+            hshift_in_mean_end,
+        ],
+        outputs=[dataftame_ref_value, dataftame_ARL0],
     )
 
-demo.launch()
+demo.launch(server_name="0.0.0.0", server_port=7860)

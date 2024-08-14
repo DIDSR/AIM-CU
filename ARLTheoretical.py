@@ -42,7 +42,7 @@ def get_ref_value(h: float):
     """
 
     # Try out this code
-    k = spc.xcusum_crit_L0h(L0, h)  # .crit.L0h(L0,h)  #xcusum.crit.L0h(L0, h)
+    # k = spc.xcusum_crit_L0h(L0, h)  # .crit.L0h(L0,h)  #xcusum.crit.L0h(L0, h)
 
     # Print the reference values for an intended ARL_0 with normalized threshold, h=4
     print("Reference value, k: for an intended ARL_0 and h")
@@ -90,3 +90,19 @@ def get_ARL_1(h: float, k: float, mu1: float, ref_val: list, shift_in_mean: list
             i += 1
 
     return summary_table
+
+table_4 = get_ref_value(
+    h=4
+)
+
+# print(table_4.to_string())
+
+table_5 = get_ARL_1(
+    h = 4,
+    k = 0.159,
+    mu1 = 0.1,
+    ref_val = [0.159], # k
+    shift_in_mean = [ 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6] # mu1
+)
+
+# print(table_5.to_string())
