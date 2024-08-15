@@ -1,8 +1,8 @@
 import gradio as gr
 import tomli
 from cusum import CUSUM
-from ARLTheoretical import get_ref_value, get_ARL_1, table_4, table_5
-from utils import get_greattable_as_html
+from ARLTheoretical import get_ref_value, get_ARL_1
+from utils import get_greattable_as_html, populate_summary_table_ARL0_k, populate_summary_table_ARL1_k
 
 with open("config.toml", "rb") as file_config:
     config = tomli.load(file_config)
@@ -22,7 +22,34 @@ def populate_table(
     hshift_in_mean_increament,
     hshift_in_mean_end,
 ):
-    return table_4, table_5, get_greattable_as_html(table_4), get_greattable_as_html(table_5)
+    summary_table_df_ARL0_k, dict_ARL0_k = get_ref_value(
+    h=4, list_ARL_0=[50, 100, 150, 200, 300, 400, 500, 1000]
+    )
+    summary_table_df_ARL1_k = get_ARL_1(
+    h=4,
+    k=0.159,
+    mu1=0.1,
+    dict_ARL0_k=dict_ARL0_k,
+    shift_in_mean=[
+        0.1,
+        0.2,
+        0.3,
+        0.4,
+        0.5,
+        0.6,
+        0.7,
+        0.8,
+        0.9,
+        1.0,
+        1.1,
+        1.2,
+        1.3,
+        1.4,
+        1.5,
+        1.6,
+    ],
+    )
+    return populate_summary_table_ARL0_k(summary_table_df_ARL0_k), populate_summary_table_ARL1_k(summary_table_df_ARL1_k, dict_ARL0_k)
     return get_ref_value(h), get_ARL_1(
         h,
         k,
@@ -93,18 +120,6 @@ with gr.Blocks(
                 label="shift_in_mean: end", placeholder="Enter the value"
             )
 
-            dataftame_ref_value = gr.Dataframe(
-                label="Reference Values",
-                col_count=2,
-                headers=["ARL0", "k"],
-            )
-
-            dataftame_ARL0 = gr.Dataframe(
-                label="ARL1",
-                col_count=2,
-                headers=["Shift in mean", "k"],
-            )
-
             dataframe_gt_ref_value = gr.HTML(label="Reference Values")
             dataframe_gt_ARL0 = gr.HTML(label="ARL1")
 
@@ -127,8 +142,6 @@ with gr.Blocks(
             hshift_in_mean_end,
         ],
         outputs=[
-            dataftame_ref_value,
-            dataftame_ARL0,
             dataframe_gt_ref_value,
             dataframe_gt_ARL0
         ],

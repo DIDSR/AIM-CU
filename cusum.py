@@ -356,20 +356,20 @@ class CUSUM:
         # print("Displacement, d:",(mu_1-mu)/std)
         print("Mean Displacement:", np.mean(D))
 
-    # histogram using matplotlib
-    def plot_histogram_mpl(self, data, xlabel, title=""):
-        fig, ax = plt.subplots(figsize=(10, 6))
-        rcParams["font.weight"] = "bold"
-        count, bins, ignored = plt.hist(data, 30, color="limegreen", alpha=0.5)
-        plt.rcParams["axes.facecolor"] = "white"
-        plt.grid(visible=None)
-        ax.set_xlabel(xlabel, fontsize=18, fontweight="bold")
-        ax.set_ylabel("Count", fontsize=18, fontweight="bold")
-        ax.xaxis.set_tick_params(labelsize=16)
-        ax.yaxis.set_tick_params(labelsize=16)
-        ax.legend(fontsize=16, frameon=False)
-        plt.title(title, fontsize=14)
-        plt.show()
+    # # histogram using matplotlib
+    # def plot_histogram_mpl(self, data, xlabel, title=""):
+    #     fig, ax = plt.subplots(figsize=(10, 6))
+    #     rcParams["font.weight"] = "bold"
+    #     count, bins, ignored = plt.hist(data, 30, color="limegreen", alpha=0.5)
+    #     plt.rcParams["axes.facecolor"] = "white"
+    #     plt.grid(visible=None)
+    #     ax.set_xlabel(xlabel, fontsize=18, fontweight="bold")
+    #     ax.set_ylabel("Count", fontsize=18, fontweight="bold")
+    #     ax.xaxis.set_tick_params(labelsize=16)
+    #     ax.yaxis.set_tick_params(labelsize=16)
+    #     ax.legend(fontsize=16, frameon=False)
+    #     plt.title(title, fontsize=14)
+    #     plt.show()
 
     # histogram using plotly
     def plot_histogram_plotly(self, data, xlabel, title=""):
@@ -380,69 +380,69 @@ class CUSUM:
 
         return fig
 
-    # Plot the input AUCs
-    def plot_input_aucs(self):
-        fig, ax = plt.subplots(figsize=(13, 6))
-        rcParams["font.weight"] = "bold"
+    # # Plot the input AUCs
+    # def plot_input_aucs(self):
+    #     fig, ax = plt.subplots(figsize=(13, 6))
+    #     rcParams["font.weight"] = "bold"
 
-        pre_change_days = 60
-        post_change_days = 60
-        total_days = pre_change_days + post_change_days
-        plt.rcParams["axes.facecolor"] = "white"
-        plt.grid(b=None)
-        y1 = np.arange(pre_change_days)
-        x1 = self.data[:pre_change_days]
-        plt.scatter(
-            y1, x1, c="mediumturquoise", s=100, alpha=0.4, label="In-control $S_p$"
-        )
-        y2 = np.arange(pre_change_days, total_days, 1)
-        x2 = self.data[pre_change_days:total_days]
-        plt.scatter(y2, x2, c="coral", s=100, alpha=0.4, label="Out-of-control $S_p$")
-        plt.hlines(
-            y=np.mean(x1),
-            xmin=0,
-            xmax=pre_change_days,
-            color="darkturquoise",
-            alpha=0.9,
-            linewidth=4,
-            linestyle="--",
-            label="In-control mean",
-        )
-        plt.hlines(
-            y=np.mean(x2),
-            xmin=pre_change_days,
-            xmax=total_days,
-            color="coral",
-            alpha=0.9,
-            linewidth=4,
-            linestyle="--",
-            label="Out-of-control mean",
-        )
-        # single vline with specific ymin and ymax
-        plt.vlines(
-            x=pre_change_days,
-            ymin=np.min(self.data),
-            ymax=np.max(self.data),
-            colors="grey",
-            linestyle="--",
-            label="Change-point",
-        )
+    #     pre_change_days = 60
+    #     post_change_days = 60
+    #     total_days = pre_change_days + post_change_days
+    #     plt.rcParams["axes.facecolor"] = "white"
+    #     plt.grid(b=None)
+    #     y1 = np.arange(pre_change_days)
+    #     x1 = self.data[:pre_change_days]
+    #     plt.scatter(
+    #         y1, x1, c="mediumturquoise", s=100, alpha=0.4, label="In-control $S_p$"
+    #     )
+    #     y2 = np.arange(pre_change_days, total_days, 1)
+    #     x2 = self.data[pre_change_days:total_days]
+    #     plt.scatter(y2, x2, c="coral", s=100, alpha=0.4, label="Out-of-control $S_p$")
+    #     plt.hlines(
+    #         y=np.mean(x1),
+    #         xmin=0,
+    #         xmax=pre_change_days,
+    #         color="darkturquoise",
+    #         alpha=0.9,
+    #         linewidth=4,
+    #         linestyle="--",
+    #         label="In-control mean",
+    #     )
+    #     plt.hlines(
+    #         y=np.mean(x2),
+    #         xmin=pre_change_days,
+    #         xmax=total_days,
+    #         color="coral",
+    #         alpha=0.9,
+    #         linewidth=4,
+    #         linestyle="--",
+    #         label="Out-of-control mean",
+    #     )
+    #     # single vline with specific ymin and ymax
+    #     plt.vlines(
+    #         x=pre_change_days,
+    #         ymin=np.min(self.data),
+    #         ymax=np.max(self.data),
+    #         colors="grey",
+    #         linestyle="--",
+    #         label="Change-point",
+    #     )
 
-        # yline(0.86)
-        # plt.plot(test_AUC, 'go')
+    #     # yline(0.86)
+    #     # plt.plot(test_AUC, 'go')
 
-        ax.legend(fontsize=14)
-        rcParams["legend.loc"] = "lower left"
-        plt.rcParams["axes.facecolor"] = "white"
-        # plt.title('Samples drawn from two Gaussians')
-        ax.set_xlabel("Length of Simulation (days)", fontsize=18, fontweight="bold")
-        ax.set_ylabel("AI model Specificity", fontsize=18, fontweight="bold")
-        plt.yticks(fontsize=16)
-        plt.xticks(fontsize=16)
-        plt.grid(visible=None)
-        plt.show()
+    #     ax.legend(fontsize=14)
+    #     rcParams["legend.loc"] = "lower left"
+    #     plt.rcParams["axes.facecolor"] = "white"
+    #     # plt.title('Samples drawn from two Gaussians')
+    #     ax.set_xlabel("Length of Simulation (days)", fontsize=18, fontweight="bold")
+    #     ax.set_ylabel("AI model Specificity", fontsize=18, fontweight="bold")
+    #     plt.yticks(fontsize=16)
+    #     plt.xticks(fontsize=16)
+    #     plt.grid(visible=None)
+    #     plt.show()
 
-    # Plot the input AUCs
+    # Plot the input AUCs using Plotly
     def plot_input_aucs_plotly(self):
         pre_change_days = 60
         post_change_days = 60
@@ -529,38 +529,38 @@ class CUSUM:
 
         return fig
 
-    # PLOT THE HISTOGRAM OF all AUCs - all the AUCs for 1000 simulations * 1000 days
-    def plot_histogram_aucs(self):
-        rcParams["font.weight"] = "bold"
-        fig, ax = plt.subplots(figsize=(10, 6))
-        locs = ["upper right", "lower right", "center right"]
-        count, bins, ignored = plt.hist(
-            self.sp_pre,
-            30,
-            color="mediumturquoise",
-            alpha=0.5,
-            label="Pre-change $S_p$",
-        )
-        plt.hist(self.sp_post, 30, color="coral", alpha=0.5, label="Post-change $S_p$")
-        # plt.plot(bins, 1/(std * np.sqrt(2 * np.pi)) *
-        #               np.exp( - (bins - mu)**2 / (2 * std**2) ),
-        #         linewidth=2, color='r')
-        plt.rcParams["axes.facecolor"] = "white"
-        plt.grid(visible=None)
-        plt.xticks([0, 0.2, 0.4, 0.6, 0.8, 1.0])
-        ax.axvline(
-            x=np.mean(self.sp_pre), color="grey", linestyle="--", label="Reference mean"
-        )
-        ax.set_xlabel("AI model Specificity", fontsize=16, fontweight="bold")
-        ax.set_ylabel("Count", fontsize=16, fontweight="bold")
-        ax.legend(loc=2, fontsize=12, frameon=False)
-        # plt.xticks([0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95])
-        plt.ticklabel_format(style="sci", axis="y", scilimits=(3, 3))
-        plt.yticks(fontsize=16)
-        plt.xticks(fontsize=16)
-        plt.show()
+    # # PLOT THE HISTOGRAM OF all AUCs - all the AUCs for 1000 simulations * 1000 days
+    # def plot_histogram_aucs(self):
+    #     rcParams["font.weight"] = "bold"
+    #     fig, ax = plt.subplots(figsize=(10, 6))
+    #     locs = ["upper right", "lower right", "center right"]
+    #     count, bins, ignored = plt.hist(
+    #         self.sp_pre,
+    #         30,
+    #         color="mediumturquoise",
+    #         alpha=0.5,
+    #         label="Pre-change $S_p$",
+    #     )
+    #     plt.hist(self.sp_post, 30, color="coral", alpha=0.5, label="Post-change $S_p$")
+    #     # plt.plot(bins, 1/(std * np.sqrt(2 * np.pi)) *
+    #     #               np.exp( - (bins - mu)**2 / (2 * std**2) ),
+    #     #         linewidth=2, color='r')
+    #     plt.rcParams["axes.facecolor"] = "white"
+    #     plt.grid(visible=None)
+    #     plt.xticks([0, 0.2, 0.4, 0.6, 0.8, 1.0])
+    #     ax.axvline(
+    #         x=np.mean(self.sp_pre), color="grey", linestyle="--", label="Reference mean"
+    #     )
+    #     ax.set_xlabel("AI model Specificity", fontsize=16, fontweight="bold")
+    #     ax.set_ylabel("Count", fontsize=16, fontweight="bold")
+    #     ax.legend(loc=2, fontsize=12, frameon=False)
+    #     # plt.xticks([0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95])
+    #     plt.ticklabel_format(style="sci", axis="y", scilimits=(3, 3))
+    #     plt.yticks(fontsize=16)
+    #     plt.xticks(fontsize=16)
+    #     plt.show()
 
-    # PLOT THE HISTOGRAM OF all AUCs - all the AUCs for 1000 simulations * 1000 days
+    # PLOT THE HISTOGRAM OF all AUCs - all the AUCs for 1000 simulations * 1000 days using Plotly
     def plot_histogram_aucs_plotly(self):
         fig = go.Figure()
 
@@ -614,47 +614,47 @@ class CUSUM:
 
         return fig
 
-    # plot CUSUM value
-    def plot_cusum(self):
-        # specifying horizontal line type
-        fig, ax = plt.subplots(figsize=(12, 6))
-        rcParams["font.weight"] = "bold"
-        # plt.yticks([0, 5, 10, 15, 20, 25])
-        plt.axhline(
-            y=self.h / self.in_std,
-            color="firebrick",
-            linestyle="--",
-            linewidth=2.0,
-            label="Threshold (H)",
-        )
-        ax.set_xlabel("Length of Simulation (Days)", fontsize=16, fontweight="bold")
-        ax.set_ylabel("CUSUM value", fontsize=16, fontweight="bold")
-        plt.plot(
-            self.S_hi / self.in_std,
-            "greenyellow",
-            label="Positive changes ($S_{hi}$)",
-            linewidth=2.0,
-        )
-        plt.plot(
-            self.S_lo / self.in_std,
-            "darkcyan",
-            label="Negative changes ($S_{lo}$)",
-            linewidth=2.0,
-        )
-        ax.axvline(
-            x=60, color="grey", linestyle="--", label="Change-point", linewidth=2.0
-        )
-        # plt.title('Positive and Negative Changes')
-        # plt.yticks([0, 5, 10, 15, 20, 25, 30, 35, 40, 45,50, 55, 60])
-        # plt.yticks([0, 5, 10, 15, 20, 25])
-        # plt.yticks([0, 10, 20, 30, 40, 50, 60])
-        ax.xaxis.set_tick_params(labelsize=18)
-        ax.yaxis.set_tick_params(labelsize=18)
-        plt.legend(fontsize=13, frameon=False)
-        rcParams["legend.loc"] = "upper left"
-        plt.show()
+    # # plot CUSUM value
+    # def plot_cusum(self):
+    #     # specifying horizontal line type
+    #     fig, ax = plt.subplots(figsize=(12, 6))
+    #     rcParams["font.weight"] = "bold"
+    #     # plt.yticks([0, 5, 10, 15, 20, 25])
+    #     plt.axhline(
+    #         y=self.h / self.in_std,
+    #         color="firebrick",
+    #         linestyle="--",
+    #         linewidth=2.0,
+    #         label="Threshold (H)",
+    #     )
+    #     ax.set_xlabel("Length of Simulation (Days)", fontsize=16, fontweight="bold")
+    #     ax.set_ylabel("CUSUM value", fontsize=16, fontweight="bold")
+    #     plt.plot(
+    #         self.S_hi / self.in_std,
+    #         "greenyellow",
+    #         label="Positive changes ($S_{hi}$)",
+    #         linewidth=2.0,
+    #     )
+    #     plt.plot(
+    #         self.S_lo / self.in_std,
+    #         "darkcyan",
+    #         label="Negative changes ($S_{lo}$)",
+    #         linewidth=2.0,
+    #     )
+    #     ax.axvline(
+    #         x=60, color="grey", linestyle="--", label="Change-point", linewidth=2.0
+    #     )
+    #     # plt.title('Positive and Negative Changes')
+    #     # plt.yticks([0, 5, 10, 15, 20, 25, 30, 35, 40, 45,50, 55, 60])
+    #     # plt.yticks([0, 5, 10, 15, 20, 25])
+    #     # plt.yticks([0, 10, 20, 30, 40, 50, 60])
+    #     ax.xaxis.set_tick_params(labelsize=18)
+    #     ax.yaxis.set_tick_params(labelsize=18)
+    #     plt.legend(fontsize=13, frameon=False)
+    #     rcParams["legend.loc"] = "upper left"
+    #     plt.show()
 
-    # plot CUSUM value
+    # plot CUSUM value using Plotly
     def plot_cusum_plotly(self):
         fig = go.Figure()
 
