@@ -2,7 +2,10 @@ import gradio as gr
 import tomli
 from cusum import CUSUM
 from ARLTheoretical import get_ref_value, get_ARL_1
-from utils import get_greattable_as_html, populate_summary_table_ARL0_k, populate_summary_table_ARL1_k
+from utils import (
+    populate_summary_table_ARL0_k,
+    populate_summary_table_ARL1_k,
+)
 
 with open("config.toml", "rb") as file_config:
     config = tomli.load(file_config)
@@ -13,55 +16,39 @@ obj_cusum.stats()
 obj_cusum.change_detection()
 
 
-def populate_table(
-    h,
-    k,
-    mu1,
-    ref_val,
-    hshift_in_mean_start,
-    hshift_in_mean_increament,
-    hshift_in_mean_end,
-):
+def populate_table(h):
+    h = float(h)
+
     summary_table_df_ARL0_k, dict_ARL0_k = get_ref_value(
-    h=4, list_ARL_0=[50, 100, 150, 200, 300, 400, 500, 1000]
+        h=h, list_ARL_0=[50, 100, 150, 200, 300, 400, 500, 1000]
     )
+
     summary_table_df_ARL1_k = get_ARL_1(
-    h=4,
-    k=0.159,
-    mu1=0.1,
-    dict_ARL0_k=dict_ARL0_k,
-    shift_in_mean=[
-        0.1,
-        0.2,
-        0.3,
-        0.4,
-        0.5,
-        0.6,
-        0.7,
-        0.8,
-        0.9,
-        1.0,
-        1.1,
-        1.2,
-        1.3,
-        1.4,
-        1.5,
-        1.6,
-    ],
+        h=h,
+        shift_in_mean=[
+            0.1,
+            0.2,
+            0.3,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.8,
+            0.9,
+            1.0,
+            1.1,
+            1.2,
+            1.3,
+            1.4,
+            1.5,
+            1.6,
+        ],
+        dict_ARL0_k=dict_ARL0_k,
     )
-    return populate_summary_table_ARL0_k(summary_table_df_ARL0_k), populate_summary_table_ARL1_k(summary_table_df_ARL1_k, dict_ARL0_k)
-    return get_ref_value(h), get_ARL_1(
-        h,
-        k,
-        mu1,
-        [ref_val],
-        [ 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6],
-        # range(
-        #     hshift_in_mean_start,
-        #     hshift_in_mean_end + hshift_in_mean_increament,
-        #     hshift_in_mean_increament,
-        # )
-    )
+
+    return populate_summary_table_ARL0_k(
+        summary_table_df_ARL0_k
+    ), populate_summary_table_ARL1_k(summary_table_df_ARL1_k, dict_ARL0_k)
 
 
 with gr.Blocks(
@@ -107,44 +94,33 @@ with gr.Blocks(
     with gr.Row():
         with gr.Column():
             h = gr.Textbox(label="h", placeholder="Enter the value h")
-            k = gr.Textbox(label="k", placeholder="Enter the value k")
-            mu1 = gr.Textbox(label="mu1", placeholder="Enter the value mu1")
-            ref_val = gr.Textbox(label="ref_val", placeholder="Enter the value ref_val")
-            hshift_in_mean_start = gr.Textbox(
-                label="shift_in_mean: start", placeholder="Enter the value"
-            )
-            hshift_in_mean_increament = gr.Textbox(
-                label="shift_in_mean: increament", placeholder="Enter the value"
-            )
-            hshift_in_mean_end = gr.Textbox(
-                label="shift_in_mean: end", placeholder="Enter the value"
-            )
+            # k = gr.Textbox(label="k", placeholder="Enter the value k")
+            # mu1 = gr.Textbox(label="mu1", placeholder="Enter the value mu1")
+            # ref_val = gr.Textbox(label="ref_val", placeholder="Enter the value ref_val")
+            # hshift_in_mean_start = gr.Textbox(
+            #     label="shift_in_mean: start", placeholder="Enter the value"
+            # )
+            # hshift_in_mean_increament = gr.Textbox(
+            #     label="shift_in_mean: increament", placeholder="Enter the value"
+            # )
+            # hshift_in_mean_end = gr.Textbox(
+            #     label="shift_in_mean: end", placeholder="Enter the value"
+            # )
 
-            dataframe_gt_ref_value = gr.HTML(label="Reference Values")
+            dataframe_gt_ref_value = gr.HTML(label="ARL0")
             dataframe_gt_ARL0 = gr.HTML(label="ARL1")
 
             button_populate_table = gr.Button("Populate Tables")
 
         with gr.Column():
-            plot1 = gr.Plot(value=obj_cusum.plot_input_aucs_plotly())
-            plot2 = gr.Plot(value=obj_cusum.plot_histogram_aucs_plotly())
-            plot3 = gr.Plot(value=obj_cusum.plot_cusum_plotly())
+            plot1 = gr.Plot(value=obj_cusum.plot_input_aucs_plotly(), label='Average Specificities for the pre-change and post-change regime')
+            plot2 = gr.Plot(value=obj_cusum.plot_histogram_aucs_plotly(), label='Histograms for the pre- and post-change specificity')
+            plot3 = gr.Plot(value=obj_cusum.plot_cusum_plotly(), label='CUSUM Chart')
 
     button_populate_table.click(
         fn=populate_table,
-        inputs=[
-            h,
-            k,
-            mu1,
-            ref_val,
-            hshift_in_mean_start,
-            hshift_in_mean_increament,
-            hshift_in_mean_end,
-        ],
-        outputs=[
-            dataframe_gt_ref_value,
-            dataframe_gt_ARL0
-        ],
+        inputs=[h],
+        outputs=[dataframe_gt_ref_value, dataframe_gt_ARL0],
     )
 
 demo.launch(server_name="0.0.0.0", server_port=7860)

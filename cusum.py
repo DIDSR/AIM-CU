@@ -465,7 +465,7 @@ class CUSUM:
                 x=x1,
                 y=y1,
                 mode="markers",
-                name="In-control $S_p$",
+                name=f'''In-control S<sub>p</sub>''',
                 marker=dict(color="darkturquoise", size=10),
                 opacity=0.4,
             )
@@ -475,7 +475,7 @@ class CUSUM:
                 x=x2,
                 y=y2,
                 mode="markers",
-                name="Out-of-control $S_p$",
+                name=f'''Out-of-control S<sub>p</sub>''',
                 marker=dict(color="coral", size=10),
                 opacity=0.4,
             )
@@ -513,7 +513,7 @@ class CUSUM:
         )
 
         fig.update_layout(
-            title="[TITLE=?]",
+            title="Average Specificities for the pre-change and post-change regime",
             xaxis_title="Length of Simulation (days)",
             yaxis_title="AI model Specificity",
             xaxis=dict(dtick=20),
@@ -569,7 +569,7 @@ class CUSUM:
             go.Histogram(
                 x=self.sp_pre,
                 nbinsx=30,
-                name="Pre-change $S_p$",
+                name=f'''Pre-change S<sub>p</sub>''',
                 marker=dict(color="mediumturquoise"),
                 opacity=0.5,
             )
@@ -579,7 +579,7 @@ class CUSUM:
             go.Histogram(
                 x=self.sp_post,
                 nbinsx=30,
-                name="Post-change $S_p$",
+                name=f'''Post-change SS<sub>p</sub>''',
                 marker=dict(color="coral"),
                 opacity=0.5,
             )
@@ -598,7 +598,7 @@ class CUSUM:
         fig.add_vline(x=np.mean(self.sp_pre), line_dash="dash", line_color="grey")
 
         fig.update_layout(
-            title="[TITLE=?]",
+            title="Histograms for the pre-change and post-change specificity",
             xaxis_title="AI model Specificity",
             yaxis_title="Count",
             xaxis=dict(dtick=0.2, range=[0, 1]),
@@ -664,7 +664,7 @@ class CUSUM:
                 x=list(range(len(self.S_hi))),
                 y=self.S_hi / self.in_std,
                 mode="lines",
-                name="Positive changes ($S_{hi}$)",
+                name=f'''Positive changes (S<sub>hi</sub>)''',
                 marker=dict(color="greenyellow", size=10),
             )
         )
@@ -673,7 +673,7 @@ class CUSUM:
                 x=list(range(len(self.S_lo))),
                 y=self.S_lo / self.in_std,
                 mode="lines",
-                name="Negative changes ($S_{lo}$)",
+                name=f'''Negative changes (S<sub>lo</sub>)''',
                 marker=dict(color="darkcyan", size=10),
             )
         )
@@ -701,7 +701,7 @@ class CUSUM:
         )
 
         fig.update_layout(
-            title="[TITLE=?]",
+            title="CUSUM Chart",
             xaxis_title="Length of Simulation (Days)",
             yaxis_title="CUSUM value",
             xaxis=dict(dtick=20),

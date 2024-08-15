@@ -5,7 +5,10 @@ Utilities to handle different operations
 import pandas as pd
 import great_tables as gt
 from collections import OrderedDict
+import tomli
 
+with open("config.toml", "rb") as file_config:
+    config = tomli.load(file_config)
 
 # Get the great_table as HTML from Pandas dataframe
 def get_greattable_as_html(df: pd.DataFrame):
@@ -23,6 +26,7 @@ def populate_summary_table_ARL0_k(summary_table_df_ARL0_k: pd.DataFrame):
                 "Reference Values for an intended ARL<sub>0</sub> with normalized threshold, h = 4"
             )
         )
+        .data_color(palette=[config['color']['blue_005'], config['color']['blue_020'], config['color']['blue_040']])
     )
     return table_great_table_ARL0_k.as_raw_html()
 
@@ -54,6 +58,6 @@ def populate_summary_table_ARL1_k(
         )
         .cols_move_to_start(columns=["Shift in mean"])
         .cols_label(**column_label_dict)
-        .data_color(palette=["#D0E4F0", "#A3CAE1", "#77B0D2"])
+        .data_color(palette=[config['color']['blue_005'], config['color']['blue_020'], config['color']['blue_040']])
     )
     return table_great_table_ARL1_k.as_raw_html()

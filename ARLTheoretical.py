@@ -60,7 +60,7 @@ def get_ref_value(h: float, list_ARL_0: list):
 
 
 def get_ARL_1(
-    h: float, k: float, mu1: float, dict_ARL0_k: OrderedDict, shift_in_mean: list
+    h: float, shift_in_mean: list, dict_ARL0_k: OrderedDict
 ):
     """
     # Code for table 5
@@ -69,8 +69,6 @@ def get_ARL_1(
 
     Example:
         h = 4
-        k = 0.159
-        mu1 = 0.1
         shift_in_mean = [ 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6] # mu1
     """
 
