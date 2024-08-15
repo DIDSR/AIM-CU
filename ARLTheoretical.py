@@ -91,11 +91,16 @@ def get_ARL_1(h: float, k: float, mu1: float, ref_val: list, shift_in_mean: list
 
     return summary_table
 
-table_4 = get_ref_value(
-    h=4
-)
-
-# print(table_4.to_string())
+# table_4 = get_ref_value(
+#     h=4
+# )
+d = {}
+d['first_level'] = pd.DataFrame(columns=['idx', 'a', 'b', 'c'],
+                                         data=[[10, 0.89, 0.98, 0.31],
+                                               [20, 0.34, 0.78, 0.34]]).set_index('idx')
+table_4 = pd.concat(d, axis=1)
+table_4.columns = ['_'.join(col) for col in table_4.columns]
+print(table_4.to_string())
 
 table_5 = get_ARL_1(
     h = 4,

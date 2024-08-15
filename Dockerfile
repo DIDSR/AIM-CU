@@ -20,10 +20,8 @@ RUN Rscript -e "install.packages('RcppCNPy')"
 RUN Rscript -e "install.packages('spc')"
 
 WORKDIR /app
-
 COPY . /app/
 
 RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
-RUN pip install --no-cache-dir --upgrade rpy2
 
 CMD ["python3", "app.py"]

@@ -2,6 +2,7 @@ import gradio as gr
 import tomli
 from cusum import CUSUM
 from ARLTheoretical import get_ref_value, get_ARL_1, table_4, table_5
+from utils import get_greattable_as_html
 
 with open("config.toml", "rb") as file_config:
     config = tomli.load(file_config)
@@ -21,17 +22,18 @@ def populate_table(
     hshift_in_mean_increament,
     hshift_in_mean_end,
 ):
-    return table_4, table_5
+    return table_4, table_5, get_greattable_as_html(table_4), get_greattable_as_html(table_5)
     return get_ref_value(h), get_ARL_1(
         h,
         k,
         mu1,
         [ref_val],
-        range(
-            hshift_in_mean_start,
-            hshift_in_mean_end + hshift_in_mean_increament,
-            hshift_in_mean_increament,
-        ),
+        [ 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6],
+        # range(
+        #     hshift_in_mean_start,
+        #     hshift_in_mean_end + hshift_in_mean_increament,
+        #     hshift_in_mean_increament,
+        # )
     )
 
 
@@ -103,6 +105,9 @@ with gr.Blocks(
                 headers=["Shift in mean", "k"],
             )
 
+            dataframe_gt_ref_value = gr.HTML(label="Reference Values")
+            dataframe_gt_ARL0 = gr.HTML(label="ARL1")
+
             button_populate_table = gr.Button("Populate Tables")
 
         with gr.Column():
@@ -121,7 +126,12 @@ with gr.Blocks(
             hshift_in_mean_increament,
             hshift_in_mean_end,
         ],
-        outputs=[dataftame_ref_value, dataftame_ARL0],
+        outputs=[
+            dataftame_ref_value,
+            dataftame_ARL0,
+            dataframe_gt_ref_value,
+            dataframe_gt_ARL0
+        ],
     )
 
 demo.launch(server_name="0.0.0.0", server_port=7860)
