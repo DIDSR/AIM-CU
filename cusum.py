@@ -44,7 +44,7 @@ class CUSUM:
 
         self.df_sp = pd.read_csv(self.config["path_input"]["path_df_sp"])
         # AUCs to numpy array
-        self.data  = self.df_sp[self.df_sp.columns[1]].to_numpy()
+        self.data = self.df_sp[self.df_sp.columns[1]].to_numpy()
 
     # Compute CUSUM for the observations in x
     def compute_cusum(self, x, mu_0, k):
@@ -123,106 +123,107 @@ class CUSUM:
 
     # [! provide a proper name]
     def change_detection(self):
-        pre_change_days  = 60
+        pre_change_days = 60
         post_change_days = 60
-        total_days       = pre_change_days + post_change_days
-        ref_val          = 0.5
-        control_limit    = 4
+        total_days = pre_change_days + post_change_days
+        ref_val = 0.5
+        control_limit = 4
 
-        self.h_1000           =  np.array([]) 
-        self.k_1000           =  np.array([])
-        DetectionTimes   =  np.array([],dtype=int)
-        Dj               =  np.array([],dtype=int) #save the Dj which are binary values indicating detection MTBFA
-        Zj               =  np.array([],dtype=int) #save the Zj = min(Tj,pre-change-days)-MTBFA
-        zj               =  np.array([],dtype=int) # ADD - MLE of delays
-        cj               =  np.array([],dtype=int) # ADD - binary
-        self.AvgDD            = np.array([])      # Average Detection Delay
-        D                =  np.array([])     #Displacement
-        FalsePos         =  np.array([])
-        TruePos          =  np.array([])
+        self.h_1000 = np.array([])
+        self.k_1000 = np.array([])
+        DetectionTimes = np.array([], dtype=int)
+        Dj = np.array(
+            [], dtype=int
+        )  # save the Dj which are binary values indicating detection MTBFA
+        Zj = np.array([], dtype=int)  # save the Zj = min(Tj,pre-change-days)-MTBFA
+        zj = np.array([], dtype=int)  # ADD - MLE of delays
+        cj = np.array([], dtype=int)  # ADD - binary
+        self.AvgDD = np.array([])  # Average Detection Delay
+        D = np.array([])  # Displacement
+        FalsePos = np.array([])
+        TruePos = np.array([])
 
-
-
-        #CUSUM for day0-60: outcomes are detection delay and #FP, #TP, MTBFA, False alarm rate
+        # CUSUM for day0-60: outcomes are detection delay and #FP, #TP, MTBFA, False alarm rate
         num_rows = np.shape(self.data)[0]
-        in_control_data  = self.data[:pre_change_days]
+        in_control_data = self.data[:pre_change_days]
         out_control_data = self.data[pre_change_days:total_days]
-        out_std          = np.std(out_control_data)
-        self.in_std           = np.std(in_control_data)
-        x                = np.array(self.data)
+        out_std = np.std(out_control_data)
+        self.in_std = np.std(in_control_data)
+        x = np.array(self.data)
 
-        mu_0   = np.mean(in_control_data)
-        mu_1   = np.mean(out_control_data)
-        d      = np.abs((mu_1-mu_0)/self.in_std)
-            
-        #h      = 0.102       # Upper/lower control limit to detect the changepoint H=0.102, 0.127 
-        #k      = 0.03831     # Drift 0.01277 is the 1 sigma change, 0.0255 - one-sigma change, 0.03831 is 3-sigma change, 0.05108
-        self.h       = control_limit * self.in_std 
-        k       = ref_val * self.in_std
+        mu_0 = np.mean(in_control_data)
+        mu_1 = np.mean(out_control_data)
+        d = np.abs((mu_1 - mu_0) / self.in_std)
 
-        #Call compute CUSUM function with x (observatoins), in-control mean (mu) and k (drift or reference value)
+        # h      = 0.102       # Upper/lower control limit to detect the changepoint H=0.102, 0.127
+        # k      = 0.03831     # Drift 0.01277 is the 1 sigma change, 0.0255 - one-sigma change, 0.03831 is 3-sigma change, 0.05108
+        self.h = control_limit * self.in_std
+        k = ref_val * self.in_std
+
+        # Call compute CUSUM function with x (observatoins), in-control mean (mu) and k (drift or reference value)
         self.S_hi, self.S_lo, cusum = self.compute_cusum(x, mu_0, k)
-        
+
         # False positives and Total alarms
         falsePos = 0
-        alarms   = 0
-        delay    = 0
-        avddd    = 0   # this is the delay from the paper: td-ts (z_k-v) where v is the changepoint and z_k is the time of detection
-        #MTBFA    = 0
-            
+        alarms = 0
+        delay = 0
+        avddd = 0  # this is the delay from the paper: td-ts (z_k-v) where v is the changepoint and z_k is the time of detection
+        # MTBFA    = 0
+
         for i in range(0, pre_change_days):
-            if ((self.S_hi[i] > self.h) or (self.S_lo[i] > self.h)):   
-                #if (i<pre_change_days):
-                falsePos += 1  #False Positives 
-                #print("time false alarm",i)
-                DetectionTimes= np.append(DetectionTimes, i+1)   #time at which a false positive is detected
+            if (self.S_hi[i] > self.h) or (self.S_lo[i] > self.h):
+                # if (i<pre_change_days):
+                falsePos += 1  # False Positives
+                # print("time false alarm",i)
+                DetectionTimes = np.append(
+                    DetectionTimes, i + 1
+                )  # time at which a false positive is detected
                 Dj = np.append(Dj, 1)
-                Zj = np.append(Zj, min(i,pre_change_days))
-                #print("detection times",DetectionTimes)
-                    #print("detection times size",DetectionTimes.size)
+                Zj = np.append(Zj, min(i, pre_change_days))
+                # print("detection times",DetectionTimes)
+                # print("detection times size",DetectionTimes.size)
                 break
-            
+
         # If there is no false positive, Zj = pre_change_days, Dj = 0
         if falsePos == 0:
             Dj = np.append(Dj, 0)
-            #DetectionTimes[runs] = pre_change_days
+            # DetectionTimes[runs] = pre_change_days
             Zj = np.append(Zj, pre_change_days)
 
         # Delay to detect the first changepoint
-        #delay = 0
+        # delay = 0
         for i in range(pre_change_days, total_days):
-            if ((self.S_hi[i] > self.h) or (self.S_lo[i] > self.h)):
-                alarms += 1           #True Positive: break after detecting one TP
-                #print("alarm at : ", i)
-                #delay  = i-1000+1    # ts is 100 because the change starts at day100
-                avddd  = i-pre_change_days
+            if (self.S_hi[i] > self.h) or (self.S_lo[i] > self.h):
+                alarms += 1  # True Positive: break after detecting one TP
+                # print("alarm at : ", i)
+                # delay  = i-1000+1    # ts is 100 because the change starts at day100
+                avddd = i - pre_change_days
                 cj = np.append(cj, 1)
-                zj = np.append(zj, min(avddd,total_days))
+                zj = np.append(zj, min(avddd, total_days))
                 break
-            
+
         # If there is no true detection, zj = total simulation days, cj = 0
         if alarms == 0:
             cj = np.append(cj, 0)
-            #DetectionTimes[runs] = pre_change_days
-            zj = np.append(zj, total_days) 
-            
-        #Calculate MTBFA(Mean time time between False Alarms)
-        #MTBFA = np.mean(DetectionTimes)
-        #FlaseAlarmRate = 1/MTBFA
-            
-        FalsePos       = np.append(FalsePos, falsePos)
-        TruePos        = np.append(TruePos, alarms)
-        #DelaytoDetect = np.append(DelaytoDetect, delay)   # td-ts+1
-        #FAR           = np.append(FAR, FlaseAlarmRate)
-        #DetectionTimes= np.append(DetectionTimes, detectionTime)
-        self.AvgDD          = np.append(self.AvgDD, avddd)   # ADD estimate from the paper
-        #outSTD_test_sp = np.append(outSTD_test_sp, out_std)
-        #inSTD_test_sp  = np.append(inSTD_test_sp, in_std)
-        D              = np.append(D, d)
-        self.h_1000         = np.append(self.h_1000, self.h)
-        self.k_1000         = np.append(self.k_1000, k)
-        #print(falsePos)    
+            # DetectionTimes[runs] = pre_change_days
+            zj = np.append(zj, total_days)
 
+        # Calculate MTBFA(Mean time time between False Alarms)
+        # MTBFA = np.mean(DetectionTimes)
+        # FlaseAlarmRate = 1/MTBFA
+
+        FalsePos = np.append(FalsePos, falsePos)
+        TruePos = np.append(TruePos, alarms)
+        # DelaytoDetect = np.append(DelaytoDetect, delay)   # td-ts+1
+        # FAR           = np.append(FAR, FlaseAlarmRate)
+        # DetectionTimes= np.append(DetectionTimes, detectionTime)
+        self.AvgDD = np.append(self.AvgDD, avddd)  # ADD estimate from the paper
+        # outSTD_test_sp = np.append(outSTD_test_sp, out_std)
+        # inSTD_test_sp  = np.append(inSTD_test_sp, in_std)
+        D = np.append(D, d)
+        self.h_1000 = np.append(self.h_1000, self.h)
+        self.k_1000 = np.append(self.k_1000, k)
+        # print(falsePos)
 
     # histogram using plotly
     def plot_histogram_plotly(self, data, xlabel, title=""):
