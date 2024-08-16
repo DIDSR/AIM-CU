@@ -1,0 +1,12 @@
+# paths to input files
+[path_input]
+path_df_sp = "spec-60pre-60-post-change.csv"
+
+# primary colors
+[color]
+blue_005 = "#F3F9FC"
+blue_020 = "#D0E4F0"
+blue_040 = "#A3CAE1"
+blue_060 = "#77B0D2"
+blue_080 = "#4F96C4"
+blue_100 = "#007CBA"
