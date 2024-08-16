@@ -12,7 +12,6 @@ with open("config.toml", "rb") as file_config:
 
 obj_cusum = CUSUM()
 obj_cusum.initialize()
-obj_cusum.stats()
 obj_cusum.change_detection()
 
 
