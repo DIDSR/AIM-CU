@@ -1,3 +1,4 @@
+import pandas as pd
 import gradio as gr
 import tomli
 from cusum import CUSUM
@@ -12,9 +13,9 @@ with open("config.toml", "rb") as file_config:
 
 obj_cusum = CUSUM()
 obj_cusum.initialize()
-obj_cusum.change_detection()
 
 
+# Populate tables for ARL0 and ARL1 given the value of h
 def populate_table(h):
     h = float(h)
 
@@ -48,6 +49,25 @@ def populate_table(h):
     return populate_summary_table_ARL0_k(
         summary_table_df_ARL0_k
     ), populate_summary_table_ARL1_k(summary_table_df_ARL1_k, dict_ARL0_k)
+
+
+# Populate CUSUM plots
+def populate_cusum_plots(file_csv_specificity):
+    if file_csv_specificity is not None:
+        # upload CSV file
+        data_csv_specificity = pd.read_csv(file_csv_specificity.name)
+        obj_cusum.set_df_spec_csv(data_csv_specificity)
+    else:
+        # use the example CSV data
+        obj_cusum.set_df_spec_default()
+
+    obj_cusum.change_detection()
+
+    return (
+        obj_cusum.plot_input_specificities_plotly(),
+        obj_cusum.plot_histogram_aucs_plotly(),
+        obj_cusum.plot_cusum_plotly(),
+    )
 
 
 with gr.Blocks(
@@ -92,34 +112,70 @@ with gr.Blocks(
 
     with gr.Row():
         with gr.Column():
-            h = gr.Textbox(label="h", placeholder="Enter the value h")
-            # k = gr.Textbox(label="k", placeholder="Enter the value k")
-            # mu1 = gr.Textbox(label="mu1", placeholder="Enter the value mu1")
-            # ref_val = gr.Textbox(label="ref_val", placeholder="Enter the value ref_val")
-            # hshift_in_mean_start = gr.Textbox(
-            #     label="shift_in_mean: start", placeholder="Enter the value"
-            # )
-            # hshift_in_mean_increament = gr.Textbox(
-            #     label="shift_in_mean: increament", placeholder="Enter the value"
-            # )
-            # hshift_in_mean_end = gr.Textbox(
-            #     label="shift_in_mean: end", placeholder="Enter the value"
-            # )
+            gr.Markdown(f"""
+                h is referred to as the normalized threshold. In typical applications, h may default to 4.
+                """)  # noqa: F541
+            h = gr.Textbox(
+                label="h value",
+                placeholder="h is referred to as the normalized threshold. In typical applications, h may default to 4.",
+            )
 
-            dataframe_gt_ref_value = gr.HTML(label="ARL0")
-            dataframe_gt_ARL0 = gr.HTML(label="ARL1")
+            dataframe_gt_ref_value = gr.HTML(label="Reference Values for an intended ARL0 with normalized threshold h", show_label=True, visible=False)
+            dataframe_gt_ARL0 = gr.HTML(label="Estimate of steady state ARL (ARL1 based on the computed reference values and intended zero-state ARL (ARL0) with normalized threshold h)", show_label=True, visible=False)
 
-            button_populate_table = gr.Button("Populate Tables")
+            button_populate_table = gr.Button(
+                "Populate Reference Values and ARL1 tables for the given h value"
+            )
 
         with gr.Column():
-            plot1 = gr.Plot(value=obj_cusum.plot_input_aucs_plotly(), label='Average Specificities for the pre-change and post-change regime')
-            plot2 = gr.Plot(value=obj_cusum.plot_histogram_aucs_plotly(), label='Histograms for the pre- and post-change specificity')
-            plot3 = gr.Plot(value=obj_cusum.plot_cusum_plotly(), label='CUSUM Chart')
+            gr.Markdown(f"""
+                Upload the CSV file with specificities. Or use the default example CSV file by directly clicking the button below.
+                """)  # noqa: F541
+            # load the CSV file with specifities across days
+            csv_file_specificity = gr.File(
+                file_types=["csv"],
+                label="Upload CSV file with specificities across days",
+            )
+            button_csv_specificity = gr.Button("Show CUSUM plots")
 
+            plot_avg_specificity = gr.Plot(
+                label="Average Specificities for the pre-change and post-change regime",
+                visible=False,
+            )
+            plot_histogram = gr.Plot(
+                label="Histograms for the pre- and post-change specificity",
+                visible=False,
+            )
+            plot_cusum_chart = gr.Plot(label="CUSUM Chart", visible=False)
+
+    # Get the CSV file and populate tables
     button_populate_table.click(
         fn=populate_table,
         inputs=[h],
         outputs=[dataframe_gt_ref_value, dataframe_gt_ARL0],
+    )
+    button_populate_table.click(
+        fn=lambda: gr.update(visible=True), inputs=[], outputs=dataframe_gt_ref_value
+    )
+    button_populate_table.click(
+        fn=lambda: gr.update(visible=True), inputs=[], outputs=dataframe_gt_ARL0
+    )
+
+    # Get the CSV file and populate plots
+    button_csv_specificity.click(
+        fn=populate_cusum_plots,
+        inputs=[csv_file_specificity],
+        outputs=[plot_avg_specificity, plot_histogram, plot_cusum_chart],
+    )
+
+    button_csv_specificity.click(
+        fn=lambda: gr.update(visible=True), inputs=[], outputs=plot_avg_specificity
+    )
+    button_csv_specificity.click(
+        fn=lambda: gr.update(visible=True), inputs=[], outputs=plot_histogram
+    )
+    button_csv_specificity.click(
+        fn=lambda: gr.update(visible=True), inputs=[], outputs=plot_cusum_chart
     )
 
 demo.launch(server_name="0.0.0.0", server_port=7860)

@@ -42,7 +42,13 @@ class CUSUM:
         with open("config.toml", "rb") as file_config:
             self.config = tomli.load(file_config)
 
+    def set_df_spec_default(self):
         self.df_sp = pd.read_csv(self.config["path_input"]["path_df_sp"])
+        # AUCs to numpy array
+        self.data = self.df_sp[self.df_sp.columns[1]].to_numpy()
+    
+    def set_df_spec_csv(self, data_csv):
+        self.df_sp = data_csv
         # AUCs to numpy array
         self.data = self.df_sp[self.df_sp.columns[1]].to_numpy()
 
@@ -234,7 +240,7 @@ class CUSUM:
         return fig
 
     # Plot the input Specificities using Plotly
-    def plot_input_aucs_plotly(self):
+    def plot_input_specificities_plotly(self):
         pre_change_days = 60
         post_change_days = 60
         total_days = pre_change_days + post_change_days
@@ -323,11 +329,13 @@ class CUSUM:
 
         fig = go.Figure()
 
+        nbinsx = 12 # 6
+
         # add subplots
         fig.add_trace(
             go.Histogram(
                 x=self.data[0:60],
-                nbinsx=6,
+                nbinsx=nbinsx,
                 name=f"""Pre-change S<sub>p</sub>""",
                 marker=dict(color="mediumturquoise"),
                 opacity=0.5,
@@ -337,8 +345,8 @@ class CUSUM:
         fig.add_trace(
             go.Histogram(
                 x=self.data[60:120],
-                nbinsx=6,
-                name=f"""Post-change SS<sub>p</sub>""",
+                nbinsx=nbinsx,
+                name=f"""Post-change S<sub>p</sub>""",
                 marker=dict(color="coral"),
                 opacity=0.5,
             )
@@ -350,11 +358,11 @@ class CUSUM:
                 y=[0, 50],  # [! y_max is not working]
                 mode="lines",
                 name="Reference mean",
-                line=dict(color="grey", dash="dash"),
+                line=dict(color="mediumturquoise", dash="dash"),
             )
         )
 
-        fig.add_vline(x=np.mean(self.data[0:60]), line_dash="dash", line_color="grey")
+        fig.add_vline(x=np.mean(self.data[0:60]), line_dash="dash", line_color="mediumturquoise")
 
         fig.update_layout(
             title="Histograms for the pre-change and post-change specificity",
