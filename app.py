@@ -65,8 +65,7 @@ def populate_cusum_plots(file_csv_specificity):
 
     return (
         obj_cusum.plot_input_specificities_plotly(),
-        obj_cusum.plot_histogram_aucs_plotly(),
-        obj_cusum.plot_cusum_plotly(),
+        obj_cusum.plot_cusum_plotly()
     )
 
 
@@ -142,10 +141,10 @@ with gr.Blocks(
                 label="Average Specificities for the pre-change and post-change regime",
                 visible=False,
             )
-            plot_histogram = gr.Plot(
-                label="Histograms for the pre- and post-change specificity",
-                visible=False,
-            )
+            # plot_histogram = gr.Plot(
+            #     label="Histograms for the pre- and post-change specificity",
+            #     visible=False,
+            # )
             plot_cusum_chart = gr.Plot(label="CUSUM Chart", visible=False)
 
     # Get the CSV file and populate tables
@@ -165,15 +164,15 @@ with gr.Blocks(
     button_csv_specificity.click(
         fn=populate_cusum_plots,
         inputs=[csv_file_specificity],
-        outputs=[plot_avg_specificity, plot_histogram, plot_cusum_chart],
+        outputs=[plot_avg_specificity, plot_cusum_chart],
     )
 
     button_csv_specificity.click(
         fn=lambda: gr.update(visible=True), inputs=[], outputs=plot_avg_specificity
     )
-    button_csv_specificity.click(
-        fn=lambda: gr.update(visible=True), inputs=[], outputs=plot_histogram
-    )
+    # button_csv_specificity.click(
+    #     fn=lambda: gr.update(visible=True), inputs=[], outputs=plot_histogram
+    # )
     button_csv_specificity.click(
         fn=lambda: gr.update(visible=True), inputs=[], outputs=plot_cusum_chart
     )

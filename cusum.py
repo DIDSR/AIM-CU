@@ -10,6 +10,7 @@ import pandas as pd
 import warnings
 
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 import tomli
 
 warnings.filterwarnings("ignore")
@@ -253,7 +254,12 @@ class CUSUM:
         y2 = self.data[pre_change_days:total_days]
         mean_y2 = np.mean(y2)
 
-        fig = go.Figure()
+        fig = make_subplots(
+            rows=1, cols=2,
+            column_widths=[0.7, 0.3],
+            shared_yaxes=True,
+            horizontal_spacing=0.02
+        )
 
         # add subplots
         fig.add_trace(
@@ -264,7 +270,7 @@ class CUSUM:
                 name=f"""In-control S<sub>p</sub>""",
                 marker=dict(color="darkturquoise", size=10),
                 opacity=0.4,
-            )
+            ), row=1, col=1
         )
         fig.add_trace(
             go.Scatter(
@@ -274,7 +280,7 @@ class CUSUM:
                 name=f"""Out-of-control S<sub>p</sub>""",
                 marker=dict(color="coral", size=10),
                 opacity=0.4,
-            )
+            ), row=1, col=1
         )
 
         # add horizontal lines
@@ -285,7 +291,7 @@ class CUSUM:
                 mode="lines",
                 name="In-control mean",
                 line=dict(color="darkturquoise", dash="dash"),
-            )
+            ), row=1, col=1
         )
         fig.add_trace(
             go.Scatter(
@@ -294,7 +300,7 @@ class CUSUM:
                 mode="lines",
                 name="Out-of-control mean",
                 line=dict(color="coral", dash="dash"),
-            )
+            ), row=1, col=1
         )
 
         # add vertical line
@@ -305,11 +311,11 @@ class CUSUM:
                 mode="lines",
                 name="Change-point",
                 line=dict(color="grey", dash="dash"),
-            )
+            ), row=1, col=1
         )
 
         fig.update_layout(
-            title="Average Specificities for the pre-change and post-change regime",
+            title="Average Specificities for the pre-change and post-change regime, and histogram",
             xaxis_title="Length of Simulation (days)",
             yaxis_title="AI model Specificity",
             xaxis=dict(dtick=20),
@@ -321,63 +327,109 @@ class CUSUM:
             legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
         )
 
-        return fig
-
-    # PLOT THE HISTOGRAM OF all Specificities - for the observations from 120 days
-    def plot_histogram_aucs_plotly(self):
-        # Display the histogram of in-control Sp
-
-        fig = go.Figure()
-
-        nbinsx = 12 # 6
+        # add histogram (like marginal histogram)
+        nbinsx = 15 # 6
 
         # add subplots
         fig.add_trace(
             go.Histogram(
-                x=self.data[0:60],
-                nbinsx=nbinsx,
-                name=f"""Pre-change S<sub>p</sub>""",
+                y=self.data[:pre_change_days],
+                nbinsy=nbinsx,
+                # name=f"""Pre-change S<sub>p</sub>""",
+                showlegend=False,
                 marker=dict(color="mediumturquoise"),
-                opacity=0.5,
-            )
+                opacity=0.4,
+                orientation='h'
+            ), row=1, col=2
         )
 
         fig.add_trace(
             go.Histogram(
-                x=self.data[60:120],
-                nbinsx=nbinsx,
-                name=f"""Post-change S<sub>p</sub>""",
+                y=self.data[pre_change_days:total_days],
+                nbinsy=nbinsx,
+                # name=f"""Post-change S<sub>p</sub>""",
+                showlegend=False,
                 marker=dict(color="coral"),
-                opacity=0.5,
-            )
+                opacity=0.4,
+                orientation='h'
+            ), row=1, col=2
         )
 
         fig.add_trace(
             go.Scatter(
-                x=[np.mean(self.data[0:60]), np.mean(self.data[0:60])],
-                y=[0, 50],  # [! y_max is not working]
+                x=[0, 20],  # [! y_max is not working]
+                y=[np.mean(self.data[:pre_change_days]), np.mean(self.data[:pre_change_days])],
                 mode="lines",
-                name="Reference mean",
+                # name="Reference mean",
+                showlegend=False,
                 line=dict(color="mediumturquoise", dash="dash"),
-            )
+            ), row=1, col=2
         )
 
-        fig.add_vline(x=np.mean(self.data[0:60]), line_dash="dash", line_color="mediumturquoise")
-
-        fig.update_layout(
-            title="Histograms for the pre-change and post-change specificity",
-            xaxis_title="AI model Specificity",
-            yaxis_title="Count",
-            xaxis=dict(dtick=0.2, range=[0, 1]),
+        fig.update_xaxes(
+            title_text="Count", row=1, col=2
         )
 
-        fig.update_layout(plot_bgcolor=self.config["color"]["blue_005"])
-
-        fig.update_layout(
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
-        )
-
+        # update layout
+        fig.update_layout(barmode='overlay')
+        
         return fig
+
+    # # PLOT THE HISTOGRAM OF all Specificities - for the observations from 120 days
+    # def plot_histogram_aucs_plotly(self):
+    #     # Display the histogram of in-control Sp
+
+    #     fig = go.Figure()
+
+    #     nbinsx = 12 # 6
+
+    #     # add subplots
+    #     fig.add_trace(
+    #         go.Histogram(
+    #             x=self.data[0:60],
+    #             nbinsx=nbinsx,
+    #             name=f"""Pre-change S<sub>p</sub>""",
+    #             marker=dict(color="mediumturquoise"),
+    #             opacity=0.5,
+    #         )
+    #     )
+
+    #     fig.add_trace(
+    #         go.Histogram(
+    #             x=self.data[60:120],
+    #             nbinsx=nbinsx,
+    #             name=f"""Post-change S<sub>p</sub>""",
+    #             marker=dict(color="coral"),
+    #             opacity=0.5,
+    #         )
+    #     )
+
+    #     fig.add_trace(
+    #         go.Scatter(
+    #             x=[np.mean(self.data[0:60]), np.mean(self.data[0:60])],
+    #             y=[0, 50],  # [! y_max is not working]
+    #             mode="lines",
+    #             name="Reference mean",
+    #             line=dict(color="mediumturquoise", dash="dash"),
+    #         )
+    #     )
+
+    #     fig.add_vline(x=np.mean(self.data[0:60]), line_dash="dash", line_color="mediumturquoise")
+
+    #     fig.update_layout(
+    #         title="Histograms for the pre-change and post-change specificity",
+    #         xaxis_title="AI model Specificity",
+    #         yaxis_title="Count",
+    #         xaxis=dict(dtick=0.2, range=[0, 1]),
+    #     )
+
+    #     fig.update_layout(plot_bgcolor=self.config["color"]["blue_005"])
+
+    #     fig.update_layout(
+    #         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+    #     )
+
+    #     return fig
 
     # plot CUSUM value using Plotly
     def plot_cusum_plotly(self):
