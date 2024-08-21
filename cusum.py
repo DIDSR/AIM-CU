@@ -411,10 +411,13 @@ class CUSUM:
         # update layout
         fig.update_layout(barmode="overlay")
 
-        fig.write_image(
-            os.path.join(self.config["path_output"]["path_figure"], "fig_plot_1.png"),
-            scale=3,
-        )
+        if self.config["control"]["save_figure"] == "true":
+            fig.write_image(
+                os.path.join(
+                    self.config["path_output"]["path_figure"], "fig_plot_1.png"
+                ),
+                scale=3,
+            )
 
         return fig
 
@@ -489,9 +492,12 @@ class CUSUM:
             legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
         )
 
-        fig.write_image(
-            os.path.join(self.config["path_output"]["path_figure"], "fig_plot_2.png"),
-            scale=3,
-        )
+        if self.config["control"]["save_figure"] == "true":
+            fig.write_image(
+                os.path.join(
+                    self.config["path_output"]["path_figure"], "fig_plot_2.png"
+                ),
+                scale=3,
+            )
 
         return fig

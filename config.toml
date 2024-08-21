@@ -14,3 +14,7 @@ blue_040 = "#A3CAE1"
 blue_060 = "#77B0D2"
 blue_080 = "#4F96C4"
 blue_100 = "#007CBA"
+
+# controls
+[control]
+save_figure = "false"

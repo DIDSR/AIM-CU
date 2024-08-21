@@ -1,3 +1,8 @@
+"""
+Gradio user interface for AIM-CU
+"""
+
+import os
 import pandas as pd
 import gradio as gr
 import tomli
@@ -11,9 +16,11 @@ from utils import (
 with open("config.toml", "rb") as file_config:
     config = tomli.load(file_config)
 
+if not os.path.exists(config["path_output"]["path_figure"]):
+    os.mkdir(config["path_output"]["path_figure"])
+
 obj_cusum = CUSUM()
 obj_cusum.initialize()
-
 
 # Populate tables for ARL0 and ARL1 given the value of h
 def populate_table(h):
@@ -130,6 +137,9 @@ with gr.Blocks(
             )
 
         with gr.Column():
+            gr.Markdown(f"""
+                        ## Phase II: Monitoring
+                        """)
             gr.Markdown(f"""
                 Upload the CSV file with specificities. Or use the default example CSV file by directly clicking the button below.
                 """)  # noqa: F541
