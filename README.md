@@ -16,7 +16,7 @@ Run the following commands to install required dependencies.
 ```
 apt-get -y install python3
 apt-get -y install pip
-cd PyBDC
+cd AIM-CU
 pip install -r requirements.txt
 ```
 
