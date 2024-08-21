@@ -7,3 +7,5 @@ nbformat>=4.2.0
 tomli
 rpy2==3.5.1
 great_tables
+kaleido
+selenium

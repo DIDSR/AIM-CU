@@ -63,43 +63,24 @@ def populate_cusum_plots(file_csv_specificity):
 
     obj_cusum.change_detection()
 
-    return (
-        obj_cusum.plot_input_specificities_plotly(),
-        obj_cusum.plot_cusum_plotly()
-    )
+    return (obj_cusum.plot_input_specificities_plotly(), obj_cusum.plot_cusum_plotly())
 
 
 with gr.Blocks(
     theme=gr.themes.Base(
-        primary_hue=gr.themes.Color(
-            c50=config["color"]["blue_005"],
-            c100=config["color"]["blue_005"],
-            c200=config["color"]["blue_020"],
-            c300=config["color"]["blue_020"],
-            c400=config["color"]["blue_040"],
-            c500=config["color"]["blue_040"],
-            c600=config["color"]["blue_060"],
-            c700=config["color"]["blue_060"],
-            c800=config["color"]["blue_080"],
-            c900=config["color"]["blue_080"],
-            c950=config["color"]["blue_100"],
+        neutral_hue=gr.themes.Color(
+            c50="#e5f1f8",
+            c100="#e5f1f8",
+            c200="#cce4f1",
+            c300="#b2d7ea",
+            c400="#7fbddc",
+            c500="#4ca3ce",
+            c600="#007cba",
+            c700="#006394",
+            c800="#004a6f",
+            c900="#00314a",
+            c950="#001825",
         ),
-        secondary_hue=gr.themes.Color(
-            c50=config["color"]["blue_005"],
-            c100=config["color"]["blue_005"],
-            c200=config["color"]["blue_020"],
-            c300=config["color"]["blue_020"],
-            c400=config["color"]["blue_040"],
-            c500=config["color"]["blue_040"],
-            c600=config["color"]["blue_060"],
-            c700=config["color"]["blue_060"],
-            c800=config["color"]["blue_080"],
-            c900=config["color"]["blue_080"],
-            c950=config["color"]["blue_100"],
-        ),
-    ).set(
-        button_primary_background_fill="*primary_200",
-        button_primary_background_fill_hover="*primary_100",
     )
 ) as demo:
     format = '<a href="{link}">{text}</a>'
@@ -109,18 +90,40 @@ with gr.Blocks(
                 # AIM-CU: A CUSUM-based tool for AI Monitoring
                 """)  # noqa: F541
 
+    gr.Markdown(f"""
+                ### AIM-CU is a statistical tool for AI monitoring using cumulative sum (AIM-CU). AIM-CU computes:
+                * the parameter choices for change-point detection based on an acceptable false alarm rate
+                * detection delay estimates for a given displacement of the performance metric from the target for those parameter choices.
+                """)
+
     with gr.Row():
         with gr.Column():
             gr.Markdown(f"""
-                h is referred to as the normalized threshold. In typical applications, h may default to 4.
-                """)  # noqa: F541
-            h = gr.Textbox(
-                label="h value",
-                placeholder="h is referred to as the normalized threshold. In typical applications, h may default to 4.",
-            )
+                        ## Phase I: Initialization
+                        """)
 
-            dataframe_gt_ref_value = gr.HTML(label="Reference Values for an intended ARL0 with normalized threshold h", show_label=True, visible=False)
-            dataframe_gt_ARL0 = gr.HTML(label="Estimate of steady state ARL (ARL1 based on the computed reference values and intended zero-state ARL (ARL0) with normalized threshold h)", show_label=True, visible=False)
+            with gr.Row():
+                with gr.Column():
+                    h = gr.Textbox(
+                        label="h value =",
+                        placeholder="h = normalized threshold, default = 4",
+                    )
+                with gr.Column():
+                    k = gr.Textbox(
+                        label="k value =",
+                        placeholder="k = reference value, default = 0.5",
+                    )
+
+            dataframe_gt_ref_value = gr.HTML(
+                label="Reference Values for an intended ARL0 with normalized threshold h",
+                show_label=True,
+                visible=False,
+            )
+            dataframe_gt_ARL0 = gr.HTML(
+                label="Estimate of steady state ARL (ARL1 based on the computed reference values and intended zero-state ARL (ARL0) with normalized threshold h)",
+                show_label=True,
+                visible=False,
+            )
 
             button_populate_table = gr.Button(
                 "Populate Reference Values and ARL1 tables for the given h value"
@@ -141,11 +144,17 @@ with gr.Blocks(
                 label="Average Specificities for the pre-change and post-change regime",
                 visible=False,
             )
-            # plot_histogram = gr.Plot(
-            #     label="Histograms for the pre- and post-change specificity",
-            #     visible=False,
-            # )
             plot_cusum_chart = gr.Plot(label="CUSUM Chart", visible=False)
+
+            # details about the tool
+            gr.Markdown(f"""
+                        ### Potential users who are concerned about safe and reliable medical AI tools:
+                        * AI developers
+                        * Healthcare professionals
+                        * Patients
+                        * Regulators
+                        * Policymakers
+                        """)
 
     # Get the CSV file and populate tables
     button_populate_table.click(
@@ -170,9 +179,6 @@ with gr.Blocks(
     button_csv_specificity.click(
         fn=lambda: gr.update(visible=True), inputs=[], outputs=plot_avg_specificity
     )
-    # button_csv_specificity.click(
-    #     fn=lambda: gr.update(visible=True), inputs=[], outputs=plot_histogram
-    # )
     button_csv_specificity.click(
         fn=lambda: gr.update(visible=True), inputs=[], outputs=plot_cusum_chart
     )

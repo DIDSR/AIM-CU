@@ -2,6 +2,10 @@
 [path_input]
 path_df_sp = "spec-60-60.csv"
 
+# paths to output files
+[path_output]
+path_figure = "figure/"
+
 # primary colors
 [color]
 blue_005 = "#F3F9FC"

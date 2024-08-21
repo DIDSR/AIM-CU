@@ -59,9 +59,7 @@ def get_ref_value(h: float, list_ARL_0: list):
     return summary_table_df_ARL0_k, dict_ARL0_k
 
 
-def get_ARL_1(
-    h: float, shift_in_mean: list, dict_ARL0_k: OrderedDict
-):
+def get_ARL_1(h: float, shift_in_mean: list, dict_ARL0_k: OrderedDict):
     """
     # Code for table 5
     # xcusum.ad
@@ -92,33 +90,3 @@ def get_ARL_1(
     summary_table_df_ARL1_k = pd.DataFrame(dict_data_ARL1_k)
 
     return summary_table_df_ARL1_k
-
-
-# summary_table_ARL0_k, dict_ARL0_k = get_ref_value(
-#     h=4, list_ARL_0=[50, 100, 150, 200, 300, 400, 500, 1000]
-# )
-
-# summary_table_df_ARL1_k = get_ARL_1(
-#     h=4,
-#     k=0.159,
-#     mu1=0.1,
-#     dict_ARL0_k=dict_ARL0_k,
-#     shift_in_mean=[
-#         0.1,
-#         0.2,
-#         0.3,
-#         0.4,
-#         0.5,
-#         0.6,
-#         0.7,
-#         0.8,
-#         0.9,
-#         1.0,
-#         1.1,
-#         1.2,
-#         1.3,
-#         1.4,
-#         1.5,
-#         1.6,
-#     ],  # mu1
-# )
