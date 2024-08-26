@@ -94,6 +94,10 @@ with gr.Blocks(
                         ## Phase I: Initialization
                         """)  # noqa: F541
 
+            gr.Markdown(f"""
+                Enter the h and k values.
+                """)  # noqa: F541
+
             with gr.Row():
                 with gr.Column():
                     h = gr.Textbox(
