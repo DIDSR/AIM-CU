@@ -2,8 +2,8 @@
 A CUSUM-based tool for AI Monitoring
 
 AIM-CU is a statistical tool for AI monitoring using cumulative sum (AIM-CU). AIM-CU computes:
-* the parameter choices for change-point detection based on an acceptable false alarm rate
-* detection delay estimates for a given displacement of the performance metric from the target for those parameter choices.
+* The parameter choices for change-point detection based on an acceptable false alarm rate
+* Detection delay estimates for a given displacement of the performance metric from the target for those parameter choices.
 
 Code execution
 ----------

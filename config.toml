@@ -18,3 +18,25 @@ blue_100 = "#007CBA"
 # controls
 [control]
 save_figure = "false"
+
+# CUSUM parameters
+[params_cusum]
+list_ARL_0 = [50, 100, 150, 200, 300, 400, 500, 1000]
+shift_in_mean = [
+    0.1,
+    0.2,
+    0.3,
+    0.4,
+    0.5,
+    0.6,
+    0.7,
+    0.8,
+    0.9,
+    1.0,
+    1.1,
+    1.2,
+    1.3,
+    1.4,
+    1.5,
+    1.6,
+]

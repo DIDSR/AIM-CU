@@ -22,34 +22,19 @@ if not os.path.exists(config["path_output"]["path_figure"]):
 obj_cusum = CUSUM()
 obj_cusum.initialize()
 
+
 # Populate tables for ARL0 and ARL1 given the value of h
 def populate_table(h):
     h = float(h)
 
     summary_table_df_ARL0_k, dict_ARL0_k = get_ref_value(
-        h=h, list_ARL_0=[50, 100, 150, 200, 300, 400, 500, 1000]
+        h=h,
+        list_ARL_0=config["params_cusum"]["list_ARL_0"],
     )
 
     summary_table_df_ARL1_k = get_ARL_1(
         h=h,
-        shift_in_mean=[
-            0.1,
-            0.2,
-            0.3,
-            0.4,
-            0.5,
-            0.6,
-            0.7,
-            0.8,
-            0.9,
-            1.0,
-            1.1,
-            1.2,
-            1.3,
-            1.4,
-            1.5,
-            1.6,
-        ],
+        shift_in_mean=config["params_cusum"]["shift_in_mean"],
         dict_ARL0_k=dict_ARL0_k,
     )
 
@@ -99,15 +84,15 @@ with gr.Blocks(
 
     gr.Markdown(f"""
                 ### AIM-CU is a statistical tool for AI monitoring using cumulative sum (AIM-CU). AIM-CU computes:
-                * the parameter choices for change-point detection based on an acceptable false alarm rate
-                * detection delay estimates for a given displacement of the performance metric from the target for those parameter choices.
-                """)
+                * The parameter choices for change-point detection based on an acceptable false alarm rate
+                * Detection delay estimates for a given displacement of the performance metric from the target for those parameter choices.
+                """)  # noqa: F541
 
     with gr.Row():
         with gr.Column():
             gr.Markdown(f"""
                         ## Phase I: Initialization
-                        """)
+                        """)  # noqa: F541
 
             with gr.Row():
                 with gr.Column():
@@ -139,7 +124,7 @@ with gr.Blocks(
         with gr.Column():
             gr.Markdown(f"""
                         ## Phase II: Monitoring
-                        """)
+                        """)  # noqa: F541
             gr.Markdown(f"""
                 Upload the CSV file with specificities. Or use the default example CSV file by directly clicking the button below.
                 """)  # noqa: F541
@@ -164,7 +149,7 @@ with gr.Blocks(
                         * Patients
                         * Regulators
                         * Policymakers
-                        """)
+                        """)  # noqa: F541
 
     # Get the CSV file and populate tables
     button_populate_table.click(
