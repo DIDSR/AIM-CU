@@ -16,8 +16,9 @@ from utils import (
 with open("config.toml", "rb") as file_config:
     config = tomli.load(file_config)
 
-if not os.path.exists(config["path_output"]["path_figure"]):
-    os.mkdir(config["path_output"]["path_figure"])
+if config["control"]["save_figure"] == "true":
+    if not os.path.exists(config["path_output"]["path_figure"]):
+        os.mkdir(config["path_output"]["path_figure"])
 
 obj_cusum = CUSUM()
 obj_cusum.initialize()
@@ -79,7 +80,7 @@ with gr.Blocks(
     text_with_link = format.format
 
     gr.Markdown(f"""
-                # AIM-CU: A CUSUM-based tool for AI Monitoring
+                # AIM-CU: A CUSUM-based tool for AI Monitoring. Hello.
                 """)  # noqa: F541
 
     gr.Markdown(f"""
