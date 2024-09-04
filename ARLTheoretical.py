@@ -31,6 +31,14 @@ names_to_install = [x for x in packnames if not rpackages.isinstalled(x)]
 if len(names_to_install) > 0:
     utils.install_packages(StrVector(names_to_install))
 
+def get_ref_value_k(h: float, ARL_0: float):
+    """
+    Calculation for the reference value for given h and ARL_0
+    """
+
+    k = np.round(spc.xcusum_crit_L0h(ARL_0, h), decimals=4).tolist()[0]
+
+    return k
 
 def get_ref_value(h: float, list_ARL_0: list):
     """
@@ -46,7 +54,7 @@ def get_ref_value(h: float, list_ARL_0: list):
     dict_ARL0_k = OrderedDict()
 
     # Print the reference values for an intended ARL_0 with normalized threshold, h=4
-    print("Reference value, k: for an intended ARL_0 and h")
+    # print("Reference value, k: for an intended ARL_0 and h")
     summary_table_df_ARL0_k = pd.DataFrame(columns=["ARL_0", "k"])
     for n, ARL_0 in enumerate(list_ARL_0):
         k = np.round(spc.xcusum_crit_L0h(ARL_0, h), decimals=4).tolist()[0]

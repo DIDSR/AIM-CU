@@ -7,7 +7,7 @@ import pandas as pd
 import gradio as gr
 import tomli
 from cusum import CUSUM
-from ARLTheoretical import get_ref_value, get_ARL_1
+from ARLTheoretical import get_ref_value, get_ref_value_k, get_ARL_1
 from utils import (
     populate_summary_table_ARL0_k,
     populate_summary_table_ARL1_k,
@@ -43,6 +43,13 @@ def populate_table(h):
         summary_table_df_ARL0_k
     ), populate_summary_table_ARL1_k(summary_table_df_ARL1_k, dict_ARL0_k)
 
+def calculate_reference_value_k(h, arl_0):
+    h = float(h)
+    arl_0 = float(arl_0)
+
+    k = get_ref_value_k(h=h, ARL_0=arl_0)
+
+    return k
 
 # Populate CUSUM plots
 def populate_cusum_plots(file_csv_specificity, ref_value):
@@ -94,7 +101,7 @@ with gr.Blocks(
     with gr.Row():
         with gr.Column():
             gr.Markdown(f"""
-                        ### AIM-CU Phase I:
+                        ### Phase I:
                         Parameter choices for detecting change and detection delay estimates.
                         """)  # noqa: F541
 
@@ -106,22 +113,36 @@ with gr.Blocks(
                 label="h value =",
                 placeholder="h = normalized threshold, default = 4",
                 value="4",
-                autofocus=True
+                autofocus=True,
             )
 
             dataframe_gt_ref_value = gr.HTML(
                 label="Reference Values for an intended ARL0 with normalized threshold h",
                 show_label=True,
-                visible=False,
+                visible=False
             )
+
+            gr.Markdown(f"""
+                ### Calculate reference value k for a specific value for ARL<sub>0</sub>:
+                """)  # noqa: F541
+            
+            with gr.Row():
+                arl_0 = gr.Textbox(label="Specific ARL_0 value =", placeholder="ARL_0")
+
+                button_calculate_k = gr.Button(
+                    "Calculate k"
+                )
+
+                output_k = gr.Textbox(label="Calculated k =", visible=False)
+
             dataframe_gt_ARL0 = gr.HTML(
-                label="Estimate of steady state ARL (ARL1 based on the computed reference values and intended zero-state ARL (ARL0) with normalized threshold h)",
+                label="Estimate of steady state ARL (ARL_1 based on the computed reference values and intended zero-state ARL (ARL_0) with normalized threshold h)",
                 show_label=True,
                 visible=False,
             )
 
             button_populate_table = gr.Button(
-                "Populate Reference Values and ARL1 tables for the given h value"
+                "Populate Reference Values and ARL_1 tables for the given h value"
             )
 
         with gr.Column():
@@ -137,7 +158,7 @@ with gr.Blocks(
             ref_value = gr.Textbox(
                 label="Reference value k value",
                 placeholder="k = reference value, default = 0.5",
-                value="0.5"
+                value="0.5",
             )
 
             gr.Markdown(f"""
@@ -179,11 +200,21 @@ with gr.Blocks(
         fn=lambda: gr.update(visible=True), inputs=[], outputs=dataframe_gt_ARL0
     )
 
+    # Calculate specific k for ARL_0
+    button_calculate_k.click(
+        fn=calculate_reference_value_k,
+        inputs=[h, arl_0],
+        outputs=[output_k]
+    )
+    button_calculate_k.click(
+        fn=lambda: gr.update(visible=True), inputs=[], outputs=output_k
+    )
+
     # Get the CSV file and populate plots
     button_csv_specificity.click(
         fn=populate_cusum_plots,
         inputs=[csv_file_specificity, ref_value],
-        outputs=[plot_avg_specificity, plot_cusum_chart],
+        outputs=[plot_avg_specificity, plot_cusum_chart]
     )
 
     button_csv_specificity.click(
