@@ -130,11 +130,11 @@ class CUSUM:
         return self.S_hi, self.S_lo, cusum
 
     # [! provide a proper name]
-    def change_detection(self):
+    def change_detection(self, ref_value=0.5):
         pre_change_days = 60
         post_change_days = 60
         total_days = pre_change_days + post_change_days
-        ref_val = 0.5
+        ref_val = ref_value # 0.5
         control_limit = 4
 
         self.h_1000 = np.array([])

@@ -45,7 +45,9 @@ def populate_table(h):
 
 
 # Populate CUSUM plots
-def populate_cusum_plots(file_csv_specificity):
+def populate_cusum_plots(file_csv_specificity, ref_value):
+    ref_value = float(ref_value)
+
     if file_csv_specificity is not None:
         # upload CSV file
         data_csv_specificity = pd.read_csv(file_csv_specificity.name)
@@ -54,7 +56,7 @@ def populate_cusum_plots(file_csv_specificity):
         # use the example CSV data
         obj_cusum.set_df_spec_default()
 
-    obj_cusum.change_detection()
+    obj_cusum.change_detection(ref_value=ref_value)
 
     return (obj_cusum.plot_input_specificities_plotly(), obj_cusum.plot_cusum_plotly())
 
@@ -80,36 +82,32 @@ with gr.Blocks(
     text_with_link = format.format
 
     gr.Markdown(f"""
-                # AIM-CU: A CUSUM-based tool for AI Monitoring. Hello.
+                # AIM-CU
+                ## AIM-CU is a statistical tool for AI monitoring using cumulative sum (AIM-CU).
                 """)  # noqa: F541
 
     gr.Markdown(f"""
-                ### AIM-CU is a statistical tool for AI monitoring using cumulative sum (AIM-CU). AIM-CU computes:
-                * The parameter choices for change-point detection based on an acceptable false alarm rate
-                * Detection delay estimates for a given displacement of the performance metric from the target for those parameter choices.
+                ### AIM-CU Input:
+                AI output (e.g. metrics such as Accuracy, F1-score, Sensitivity etc.)
                 """)  # noqa: F541
 
     with gr.Row():
         with gr.Column():
             gr.Markdown(f"""
-                        ## Phase I: Initialization
+                        ### AIM-CU Phase I:
+                        Parameter choices for detecting change and detection delay estimates.
                         """)  # noqa: F541
 
             gr.Markdown(f"""
-                Enter the h and k values.
+                ### Enter h value:
                 """)  # noqa: F541
 
-            with gr.Row():
-                with gr.Column():
-                    h = gr.Textbox(
-                        label="h value =",
-                        placeholder="h = normalized threshold, default = 4",
-                    )
-                with gr.Column():
-                    k = gr.Textbox(
-                        label="k value =",
-                        placeholder="k = reference value, default = 0.5",
-                    )
+            h = gr.Textbox(
+                label="h value =",
+                placeholder="h = normalized threshold, default = 4",
+                value="4",
+                autofocus=True
+            )
 
             dataframe_gt_ref_value = gr.HTML(
                 label="Reference Values for an intended ARL0 with normalized threshold h",
@@ -128,8 +126,20 @@ with gr.Blocks(
 
         with gr.Column():
             gr.Markdown(f"""
-                        ## Phase II: Monitoring
+                        ### Phase II:
+                        Performance drift detection plots, pre- and post-change distribution with respect to the performance drift detected.
                         """)  # noqa: F541
+
+            gr.Markdown(f"""
+                ### Enter reference value k:
+                """)  # noqa: F541
+
+            ref_value = gr.Textbox(
+                label="Reference value k value",
+                placeholder="k = reference value, default = 0.5",
+                value="0.5"
+            )
+
             gr.Markdown(f"""
                 Upload the CSV file with specificities. Or use the default example CSV file by directly clicking the button below.
                 """)  # noqa: F541
@@ -146,15 +156,15 @@ with gr.Blocks(
             )
             plot_cusum_chart = gr.Plot(label="CUSUM Chart", visible=False)
 
-            # details about the tool
-            gr.Markdown(f"""
-                        ### Potential users who are concerned about safe and reliable medical AI tools:
-                        * AI developers
-                        * Healthcare professionals
-                        * Patients
-                        * Regulators
-                        * Policymakers
-                        """)  # noqa: F541
+            # # details about the tool
+            # gr.Markdown(f"""
+            #             ### Potential users who are concerned about safe and reliable medical AI tools:
+            #             * AI developers
+            #             * Healthcare professionals
+            #             * Patients
+            #             * Regulators
+            #             * Policymakers
+            #             """)  # noqa: F541
 
     # Get the CSV file and populate tables
     button_populate_table.click(
@@ -172,7 +182,7 @@ with gr.Blocks(
     # Get the CSV file and populate plots
     button_csv_specificity.click(
         fn=populate_cusum_plots,
-        inputs=[csv_file_specificity],
+        inputs=[csv_file_specificity, ref_value],
         outputs=[plot_avg_specificity, plot_cusum_chart],
     )
 
