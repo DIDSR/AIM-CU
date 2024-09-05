@@ -7,7 +7,7 @@ import pandas as pd
 import gradio as gr
 import tomli
 from cusum import CUSUM
-from ARLTheoretical import get_ref_value, get_ref_value_k, get_ARL_1
+from ARLTheoretical import get_ref_value, get_ref_value_k, get_ARL_1, get_ARL_1_h_mu1_k
 from utils import (
     populate_summary_table_ARL0_k,
     populate_summary_table_ARL1_k,
@@ -43,6 +43,7 @@ def populate_table(h):
         summary_table_df_ARL0_k
     ), populate_summary_table_ARL1_k(summary_table_df_ARL1_k, dict_ARL0_k)
 
+
 def calculate_reference_value_k(h, arl_0):
     h = float(h)
     arl_0 = float(arl_0)
@@ -50,6 +51,17 @@ def calculate_reference_value_k(h, arl_0):
     k = get_ref_value_k(h=h, ARL_0=arl_0)
 
     return k
+
+
+def calculate_arl1_h_k_mu1(h, k, mu1):
+    h = float(h)
+    k = float(k)
+    mu1 = float(mu1)
+
+    arl_1 = get_ARL_1_h_mu1_k(h=h, k=k, mu1=mu1)
+
+    return arl_1
+
 
 # Populate CUSUM plots
 def populate_cusum_plots(file_csv_specificity, ref_value):
@@ -119,19 +131,19 @@ with gr.Blocks(
             dataframe_gt_ref_value = gr.HTML(
                 label="Reference Values for an intended ARL0 with normalized threshold h",
                 show_label=True,
-                visible=False
+                visible=False,
             )
 
             gr.Markdown(f"""
                 ### Calculate reference value k for a specific value for ARL<sub>0</sub>:
                 """)  # noqa: F541
-            
-            with gr.Row():
-                arl_0 = gr.Textbox(label="Specific ARL_0 value =", placeholder="ARL_0")
 
-                button_calculate_k = gr.Button(
-                    "Calculate k"
+            with gr.Row():
+                arl_0 = gr.Textbox(
+                    label="ARL_0 value =", placeholder="ARL_0", value="100"
                 )
+
+                button_calculate_k = gr.Button("Calculate k")
 
                 output_k = gr.Textbox(label="Calculated k =", visible=False)
 
@@ -140,6 +152,24 @@ with gr.Blocks(
                 show_label=True,
                 visible=False,
             )
+
+            gr.Markdown(f"""
+                ### Calculate ARL<sub>1</sub> for reference value h, value k and shift in mean:
+                """)  # noqa: F541
+
+            with gr.Row():
+                k_phase1 = gr.Textbox(
+                    label="k value =", placeholder="k", value="0.2996"
+                )
+                mu1 = gr.Textbox(
+                    label="Shift in mean value =",
+                    placeholder="Shift in mean value",
+                    value="1.2",
+                )
+
+                button_calculate_ARL_1 = gr.Button("Calculate ARL_1")
+
+                output_ARL_1 = gr.Textbox(label="Calculated ARL_1 =", visible=False)
 
             button_populate_table = gr.Button(
                 "Populate Reference Values and ARL_1 tables for the given h value"
@@ -155,7 +185,7 @@ with gr.Blocks(
                 ### Enter reference value k:
                 """)  # noqa: F541
 
-            ref_value = gr.Textbox(
+            k_phase2 = gr.Textbox(
                 label="Reference value k value",
                 placeholder="k = reference value, default = 0.5",
                 value="0.5",
@@ -164,6 +194,7 @@ with gr.Blocks(
             gr.Markdown(f"""
                 Upload the CSV file with specificities. Or use the default example CSV file by directly clicking the button below.
                 """)  # noqa: F541
+
             # load the CSV file with specifities across days
             csv_file_specificity = gr.File(
                 file_types=["csv"],
@@ -176,16 +207,6 @@ with gr.Blocks(
                 visible=False,
             )
             plot_cusum_chart = gr.Plot(label="CUSUM Chart", visible=False)
-
-            # # details about the tool
-            # gr.Markdown(f"""
-            #             ### Potential users who are concerned about safe and reliable medical AI tools:
-            #             * AI developers
-            #             * Healthcare professionals
-            #             * Patients
-            #             * Regulators
-            #             * Policymakers
-            #             """)  # noqa: F541
 
     # Get the CSV file and populate tables
     button_populate_table.click(
@@ -202,19 +223,25 @@ with gr.Blocks(
 
     # Calculate specific k for ARL_0
     button_calculate_k.click(
-        fn=calculate_reference_value_k,
-        inputs=[h, arl_0],
-        outputs=[output_k]
+        fn=calculate_reference_value_k, inputs=[h, arl_0], outputs=[output_k]
     )
     button_calculate_k.click(
         fn=lambda: gr.update(visible=True), inputs=[], outputs=output_k
     )
 
+    # Calculate specific ARL_1 for value h, value k and shift in mean
+    button_calculate_ARL_1.click(
+        fn=calculate_arl1_h_k_mu1, inputs=[h, k_phase1, mu1], outputs=[output_ARL_1]
+    )
+    button_calculate_ARL_1.click(
+        fn=lambda: gr.update(visible=True), inputs=[], outputs=output_ARL_1
+    )
+
     # Get the CSV file and populate plots
     button_csv_specificity.click(
         fn=populate_cusum_plots,
-        inputs=[csv_file_specificity, ref_value],
-        outputs=[plot_avg_specificity, plot_cusum_chart]
+        inputs=[csv_file_specificity, k_phase2],
+        outputs=[plot_avg_specificity, plot_cusum_chart],
     )
 
     button_csv_specificity.click(

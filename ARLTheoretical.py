@@ -31,6 +31,7 @@ names_to_install = [x for x in packnames if not rpackages.isinstalled(x)]
 if len(names_to_install) > 0:
     utils.install_packages(StrVector(names_to_install))
 
+
 def get_ref_value_k(h: float, ARL_0: float):
     """
     Calculation for the reference value for given h and ARL_0
@@ -39,6 +40,7 @@ def get_ref_value_k(h: float, ARL_0: float):
     k = np.round(spc.xcusum_crit_L0h(ARL_0, h), decimals=4).tolist()[0]
 
     return k
+
 
 def get_ref_value(h: float, list_ARL_0: list):
     """
@@ -65,6 +67,18 @@ def get_ref_value(h: float, list_ARL_0: list):
         dict_ARL0_k[ARL_0] = k
 
     return summary_table_df_ARL0_k, dict_ARL0_k
+
+
+def get_ARL_1_h_mu1_k(h: float, k: float, mu1: float):
+    """
+    Calculate ARL_1 with given Shift in Mean (mu1) and k
+    """
+
+    ARL_1 = np.round(
+        spc.xcusum_ad_(k=k, h=h, mu1=mu1, mu0=0, sided="two", r=20), decimals=4
+    ).tolist()[0]
+
+    return ARL_1
 
 
 def get_ARL_1(h: float, shift_in_mean: list, dict_ARL0_k: OrderedDict):
