@@ -97,9 +97,6 @@ with gr.Blocks(
         ),
     )
 ) as demo:
-    format = '<a href="{link}">{text}</a>'
-    text_with_link = format.format
-
     gr.Markdown(f"""
                 # AIM-CU
                 ## AIM-CU is a statistical tool for AI monitoring using cumulative sum (AIM-CU).
@@ -186,7 +183,7 @@ with gr.Blocks(
                 """)  # noqa: F541
 
             k_phase2 = gr.Textbox(
-                label="Reference value k value",
+                label="k value =",
                 placeholder="k = reference value, default = 0.5",
                 value="0.5",
             )

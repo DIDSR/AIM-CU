@@ -12,7 +12,7 @@ Clone AIM-CU repository.
 git clone https://github.com/DIDSR/AIM-CU.git
 ```
 
-Run the following commands to install required dependencies.
+Run the following commands to install required dependencies (Python = 3.10 is used).
 ```
 apt-get -y install python3
 apt-get -y install pip

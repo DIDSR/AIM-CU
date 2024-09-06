@@ -4,8 +4,6 @@ ARLTheoretical
 @author: smriti.prathapan
 """
 
-import rpy2
-
 # import rpy2's package module
 import rpy2.robjects.packages as rpackages
 
