@@ -9,3 +9,4 @@ rpy2==3.5.1
 great_tables
 kaleido
 selenium
+sphinx
