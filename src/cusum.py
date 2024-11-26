@@ -41,11 +41,11 @@ class CUSUM:
         self.config = None
 
     def initialize(self):
-        with open("config.toml", "rb") as file_config:
+        with open(os.path.abspath("../config/config.toml"), "rb") as file_config:
             self.config = tomli.load(file_config)
 
     def set_df_spec_default(self):
-        self.df_sp = pd.read_csv(self.config["path_input"]["path_df_sp"])
+        self.df_sp = pd.read_csv(os.path.abspath(self.config["path_input"]["path_df_sp"]))
         # AUCs to numpy array
         self.data = self.df_sp[self.df_sp.columns[1]].to_numpy()
 

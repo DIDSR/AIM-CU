@@ -13,7 +13,7 @@ from utils import (
     populate_summary_table_ARL1_k,
 )
 
-with open("config.toml", "rb") as file_config:
+with open(os.path.abspath("../config/config.toml"), "rb") as file_config:
     config = tomli.load(file_config)
 
 if config["control"]["save_figure"] == "true":
