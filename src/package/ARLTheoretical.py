@@ -24,15 +24,21 @@ utils.chooseCRANmirror(ind=1)  # select the first mirror in the list
 packnames = ("ggplot2", "hexbin", "lazyeval", "cusumcharter", "RcppCNPy", "spc")
 
 # Selectively install what needs to be install.
-# We are fancy, just because we can.
 names_to_install = [x for x in packnames if not rpackages.isinstalled(x)]
 if len(names_to_install) > 0:
     utils.install_packages(StrVector(names_to_install))
 
 
-def get_ref_value_k(h: float, ARL_0: float):
+def get_ref_value_k(h: float, ARL_0: float) -> float:
     """
-    Calculation for the reference value for given h and ARL_0
+    Calculation for the reference value for given h and ARL_0.
+
+    Args:
+        h (float): Normalized threshold.
+        ARL_0 (float): ARL0 value.
+
+    Returns:
+        float: Normalized reference value k.
     """
 
     k = np.round(spc.xcusum_crit_L0h(ARL_0, h), decimals=4).tolist()[0]
@@ -40,21 +46,23 @@ def get_ref_value_k(h: float, ARL_0: float):
     return k
 
 
-def get_ref_value(h: float, list_ARL_0: list):
+def get_ref_value(
+    h: float, list_ARL_0: list[float]
+) -> tuple[pd.DataFrame, OrderedDict]:
     """
-    # Code for table 4
-    # Find k given h
+    provides normalized reference values k for provided list of ARL0, given the value of normalized threshold h.
 
-    Example:
-        h = 4 # Default choice for threshold
-        list_ARL_0 = [50, 100, 150, 200, 300, 400, 500, 1000]
+    Args:
+        h (float): Normalized threshold.
+        list_ARL_0 (list): List of ARL0 values.
+
+    Returns:
+        tuple[pd.Dataframe, OrderedDict]: Dataframe of ARL0 and k, Data dictionary of ARL0 and k; where k is normalized reference value.
     """
 
     # data in Ordered dictionary to use it other functions instead of using DataFrame
     dict_ARL0_k = OrderedDict()
 
-    # Print the reference values for an intended ARL_0 with normalized threshold, h=4
-    # print("Reference value, k: for an intended ARL_0 and h")
     summary_table_df_ARL0_k = pd.DataFrame(columns=["ARL_0", "k"])
     for n, ARL_0 in enumerate(list_ARL_0):
         k = np.round(spc.xcusum_crit_L0h(ARL_0, h), decimals=4).tolist()[0]
@@ -67,9 +75,17 @@ def get_ref_value(h: float, list_ARL_0: list):
     return summary_table_df_ARL0_k, dict_ARL0_k
 
 
-def get_ARL_1_h_mu1_k(h: float, k: float, mu1: float):
+def get_ARL_1_h_mu1_k(h: float, k: float, mu1: float) -> float:
     """
-    Calculate ARL_1 with given Shift in Mean (mu1) and k
+    Calculate ARL_1 with given Shift in Mean (mu1) and k.
+
+    Args:
+        h (float): Normalized threshold.
+        k (float): Normalized reference value.
+        mu1 (float): Intended shift in mean.
+
+    Returns:
+        float: Detection delay (ARL1).
     """
 
     ARL_1 = np.round(
@@ -79,15 +95,16 @@ def get_ARL_1_h_mu1_k(h: float, k: float, mu1: float):
     return ARL_1
 
 
-def get_ARL_1(h: float, shift_in_mean: list, dict_ARL0_k: OrderedDict):
-    """
-    # Code for table 5
-    # xcusum.ad
-    # Find ARL_1 for the k from above with h=4 for various shifts in mean
+def get_ARL_1(h: float, shift_in_mean: list[float], dict_ARL0_k: OrderedDict) -> pd.DataFrame:
+    """_summary_
 
-    Example:
-        h = 4
-        shift_in_mean = [ 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6] # mu1
+    Args:
+        h (float): Normalized threshold.
+        shift_in_mean (list[float]): List of the values of shift in mean.
+        dict_ARL0_k (OrderedDict): Data dictionary of ARL0 and k
+
+    Returns:
+        pd.DataFrame: Table of ARL1 and k values.
     """
 
     list_ARL_0 = [ARL_0 for ARL_0 in dict_ARL0_k.keys()]

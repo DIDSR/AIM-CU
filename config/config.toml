@@ -1,6 +1,6 @@
 # paths to input files
 [path_input]
-path_df_sp = "../config/spec-60-60.csv"
+path_df_sp = "../../config/spec-60-60.csv"
 
 # paths to output files
 [path_output]

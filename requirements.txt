@@ -10,3 +10,4 @@ great_tables
 kaleido
 selenium
 sphinx
+sphinxcontrib-napoleon

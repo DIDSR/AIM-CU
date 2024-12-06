@@ -40,22 +40,50 @@ class CUSUM:
 
         self.config = None
 
-    def initialize(self):
-        with open(os.path.abspath("../config/config.toml"), "rb") as file_config:
+    def initialize(self) -> None:
+        """
+        Initialize with the configuration file.
+        """
+        with open(os.path.abspath("../../config/config.toml"), "rb") as file_config:
             self.config = tomli.load(file_config)
 
-    def set_df_spec_default(self):
-        self.df_sp = pd.read_csv(os.path.abspath(self.config["path_input"]["path_df_sp"]))
+    def set_df_spec_default(self) -> None:
+        """
+        Read the provided performance metric data to be used for CUSUM for an example.
+        """
+        # [? remove sp or AUC]
+        self.df_sp = pd.read_csv(
+            os.path.abspath(self.config["path_input"]["path_df_sp"])
+        )
         # AUCs to numpy array
         self.data = self.df_sp[self.df_sp.columns[1]].to_numpy()
 
-    def set_df_spec_csv(self, data_csv):
+    def set_df_spec_csv(self, data_csv: pd.DataFrame) -> None:
+        """
+        Assign the performance metric data to be used for CUSUM.
+
+        Args:
+            data_csv (DataFrame or TextFileReader): A comma-separated values (csv) file is returned as two-dimensional data structure with labeled axes.
+        """
+        # [? remove sp or AUC]
         self.df_sp = data_csv
         # AUCs to numpy array
         self.data = self.df_sp[self.df_sp.columns[1]].to_numpy()
 
-    # Compute CUSUM for the observations in x
-    def compute_cusum(self, x, mu_0, k):
+    def compute_cusum(
+        self, x: list[float], mu_0: float, k: float
+    ) -> tuple[list[float], list[float], list[float]]:
+        """
+        Compute CUSUM for the observations in x
+
+        Args:
+            x (list[float]): Performance metric
+            mu_0 (float): In-control mean
+            k (float): Reference value related to the magnitude of change that one is interested in detecting
+
+        Returns:
+            tuple[list[float], list[float], list[float]]: Positive cumulative sum, negative cumulative sum, and CUSUM
+        """
         # CUSUM for day0-2000: outcomes are detection delay and #FP, #TP, MTBFA, False alarm rate
         num_rows = np.shape(x)[0]
 
@@ -130,11 +158,17 @@ class CUSUM:
         return self.S_hi, self.S_lo, cusum
 
     # [! provide a proper name]
-    def change_detection(self, ref_value=0.5):
+    def change_detection(self, ref_value: float = 0.5) -> None:
+        """
+        Detects a change in the process.
+
+        Args:
+            ref_value (float, optional): Normalized reference value for detecting a unit standard deviation change in mean of the process. Defaults to 0.5.
+        """
         pre_change_days = 60
         post_change_days = 60
         total_days = pre_change_days + post_change_days
-        ref_val = ref_value # 0.5
+        ref_val = ref_value  # 0.5
         control_limit = 4
 
         self.h_1000 = np.array([])
@@ -233,16 +267,31 @@ class CUSUM:
         self.k_1000 = np.append(self.k_1000, k)
         # print(falsePos)
 
-    # histogram using plotly
-    def plot_histogram_plotly(self, data, xlabel, title=""):
+    def plot_histogram_plotly(self, data, xlabel, title="") -> go.Figure:
+        """
+        histogram using plotly
+
+        Args:
+            data (_type_): Data values to show in histogram.
+            xlabel (_type_): Title of the label for X-axis.
+            title (str, optional): Title of the plot. Defaults to "".
+
+        Returns:
+            go.Figure: Histogram as Plotly graph object.
+        """
         fig = go.Figure(data=[go.Histogram(x=data, nbinsx=30)])
         fig.update_layout(title="[TITLE=?]", xaxis_title=xlabel, yaxis_title="Count")
         fig.update_layout(plot_bgcolor=self.config["color"]["blue_005"])
 
         return fig
 
-    # Plot the input Specificities using Plotly
-    def plot_input_specificities_plotly(self):
+    def plot_input_specificities_plotly(self) -> go.Figure:
+        """
+        Plot the input Specificities using Plotly.
+
+        Returns:
+            go.Figure: Scatter plot as Plotly graph object.
+        """
         pre_change_days = 60
         post_change_days = 60
         total_days = pre_change_days + post_change_days
@@ -421,8 +470,13 @@ class CUSUM:
 
         return fig
 
-    # plot CUSUM value using Plotly
-    def plot_cusum_plotly(self):
+    def plot_cusum_plotly(self) -> go.Figure:
+        """
+        Plot CUSUM value using Plotly
+
+        Returns:
+            go.Figure: CUSUM plot using Plotly graph object.
+        """
         fig = go.Figure()
 
         font_size_title = 20

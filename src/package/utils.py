@@ -8,19 +8,35 @@ import great_tables as gt
 from collections import OrderedDict
 import tomli
 
-with open(os.path.abspath("../config/config.toml"), "rb") as file_config:
+with open(os.path.abspath("../../config/config.toml"), "rb") as file_config:
     config = tomli.load(file_config)
 
 
-# Get the great_table as HTML from Pandas dataframe
-def get_greattable_as_html(df: pd.DataFrame):
+def get_greattable_as_html(df: pd.DataFrame) -> gt.GT:
+    """
+    Get the great_table as HTML from Pandas dataframe.
+
+    Args:
+        df (pd.DataFrame): Dataframe to rendera as a table.
+
+    Returns:
+        gt.GT: Table in HTML format.
+    """
     table_great_table = gt.GT(data=df)
 
     return table_great_table.as_raw_html()
 
 
-# Populate ARLTheoretical.summary_table_df_ARL0_k
-def populate_summary_table_ARL0_k(summary_table_df_ARL0_k: pd.DataFrame):
+def populate_summary_table_ARL0_k(summary_table_df_ARL0_k: pd.DataFrame) -> gt.GT:
+    """
+    Populate ARLTheoretical.summary_table_df_ARL0_k.
+
+    Args:
+        summary_table_df_ARL0_k (pd.DataFrame): Dataframe of ARL0 and its respective values of k.
+
+    Returns:
+        gt.GT: Table of ARL0 and k in HTML format.
+    """
     table_great_table_ARL0_k = (
         gt.GT(summary_table_df_ARL0_k)
         .tab_header(
@@ -47,10 +63,19 @@ def populate_summary_table_ARL0_k(summary_table_df_ARL0_k: pd.DataFrame):
     return table_great_table_ARL0_k.as_raw_html()
 
 
-# Populate Multiindex table specific for ARLTheoretical.summary_table_df_ARL1_k
 def populate_summary_table_ARL1_k(
     summary_table_df_ARL1_k: pd.DataFrame, dict_ARL0_k: OrderedDict
-):
+) -> gt.GT:
+    """
+    Populate Multiindex table specific for ARLTheoretical.summary_table_df_ARL1_k
+
+    Args:
+        summary_table_df_ARL1_k (pd.DataFrame): Dataframe with ARL1 and k values.
+        dict_ARL0_k (OrderedDict): Data Dictionary with the mapping between ARL0 and k.
+
+    Returns:
+        gt.GT: Table for ARL1 and k in HTML format.
+    """
     list_ARL_0 = [str(ARL_0) for ARL_0 in dict_ARL0_k.keys()]
     list_k = [k for k in dict_ARL0_k.values()]
 
@@ -85,9 +110,9 @@ def populate_summary_table_ARL1_k(
 
     if config["control"]["save_figure"] == "true":
         table_great_table_ARL1_k.save(
-                os.path.join(config["path_output"]["path_figure"], "table_ARL1_k.png"),
-                scale=3,
-                window_size=(1200, 1600),
-            )
+            os.path.join(config["path_output"]["path_figure"], "table_ARL1_k.png"),
+            scale=3,
+            window_size=(1200, 1600),
+        )
 
     return table_great_table_ARL1_k.as_raw_html()
