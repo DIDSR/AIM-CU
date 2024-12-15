@@ -26,11 +26,11 @@ class CUSUM:
 
     def __init__(self):  # [? add the required input parameters]
         # [? add required variables here]
-        self.df_sp = None
+        self.df_metric = None
 
         self.AvgDD = None
-        self.h_1000 = None
-        self.k_1000 = None
+        # self.h_1000 = None
+        # self.k_1000 = None
         self.data = None
 
         self.h = None
@@ -40,6 +40,10 @@ class CUSUM:
 
         self.config = None
 
+        self.total_days = None
+        self.pre_change_days = None
+        self.post_change_days = None
+
     def initialize(self) -> None:
         """
         Initialize with the configuration file.
@@ -47,16 +51,27 @@ class CUSUM:
         with open(os.path.abspath("../../config/config.toml"), "rb") as file_config:
             self.config = tomli.load(file_config)
 
+    def set_timeline(self, data: np.ndarray) -> None:
+        """
+        Set the timeline of observations.
+
+        Args:
+            data (np.ndarray): Data of the metric values across the observations.
+        """
+        self.total_days = np.shape(data)[0]
+
     def set_df_spec_default(self) -> None:
         """
         Read the provided performance metric data to be used for CUSUM for an example.
         """
         # [? remove sp or AUC]
-        self.df_sp = pd.read_csv(
+        self.df_metric = pd.read_csv(
             os.path.abspath(self.config["path_input"]["path_df_sp"])
         )
         # AUCs to numpy array
-        self.data = self.df_sp[self.df_sp.columns[1]].to_numpy()
+        self.data = self.df_metric[self.df_metric.columns[1]].to_numpy()
+
+        self.set_timeline(self.data)
 
     def set_df_spec_csv(self, data_csv: pd.DataFrame) -> None:
         """
@@ -66,9 +81,11 @@ class CUSUM:
             data_csv (DataFrame or TextFileReader): A comma-separated values (csv) file is returned as two-dimensional data structure with labeled axes.
         """
         # [? remove sp or AUC]
-        self.df_sp = data_csv
+        self.df_metric = data_csv
         # AUCs to numpy array
-        self.data = self.df_sp[self.df_sp.columns[1]].to_numpy()
+        self.data = self.df_metric[self.df_metric.columns[1]].to_numpy()
+
+        self.set_timeline(self.data)
 
     def compute_cusum(
         self, x: list[float], mu_0: float, k: float
@@ -157,22 +174,22 @@ class CUSUM:
 
         return self.S_hi, self.S_lo, cusum
 
-    # [! provide a proper name]
-    def change_detection(self, ref_value: float = 0.5) -> None:
+    def change_detection(self, pre_change_days, normalized_ref_value: float = 0.5, normalized_threshold: float = 4) -> None:
         """
         Detects a change in the process.
 
         Args:
-            ref_value (float, optional): Normalized reference value for detecting a unit standard deviation change in mean of the process. Defaults to 0.5.
+            normalized_ref_value (float, optional): Normalized reference value for detecting a unit standard deviation change in mean of the process. Defaults to 0.5.
+            normalized_threshold (float, optional): Normalized threshold. Defaults to 4.
         """
-        pre_change_days = 60
-        post_change_days = 60
-        total_days = pre_change_days + post_change_days
-        ref_val = ref_value  # 0.5
-        control_limit = 4
+        self.pre_change_days = pre_change_days
+        self.post_change_days = self.total_days - self.pre_change_days
 
-        self.h_1000 = np.array([])
-        self.k_1000 = np.array([])
+        ref_val = normalized_ref_value  # 0.5
+        control_limit = normalized_threshold
+
+        # self.h_1000 = np.array([])
+        # self.k_1000 = np.array([])
         DetectionTimes = np.array([], dtype=int)
         Dj = np.array(
             [], dtype=int
@@ -187,8 +204,8 @@ class CUSUM:
 
         # CUSUM for day0-60: outcomes are detection delay and #FP, #TP, MTBFA, False alarm rate
         num_rows = np.shape(self.data)[0]
-        in_control_data = self.data[:pre_change_days]
-        out_control_data = self.data[pre_change_days:total_days]
+        in_control_data = self.data[:self.pre_change_days]
+        out_control_data = self.data[self.pre_change_days:self.total_days]
         out_std = np.std(out_control_data)
         self.in_std = np.std(in_control_data)
         x = np.array(self.data)
@@ -212,7 +229,7 @@ class CUSUM:
         avddd = 0  # this is the delay from the paper: td-ts (z_k-v) where v is the changepoint and z_k is the time of detection
         # MTBFA    = 0
 
-        for i in range(0, pre_change_days):
+        for i in range(0, self.pre_change_days):
             if (self.S_hi[i] > self.h) or (self.S_lo[i] > self.h):
                 # if (i<pre_change_days):
                 falsePos += 1  # False Positives
@@ -221,7 +238,7 @@ class CUSUM:
                     DetectionTimes, i + 1
                 )  # time at which a false positive is detected
                 Dj = np.append(Dj, 1)
-                Zj = np.append(Zj, min(i, pre_change_days))
+                Zj = np.append(Zj, min(i, self.pre_change_days))
                 # print("detection times",DetectionTimes)
                 # print("detection times size",DetectionTimes.size)
                 break
@@ -230,25 +247,25 @@ class CUSUM:
         if falsePos == 0:
             Dj = np.append(Dj, 0)
             # DetectionTimes[runs] = pre_change_days
-            Zj = np.append(Zj, pre_change_days)
+            Zj = np.append(Zj, self.pre_change_days)
 
         # Delay to detect the first changepoint
         # delay = 0
-        for i in range(pre_change_days, total_days):
+        for i in range(self.pre_change_days, self.total_days):
             if (self.S_hi[i] > self.h) or (self.S_lo[i] > self.h):
                 alarms += 1  # True Positive: break after detecting one TP
                 # print("alarm at : ", i)
                 # delay  = i-1000+1    # ts is 100 because the change starts at day100
-                avddd = i - pre_change_days
+                avddd = i - self.pre_change_days
                 cj = np.append(cj, 1)
-                zj = np.append(zj, min(avddd, total_days))
+                zj = np.append(zj, min(avddd, self.total_days))
                 break
 
         # If there is no true detection, zj = total simulation days, cj = 0
         if alarms == 0:
             cj = np.append(cj, 0)
             # DetectionTimes[runs] = pre_change_days
-            zj = np.append(zj, total_days)
+            zj = np.append(zj, self.total_days)
 
         # Calculate MTBFA(Mean time time between False Alarms)
         # MTBFA = np.mean(DetectionTimes)
@@ -263,8 +280,8 @@ class CUSUM:
         # outSTD_test_sp = np.append(outSTD_test_sp, out_std)
         # inSTD_test_sp  = np.append(inSTD_test_sp, in_std)
         D = np.append(D, d)
-        self.h_1000 = np.append(self.h_1000, self.h)
-        self.k_1000 = np.append(self.k_1000, k)
+        # self.h_1000 = np.append(self.h_1000, self.h)
+        # self.k_1000 = np.append(self.k_1000, k)
         # print(falsePos)
 
     def plot_histogram_plotly(self, data, xlabel, title="") -> go.Figure:
@@ -292,16 +309,12 @@ class CUSUM:
         Returns:
             go.Figure: Scatter plot as Plotly graph object.
         """
-        pre_change_days = 60
-        post_change_days = 60
-        total_days = pre_change_days + post_change_days
-
-        x1 = np.arange(pre_change_days)
-        y1 = self.data[:pre_change_days]
+        x1 = np.arange(self.pre_change_days)
+        y1 = self.data[:self.pre_change_days]
         mean_y1 = np.mean(y1)
 
-        x2 = np.arange(pre_change_days, total_days, 1)
-        y2 = self.data[pre_change_days:total_days]
+        x2 = np.arange(self.pre_change_days, self.total_days, 1)
+        y2 = self.data[self.pre_change_days:self.total_days]
         mean_y2 = np.mean(y2)
 
         fig = make_subplots(
@@ -368,7 +381,7 @@ class CUSUM:
         # add vertical line
         fig.add_trace(
             go.Scatter(
-                x=[pre_change_days, pre_change_days],
+                x=[self.pre_change_days, self.pre_change_days],
                 y=[np.min(self.data), np.max(self.data)],
                 mode="lines",
                 name="Change-point",
@@ -407,7 +420,7 @@ class CUSUM:
         # add subplots
         fig.add_trace(
             go.Histogram(
-                y=self.data[:pre_change_days],
+                y=self.data[:self.pre_change_days],
                 nbinsy=nbinsx,
                 # name=f"""Pre-change S<sub>p</sub>""",
                 showlegend=False,
@@ -421,7 +434,7 @@ class CUSUM:
 
         fig.add_trace(
             go.Histogram(
-                y=self.data[pre_change_days:total_days],
+                y=self.data[self.pre_change_days:self.total_days],
                 nbinsy=nbinsx,
                 # name=f"""Post-change S<sub>p</sub>""",
                 showlegend=False,
@@ -437,8 +450,8 @@ class CUSUM:
             go.Scatter(
                 x=[0, 20],  # [! y_max is not working]
                 y=[
-                    np.mean(self.data[:pre_change_days]),
-                    np.mean(self.data[:pre_change_days]),
+                    np.mean(self.data[:self.pre_change_days]),
+                    np.mean(self.data[:self.pre_change_days]),
                 ],
                 mode="lines",
                 # name="Reference mean",
@@ -516,8 +529,8 @@ class CUSUM:
         # add vertical line
         fig.add_trace(
             go.Scatter(
-                x=[60, 60],  # [! this is constant!]
-                y=[0, np.max(self.S_lo / self.in_std)],
+                x=[self.pre_change_days, self.pre_change_days],
+                y=[0, np.max(self.S_lo / self.in_std)], # [! np.max(self.S_lo / self.in_std)?]
                 mode="lines",
                 name="Change-point",
                 line=dict(color="grey", dash="dash"),

@@ -64,8 +64,10 @@ def calculate_arl1_h_k_mu1(h, k, mu1):
 
 
 # Populate CUSUM plots
-def populate_cusum_plots(file_csv_specificity, ref_value):
+def populate_cusum_plots(file_csv_specificity, ref_value, normalized_threshold, pre_change_days):
     ref_value = float(ref_value)
+    normalized_threshold = float(normalized_threshold)
+    pre_change_days = int(pre_change_days)
 
     if file_csv_specificity is not None:
         # upload CSV file
@@ -75,7 +77,7 @@ def populate_cusum_plots(file_csv_specificity, ref_value):
         # use the example CSV data
         obj_cusum.set_df_spec_default()
 
-    obj_cusum.change_detection(ref_value=ref_value)
+    obj_cusum.change_detection(pre_change_days=pre_change_days, normalized_ref_value=ref_value, normalized_threshold=normalized_threshold)
 
     return (obj_cusum.plot_input_specificities_plotly(), obj_cusum.plot_cusum_plotly())
 
@@ -182,11 +184,24 @@ with gr.Blocks(
                 ### Enter reference value k:
                 """)  # noqa: F541
 
-            k_phase2 = gr.Textbox(
-                label="k value =",
-                placeholder="normalized reference value, default = 0.5",
-                value="0.5",
-            )
+            with gr.Row():
+                h_phase2 = gr.Textbox(
+                    label="h value =",
+                    placeholder="normalized threshold, default = 0.5",
+                    value="4",
+                )
+
+                k_phase2 = gr.Textbox(
+                    label="k value =",
+                    placeholder="normalized reference value, default = 0.5",
+                    value="0.5",
+                )
+
+            pre_change_days = gr.Textbox(
+                    label="In-control days =",
+                    placeholder="Number of days for in-control phase, default = 60",
+                    value="60",
+                )
 
             gr.Markdown(f"""
                 Upload the CSV file with specificities. Or use the default example CSV file by directly clicking the button below.
@@ -237,7 +252,7 @@ with gr.Blocks(
     # Get the CSV file and populate plots
     button_csv_specificity.click(
         fn=populate_cusum_plots,
-        inputs=[csv_file_specificity, k_phase2],
+        inputs=[csv_file_specificity, k_phase2, h_phase2, pre_change_days],
         outputs=[plot_avg_specificity, plot_cusum_chart],
     )
 
