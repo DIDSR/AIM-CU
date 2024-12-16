@@ -223,9 +223,9 @@ class CUSUM:
                 alarms += 1  # True Positive: break after detecting one TP
                 # print("alarm at : ", i)
                 # delay  = i-1000+1    # ts is 100 because the change starts at day100
-                avddd = i - self.pre_change_days
+                # avddd = i - self.pre_change_days
                 cj = np.append(cj, 1)
-                zj = np.append(zj, min(avddd, self.total_days))
+                zj = np.append(zj, min(i, self.total_days) - self.pre_change_days)
                 break
 
         # If there is no true detection, zj = total simulation days, cj = 0
