@@ -4,29 +4,15 @@ ARLTheoretical
 @author: smriti.prathapan
 """
 
+import pandas as pd
+import numpy as np
+from collections import OrderedDict
+
 # import rpy2's package module
 import rpy2.robjects.packages as rpackages
 
 # R vector of strings
 from rpy2.robjects.vectors import StrVector
-import rpy2.robjects.lib.ggplot2 as gp
-import pandas as pd
-import numpy as np
-from collections import OrderedDict
-
-# import R's utility package
-utils = rpackages.importr("utils")
-spc = rpackages.importr("spc")
-# select a mirror for R packages
-utils.chooseCRANmirror(ind=1)  # select the first mirror in the list
-
-# R package names
-packnames = ("ggplot2", "hexbin", "lazyeval", "cusumcharter", "RcppCNPy", "spc")
-
-# Selectively install what needs to be install.
-names_to_install = [x for x in packnames if not rpackages.isinstalled(x)]
-if len(names_to_install) > 0:
-    utils.install_packages(StrVector(names_to_install))
 
 
 def get_ref_value_k(h: float, ARL_0: float) -> float:
@@ -95,7 +81,9 @@ def get_ARL_1_h_mu1_k(h: float, k: float, mu1: float) -> float:
     return ARL_1
 
 
-def get_ARL_1(h: float, shift_in_mean: list[float], dict_ARL0_k: OrderedDict) -> pd.DataFrame:
+def get_ARL_1(
+    h: float, shift_in_mean: list[float], dict_ARL0_k: OrderedDict
+) -> pd.DataFrame:
     """_summary_
 
     Args:
@@ -104,7 +92,7 @@ def get_ARL_1(h: float, shift_in_mean: list[float], dict_ARL0_k: OrderedDict) ->
         dict_ARL0_k (OrderedDict): Data dictionary of ARL0 and k
 
     Returns:
-        pd.DataFrame: Table of ARL1 and k values.
+        pd.DataFrame: Table for ARL1 and k values.
     """
 
     list_ARL_0 = [ARL_0 for ARL_0 in dict_ARL0_k.keys()]
@@ -127,3 +115,18 @@ def get_ARL_1(h: float, shift_in_mean: list[float], dict_ARL0_k: OrderedDict) ->
     summary_table_df_ARL1_k = pd.DataFrame(dict_data_ARL1_k)
 
     return summary_table_df_ARL1_k
+
+
+# import R's utility package
+utils = rpackages.importr("utils")
+spc = rpackages.importr("spc")
+# select a mirror for R packages
+utils.chooseCRANmirror(ind=1)  # select the first mirror in the list
+
+# R package names
+packnames = ("ggplot2", "hexbin", "lazyeval", "cusumcharter", "RcppCNPy", "spc")
+
+# Selectively install what needs to be install
+names_to_install = [x for x in packnames if not rpackages.isinstalled(x)]
+if len(names_to_install) > 0:
+    utils.install_packages(StrVector(names_to_install))

@@ -1,10 +1,11 @@
 """
-CUSUM
+Cumulative Sum (CUSUM)
 
 @author: smriti.prathapan
 """
 
 import os
+import sys
 import numpy as np
 import random
 import pandas as pd
@@ -18,10 +19,9 @@ warnings.filterwarnings("ignore")
 random.seed(58)
 
 
-# CUSUM class and its functionalities [? modify the comment]
 class CUSUM:
     """
-    CUSUM Class
+    CUSUM class and its functionalities.
     """
 
     def __init__(self):
@@ -29,8 +29,6 @@ class CUSUM:
         self.metric_type = None
 
         self.AvgDD = None
-        # self.h_1000 = None
-        # self.k_1000 = None
         self.data = None
 
         self.h = None
@@ -48,8 +46,12 @@ class CUSUM:
         """
         Initialize with the configuration file.
         """
-        with open(os.path.abspath("../../config/config.toml"), "rb") as file_config:
-            self.config = tomli.load(file_config)
+        try:
+            with open(os.path.abspath("../../config/config.toml"), "rb") as file_config:
+                self.config = tomli.load(file_config)
+        except FileNotFoundError:
+            print("Error: config.toml not found.")
+            sys.exit(1)
 
     def set_timeline(self, data: np.ndarray) -> None:
         """
@@ -64,9 +66,13 @@ class CUSUM:
         """
         Read the provided performance metric data to be used for CUSUM for an example.
         """
-        self.df_metric = pd.read_csv(
-            os.path.abspath(self.config["path_input"]["path_df_metric"])
-        )
+        try:
+            self.df_metric = pd.read_csv(
+                os.path.abspath(self.config["path_input"]["path_df_metric"])
+            )
+        except FileNotFoundError:
+            print("Error: CSV file not found.")
+            sys.exit(1)
         self.data = self.df_metric[self.df_metric.columns[1]].to_numpy()
 
         self.set_timeline(self.data)
@@ -131,22 +137,26 @@ class CUSUM:
 
         return self.S_hi, self.S_lo, cusum
 
-    def change_detection(self, pre_change_days, normalized_ref_value: float = 0.5, normalized_threshold: float = 4) -> None:
+    def change_detection(
+        self,
+        pre_change_days: int,
+        normalized_ref_value: float = 0.5,
+        normalized_threshold: float = 4,
+    ) -> None:
         """
         Detects a change in the process.
 
         Args:
+            pre_change_days (int): Number of days for in-control phase.
             normalized_ref_value (float, optional): Normalized reference value for detecting a unit standard deviation change in mean of the process. Defaults to 0.5.
             normalized_threshold (float, optional): Normalized threshold. Defaults to 4.
         """
         self.pre_change_days = pre_change_days
         self.post_change_days = self.total_days - self.pre_change_days
 
-        ref_val = normalized_ref_value  # 0.5
+        ref_val = normalized_ref_value
         control_limit = normalized_threshold
 
-        # self.h_1000 = np.array([])
-        # self.k_1000 = np.array([])
         DetectionTimes = np.array([], dtype=int)
         Dj = np.array(
             [], dtype=int
@@ -161,14 +171,14 @@ class CUSUM:
 
         # CUSUM for day0-60: outcomes are detection delay and #FP, #TP, MTBFA, False alarm rate
         # num_rows = np.shape(self.data)[0]
-        in_control_data = self.data[:self.pre_change_days]
-        out_control_data = self.data[self.pre_change_days:self.total_days]
+        in_control_data = self.data[: self.pre_change_days]
+        # out_control_data = self.data[self.pre_change_days : self.total_days]
         # out_std = np.std(out_control_data)
         self.in_std = np.std(in_control_data)
         x = np.array(self.data)
 
         mu_0 = np.mean(in_control_data)
-        mu_1 = np.mean(out_control_data)
+        # mu_1 = np.mean(out_control_data)
         # d = np.abs((mu_1 - mu_0) / self.in_std)
 
         # h      = 0.102       # Upper/lower control limit to detect the changepoint H=0.102, 0.127
@@ -267,11 +277,11 @@ class CUSUM:
             go.Figure: Scatter plot as Plotly graph object.
         """
         x1 = np.arange(self.pre_change_days)
-        y1 = self.data[:self.pre_change_days]
+        y1 = self.data[: self.pre_change_days]
         mean_y1 = np.mean(y1)
 
         x2 = np.arange(self.pre_change_days, self.total_days, 1)
-        y2 = self.data[self.pre_change_days:self.total_days]
+        y2 = self.data[self.pre_change_days : self.total_days]
         mean_y2 = np.mean(y2)
 
         fig = make_subplots(
@@ -377,7 +387,7 @@ class CUSUM:
         # add subplots
         fig.add_trace(
             go.Histogram(
-                y=self.data[:self.pre_change_days],
+                y=self.data[: self.pre_change_days],
                 nbinsy=nbinsx,
                 # name=f"""Pre-change S<sub>p</sub>""",
                 showlegend=False,
@@ -391,7 +401,7 @@ class CUSUM:
 
         fig.add_trace(
             go.Histogram(
-                y=self.data[self.pre_change_days:self.total_days],
+                y=self.data[self.pre_change_days : self.total_days],
                 nbinsy=nbinsx,
                 # name=f"""Post-change S<sub>p</sub>""",
                 showlegend=False,
@@ -405,10 +415,10 @@ class CUSUM:
 
         fig.add_trace(
             go.Scatter(
-                x=[0, 20],  # [! y_max is not working]
+                x=[0, 20],  # [! y_max can should be used]
                 y=[
-                    np.mean(self.data[:self.pre_change_days]),
-                    np.mean(self.data[:self.pre_change_days]),
+                    np.mean(self.data[: self.pre_change_days]),
+                    np.mean(self.data[: self.pre_change_days]),
                 ],
                 mode="lines",
                 # name="Reference mean",
@@ -487,7 +497,10 @@ class CUSUM:
         fig.add_trace(
             go.Scatter(
                 x=[self.pre_change_days, self.pre_change_days],
-                y=[0, np.max(self.S_lo / self.in_std)], # [! np.max(self.S_lo / self.in_std)?]
+                y=[
+                    0,
+                    np.max(self.S_lo / self.in_std),
+                ],  # [! np.max(self.S_lo / self.in_std)?]
                 mode="lines",
                 name="Change-point",
                 line=dict(color="grey", dash="dash"),

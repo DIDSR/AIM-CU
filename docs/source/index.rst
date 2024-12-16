@@ -50,4 +50,3 @@ AIM-CU can also be run through its demo available at https://huggingface.co/dids
    ref_cusum
    ref_theoretical
    ref_utils
-

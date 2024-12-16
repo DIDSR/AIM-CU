@@ -3,6 +3,7 @@ Gradio user interface for AIM-CU
 """
 
 import os
+import sys
 import pandas as pd
 import gradio as gr
 import tomli
@@ -12,20 +13,20 @@ from utils import (
     populate_summary_table_ARL0_k,
     populate_summary_table_ARL1_k,
 )
-
-with open(os.path.abspath("../../config/config.toml"), "rb") as file_config:
-    config = tomli.load(file_config)
-
-if config["control"]["save_figure"] == "true":
-    if not os.path.exists(config["path_output"]["path_figure"]):
-        os.mkdir(config["path_output"]["path_figure"])
-
-obj_cusum = CUSUM()
-obj_cusum.initialize()
+import great_tables as gt
+import plotly.graph_objects as go
 
 
-# Populate tables for ARL0 and ARL1 given the value of h
-def populate_table(h):
+def populate_table(h: str) -> tuple[gt.GT, gt.GT]:
+    """
+    Populate tables for ARL0 and ARL1 given the value of h
+
+    Args:
+        h (str): Normalized threshold.
+
+    Returns:
+        tuple[gt.GT, gt.GT]: Table for ARL0 and k in HTML format; table for ARL1 and k in HTML format.
+    """
     h = float(h)
 
     summary_table_df_ARL0_k, dict_ARL0_k = get_ref_value(
@@ -44,7 +45,17 @@ def populate_table(h):
     ), populate_summary_table_ARL1_k(summary_table_df_ARL1_k, dict_ARL0_k)
 
 
-def calculate_reference_value_k(h, arl_0):
+def calculate_reference_value_k(h: str, arl_0: str) -> float:
+    """
+    Gets the reference value for given h and ARL_0.
+
+    Args:
+        h (str): Normalized threshold.
+        arl_0 (str): ARL0 value.
+
+    Returns:
+        float: Normalized reference value k.
+    """
     h = float(h)
     arl_0 = float(arl_0)
 
@@ -53,7 +64,18 @@ def calculate_reference_value_k(h, arl_0):
     return k
 
 
-def calculate_arl1_h_k_mu1(h, k, mu1):
+def calculate_arl1_h_k_mu1(h: str, k: str, mu1: str) -> float:
+    """
+    Get the ARL_1 with given Shift in Mean (mu1) and k.
+
+    Args:
+        h (str): Normalized threshold.
+        k (str): Normalized reference value.
+        mu1 (str): Intended shift in mean.
+
+    Returns:
+        float: Detection delay (ARL1).
+    """
     h = float(h)
     k = float(k)
     mu1 = float(mu1)
@@ -63,8 +85,24 @@ def calculate_arl1_h_k_mu1(h, k, mu1):
     return arl_1
 
 
-# Populate CUSUM plots
-def populate_cusum_plots(file_csv_specificity, ref_value, normalized_threshold, pre_change_days):
+def populate_cusum_plots(
+    file_csv_specificity: gr.File,
+    ref_value: str,
+    normalized_threshold: str,
+    pre_change_days: str,
+) -> tuple[go.Figure, go.Figure]:
+    """
+    Populate CUSUM plots
+
+    Args:
+        file_csv_specificity (gr.File): CSV file with metric data
+        ref_value (str): Normalized reference value for detecting a unit standard deviation change in mean of the process.
+        normalized_threshold (str): Normalized threshold.
+        pre_change_days (str): Number of days for in-control phase.
+
+    Returns:
+        tuple[go.Figure, go.Figure]: Scatter plot as Plotly graph object; CUSUM plot using Plotly graph object.
+    """
     ref_value = float(ref_value)
     normalized_threshold = float(normalized_threshold)
     pre_change_days = int(pre_change_days)
@@ -77,7 +115,11 @@ def populate_cusum_plots(file_csv_specificity, ref_value, normalized_threshold, 
         # use the example CSV data
         obj_cusum.set_df_metric_default()
 
-    obj_cusum.change_detection(pre_change_days=pre_change_days, normalized_ref_value=ref_value, normalized_threshold=normalized_threshold)
+    obj_cusum.change_detection(
+        pre_change_days=pre_change_days,
+        normalized_ref_value=ref_value,
+        normalized_threshold=normalized_threshold,
+    )
 
     return (obj_cusum.plot_input_metric_plotly(), obj_cusum.plot_cusum_plotly())
 
@@ -198,10 +240,10 @@ with gr.Blocks(
                 )
 
             pre_change_days = gr.Textbox(
-                    label="In-control days =",
-                    placeholder="Number of days for in-control phase, default = 60",
-                    value="60",
-                )
+                label="In-control days =",
+                placeholder="Number of days for in-control phase, default = 60",
+                value="60",
+            )
 
             gr.Markdown(f"""
                 Upload the CSV file with specificities. Or use the default example CSV file by directly clicking the button below.
@@ -262,5 +304,20 @@ with gr.Blocks(
     button_csv_specificity.click(
         fn=lambda: gr.update(visible=True), inputs=[], outputs=plot_cusum_chart
     )
+
+try:
+    with open(os.path.abspath("../../config/config.toml"), "rb") as file_config:
+        config = tomli.load(file_config)
+except FileNotFoundError:
+    print("Error: config.toml not found.")
+    sys.exit(1)
+
+
+if config["control"]["save_figure"] == "true":
+    if not os.path.exists(config["path_output"]["path_figure"]):
+        os.mkdir(config["path_output"]["path_figure"])
+
+obj_cusum = CUSUM()
+obj_cusum.initialize()
 
 demo.launch(server_name="0.0.0.0", server_port=7860)
