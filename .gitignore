@@ -165,4 +165,4 @@ cython_debug/
 figure/
 
 # temporary exclusion of sphinx docs
-docs/
+docs/build/

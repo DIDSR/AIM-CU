@@ -72,14 +72,14 @@ def populate_cusum_plots(file_csv_specificity, ref_value, normalized_threshold, 
     if file_csv_specificity is not None:
         # upload CSV file
         data_csv_specificity = pd.read_csv(file_csv_specificity.name)
-        obj_cusum.set_df_spec_csv(data_csv_specificity)
+        obj_cusum.set_df_metric_csv(data_csv_specificity)
     else:
         # use the example CSV data
-        obj_cusum.set_df_spec_default()
+        obj_cusum.set_df_metric_default()
 
     obj_cusum.change_detection(pre_change_days=pre_change_days, normalized_ref_value=ref_value, normalized_threshold=normalized_threshold)
 
-    return (obj_cusum.plot_input_specificities_plotly(), obj_cusum.plot_cusum_plotly())
+    return (obj_cusum.plot_input_metric_plotly(), obj_cusum.plot_cusum_plotly())
 
 
 with gr.Blocks(

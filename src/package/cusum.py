@@ -21,12 +21,12 @@ random.seed(58)
 # CUSUM class and its functionalities [? modify the comment]
 class CUSUM:
     """
-    [? add docstring for class]
+    CUSUM Class
     """
 
-    def __init__(self):  # [? add the required input parameters]
-        # [? add required variables here]
+    def __init__(self):
         self.df_metric = None
+        self.metric_type = None
 
         self.AvgDD = None
         # self.h_1000 = None
@@ -60,29 +60,25 @@ class CUSUM:
         """
         self.total_days = np.shape(data)[0]
 
-    def set_df_spec_default(self) -> None:
+    def set_df_metric_default(self) -> None:
         """
         Read the provided performance metric data to be used for CUSUM for an example.
         """
-        # [? remove sp or AUC]
         self.df_metric = pd.read_csv(
-            os.path.abspath(self.config["path_input"]["path_df_sp"])
+            os.path.abspath(self.config["path_input"]["path_df_metric"])
         )
-        # AUCs to numpy array
         self.data = self.df_metric[self.df_metric.columns[1]].to_numpy()
 
         self.set_timeline(self.data)
 
-    def set_df_spec_csv(self, data_csv: pd.DataFrame) -> None:
+    def set_df_metric_csv(self, data_csv: pd.DataFrame) -> None:
         """
         Assign the performance metric data to be used for CUSUM.
 
         Args:
             data_csv (DataFrame or TextFileReader): A comma-separated values (csv) file is returned as two-dimensional data structure with labeled axes.
         """
-        # [? remove sp or AUC]
         self.df_metric = data_csv
-        # AUCs to numpy array
         self.data = self.df_metric[self.df_metric.columns[1]].to_numpy()
 
         self.set_timeline(self.data)
@@ -101,7 +97,6 @@ class CUSUM:
         Returns:
             tuple[list[float], list[float], list[float]]: Positive cumulative sum, negative cumulative sum, and CUSUM
         """
-        # CUSUM for day0-2000: outcomes are detection delay and #FP, #TP, MTBFA, False alarm rate
         num_rows = np.shape(x)[0]
 
         x_mean = np.zeros(num_rows, dtype=float)
@@ -134,44 +129,6 @@ class CUSUM:
         self.S_lo = np.round(self.S_lo, decimals=2)
         cusum = np.round(cusum, decimals=2)
 
-        # # Construct the tabular CUSUM Chart
-        # chart = np.array([])
-        # chart = np.column_stack(
-        #     (x.T, x_mean.T, mean_hi.T, self.S_hi.T, mean_lo.T, self.S_lo.T, cusum.T)
-        # )
-        # np.round(chart, 2)
-
-        # d = 2 *(np.log((1-0.01) / (0.0027)))
-        # h = d * 0.5 # h= d*k where k=0.5
-        # h = 4 # as per the NIST doc on CUSUM
-
-        # l1 =  np.append(num_rows, data_tabular, axis = 1)
-        # l1 = np.concatenate(num_rows.T, data_tabular.T)
-        # chart = np.column_stack((num_rows.T, data_tabular.T))
-        # chart
-
-        np.set_printoptions(suppress=True, formatter={"float_kind": "{:0.2f}".format})
-        # print("CUSUM Chart is:\n", np.round(chart,decimals=2))
-        # x_mean
-
-        # df_out = pd.DataFrame(chart)
-        # df_out.columns = [
-        #     "X",
-        #     "x-mu_0",
-        #     "Increase in Mean",
-        #     "S_hi",
-        #     "Decrease-in-mean",
-        #     "S_lo",
-        #     "CUSUM",
-        # ]
-        # filename = "file%d" %runs
-        # df_out.to_csv(("CUSUM-out/file%d.csv" %runs), sep='\t')
-        # print(df.to_string())
-        # print(chart)
-        # Export datafrae to png
-        # import dataframe_image as dfi
-        # dfi.export(df,'CUSUM-out/CUSUM-run.png')
-
         return self.S_hi, self.S_lo, cusum
 
     def change_detection(self, pre_change_days, normalized_ref_value: float = 0.5, normalized_threshold: float = 4) -> None:
@@ -198,21 +155,21 @@ class CUSUM:
         zj = np.array([], dtype=int)  # ADD - MLE of delays
         cj = np.array([], dtype=int)  # ADD - binary
         self.AvgDD = np.array([])  # Average Detection Delay
-        D = np.array([])  # Displacement
-        FalsePos = np.array([])
-        TruePos = np.array([])
+        # D = np.array([])  # Displacement
+        # FalsePos = np.array([])
+        # TruePos = np.array([])
 
         # CUSUM for day0-60: outcomes are detection delay and #FP, #TP, MTBFA, False alarm rate
-        num_rows = np.shape(self.data)[0]
+        # num_rows = np.shape(self.data)[0]
         in_control_data = self.data[:self.pre_change_days]
         out_control_data = self.data[self.pre_change_days:self.total_days]
-        out_std = np.std(out_control_data)
+        # out_std = np.std(out_control_data)
         self.in_std = np.std(in_control_data)
         x = np.array(self.data)
 
         mu_0 = np.mean(in_control_data)
         mu_1 = np.mean(out_control_data)
-        d = np.abs((mu_1 - mu_0) / self.in_std)
+        # d = np.abs((mu_1 - mu_0) / self.in_std)
 
         # h      = 0.102       # Upper/lower control limit to detect the changepoint H=0.102, 0.127
         # k      = 0.03831     # Drift 0.01277 is the 1 sigma change, 0.0255 - one-sigma change, 0.03831 is 3-sigma change, 0.05108
@@ -225,7 +182,7 @@ class CUSUM:
         # False positives and Total alarms
         falsePos = 0
         alarms = 0
-        delay = 0
+        # delay = 0
         avddd = 0  # this is the delay from the paper: td-ts (z_k-v) where v is the changepoint and z_k is the time of detection
         # MTBFA    = 0
 
@@ -271,15 +228,15 @@ class CUSUM:
         # MTBFA = np.mean(DetectionTimes)
         # FlaseAlarmRate = 1/MTBFA
 
-        FalsePos = np.append(FalsePos, falsePos)
-        TruePos = np.append(TruePos, alarms)
+        # FalsePos = np.append(FalsePos, falsePos)
+        # TruePos = np.append(TruePos, alarms)
         # DelaytoDetect = np.append(DelaytoDetect, delay)   # td-ts+1
         # FAR           = np.append(FAR, FlaseAlarmRate)
         # DetectionTimes= np.append(DetectionTimes, detectionTime)
         self.AvgDD = np.append(self.AvgDD, avddd)  # ADD estimate from the paper
         # outSTD_test_sp = np.append(outSTD_test_sp, out_std)
         # inSTD_test_sp  = np.append(inSTD_test_sp, in_std)
-        D = np.append(D, d)
+        # D = np.append(D, d)
         # self.h_1000 = np.append(self.h_1000, self.h)
         # self.k_1000 = np.append(self.k_1000, k)
         # print(falsePos)
@@ -302,9 +259,9 @@ class CUSUM:
 
         return fig
 
-    def plot_input_specificities_plotly(self) -> go.Figure:
+    def plot_input_metric_plotly(self) -> go.Figure:
         """
-        Plot the input Specificities using Plotly.
+        Plot the input metric using Plotly.
 
         Returns:
             go.Figure: Scatter plot as Plotly graph object.
@@ -394,7 +351,7 @@ class CUSUM:
 
         fig.update_layout(
             title={
-                "text": "Average Specificities for pre- and post-change regime, and histogram",
+                "text": "Average metric for pre- and post-change regime, and histogram",
                 "font": {"size": font_size_title, "weight": "bold"},
             },
             xaxis_title={
@@ -402,7 +359,7 @@ class CUSUM:
                 "font": {"size": font_size_legend, "weight": "bold"},
             },
             yaxis_title={
-                "text": "AI model Specificity",
+                "text": "AI model metric",
                 "font": {"size": font_size_legend, "weight": "bold"},
             },
             xaxis=dict(dtick=20),
