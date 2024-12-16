@@ -9,6 +9,7 @@ AIM-CU is a statistical tool for AI monitoring using cumulative sum (AIM-CU). AI
 Code execution
 --------------
 Clone AIM-CU repository.
+
 .. code-block:: shell
 
     git clone https://github.com/DIDSR/AIM-CU.git
@@ -24,6 +25,7 @@ Run the following commands to install required dependencies (Python = 3.10 is us
 
 
 Run AIM-CU.
+
 .. code-block:: shell
 
     python3 app.py
