@@ -4,8 +4,9 @@ Test the basic functionality of the package.
 
 import os
 import sys
+
 current_directory = os.path.dirname(__file__)
-sibling_directory = os.path.join(current_directory, '..', 'src')
+sibling_directory = os.path.join(current_directory, "..", "src")
 sys.path.append(sibling_directory)
 
 import unittest
@@ -19,9 +20,10 @@ class TestCUSUM(unittest.TestCase):
     """
     Test class for CUSUM to check functionality.
     """
+
     def test_cusum(self):
         obj_cusum = CUSUM()
-        
+
         path_file_config = os.path.abspath("../config/config.toml")
         with open(os.path.abspath(path_file_config), "rb") as file_config:
             obj_cusum.config = tomli.load(file_config)
@@ -40,12 +42,15 @@ class TestCUSUM(unittest.TestCase):
             normalized_threshold=normalized_threshold,
         )
 
-        self.assertEqual(obj_cusum.S_lo[-1], 2.31, "Cumulative (negative) sum does not match.")
+        self.assertEqual(
+            obj_cusum.S_lo[-1], 2.31, "Cumulative (negative) sum does not match."
+        )
 
     def test_rpy2(self):
         arl_1 = get_ARL_1_h_mu1_k(h=4, k=0.2996, mu1=1.2)
 
         self.assertEqual(arl_1, 4.4304, "Package rpy2 is not working properly")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

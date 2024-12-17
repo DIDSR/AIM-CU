@@ -48,7 +48,7 @@ class CUSUM:
         """
         try:
             path_file_config = os.path.abspath("../../config/config.toml")
-            
+
             with open(path_file_config, "rb") as file_config:
                 self.config = tomli.load(file_config)
         except FileNotFoundError:
@@ -69,7 +69,9 @@ class CUSUM:
         Read the provided performance metric data to be used for CUSUM for an example.
         """
         try:
-            path_csv = os.path.abspath(os.path.join("../../", self.config["path_input"]["path_df_metric"]))
+            path_csv = os.path.abspath(
+                os.path.join("../../", self.config["path_input"]["path_df_metric"])
+            )
             self.df_metric = pd.read_csv(path_csv)
         except FileNotFoundError:
             print("Error: CSV file not found at", path_csv)

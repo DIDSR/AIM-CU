@@ -307,7 +307,7 @@ with gr.Blocks(
 
 try:
     path_file_config = os.path.abspath("../../config/config.toml")
-    
+
     with open(path_file_config, "rb") as file_config:
         config = tomli.load(file_config)
 except FileNotFoundError:
