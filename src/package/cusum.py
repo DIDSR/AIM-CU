@@ -47,10 +47,12 @@ class CUSUM:
         Initialize with the configuration file.
         """
         try:
-            with open(os.path.abspath("../../config/config.toml"), "rb") as file_config:
+            path_file_config = os.path.abspath("../../config/config.toml")
+            
+            with open(path_file_config, "rb") as file_config:
                 self.config = tomli.load(file_config)
         except FileNotFoundError:
-            print("Error: config.toml not found.")
+            print("Error: config.toml not found at", path_file_config)
             sys.exit(1)
 
     def set_timeline(self, data: np.ndarray) -> None:
@@ -67,11 +69,10 @@ class CUSUM:
         Read the provided performance metric data to be used for CUSUM for an example.
         """
         try:
-            self.df_metric = pd.read_csv(
-                os.path.abspath(self.config["path_input"]["path_df_metric"])
-            )
+            path_csv = os.path.abspath(os.path.join("../../", self.config["path_input"]["path_df_metric"]))
+            self.df_metric = pd.read_csv(path_csv)
         except FileNotFoundError:
-            print("Error: CSV file not found.")
+            print("Error: CSV file not found at", path_csv)
             sys.exit(1)
         self.data = self.df_metric[self.df_metric.columns[1]].to_numpy()
 

@@ -229,7 +229,7 @@ with gr.Blocks(
             with gr.Row():
                 h_phase2 = gr.Textbox(
                     label="h value =",
-                    placeholder="normalized threshold, default = 0.5",
+                    placeholder="normalized threshold, default = 4",
                     value="4",
                 )
 
@@ -306,10 +306,12 @@ with gr.Blocks(
     )
 
 try:
-    with open(os.path.abspath("../../config/config.toml"), "rb") as file_config:
+    path_file_config = os.path.abspath("../../config/config.toml")
+    
+    with open(path_file_config, "rb") as file_config:
         config = tomli.load(file_config)
 except FileNotFoundError:
-    print("Error: config.toml not found.")
+    print("Error: config.toml not found at", path_file_config)
     sys.exit(1)
 
 

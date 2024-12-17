@@ -14,6 +14,9 @@ import rpy2.robjects.packages as rpackages
 # R vector of strings
 from rpy2.robjects.vectors import StrVector
 
+import rpy2.robjects as ro
+# Suppress all R warnings globally
+ro.r['options'](warn=-1)
 
 def get_ref_value_k(h: float, ARL_0: float) -> float:
     """
