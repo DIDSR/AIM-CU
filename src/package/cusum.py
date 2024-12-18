@@ -446,9 +446,27 @@ class CUSUM:
         if self.config["control"]["save_figure"] == "true":
             fig.write_image(
                 os.path.join(
-                    self.config["path_output"]["path_figure"], "fig_plot_1.png"
+                    os.path.abspath(
+                        os.path.join(
+                            "../../",
+                            self.config["path_output"]["path_figure"]
+                        )
+                    ),
+                    "fig_plot_1.png",
                 ),
                 scale=3,
+            )
+            print(
+                "Created",
+                os.path.join(
+                    os.path.abspath(
+                        os.path.join(
+                            "../../",
+                            self.config["path_output"]["path_figure"]
+                        )
+                    ),
+                    "fig_plot_1.png",
+                ),
             )
 
         return fig
@@ -535,9 +553,27 @@ class CUSUM:
         if self.config["control"]["save_figure"] == "true":
             fig.write_image(
                 os.path.join(
-                    self.config["path_output"]["path_figure"], "fig_plot_2.png"
+                    os.path.abspath(
+                        os.path.join(
+                            "../../",
+                            self.config["path_output"]["path_figure"]
+                        )
+                    ),
+                    "fig_plot_2.png",
                 ),
                 scale=3,
+            )
+            print(
+                "Created",
+                os.path.join(
+                    os.path.abspath(
+                        os.path.join(
+                            "../../",
+                            self.config["path_output"]["path_figure"]
+                        )
+                    ),
+                    "fig_plot_2.png",
+                ),
             )
 
         return fig
