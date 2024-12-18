@@ -86,7 +86,7 @@ def calculate_arl1_h_k_mu1(h: str, k: str, mu1: str) -> float:
 
 
 def populate_cusum_plots(
-    file_csv_specificity: gr.File,
+    file_csv_metric: gr.File,
     ref_value: str,
     normalized_threshold: str,
     pre_change_days: str,
@@ -95,7 +95,7 @@ def populate_cusum_plots(
     Populate CUSUM plots
 
     Args:
-        file_csv_specificity (gr.File): CSV file with metric data
+        file_csv_metric (gr.File): CSV file with metric data
         ref_value (str): Normalized reference value for detecting a unit standard deviation change in mean of the process.
         normalized_threshold (str): Normalized threshold.
         pre_change_days (str): Number of days for in-control phase.
@@ -107,10 +107,10 @@ def populate_cusum_plots(
     normalized_threshold = float(normalized_threshold)
     pre_change_days = int(pre_change_days)
 
-    if file_csv_specificity is not None:
+    if file_csv_metric is not None:
         # upload CSV file
-        data_csv_specificity = pd.read_csv(file_csv_specificity.name)
-        obj_cusum.set_df_metric_csv(data_csv_specificity)
+        data_csv_metric = pd.read_csv(file_csv_metric.name)
+        obj_cusum.set_df_metric_csv(data_csv_metric)
     else:
         # use the example CSV data
         obj_cusum.set_df_metric_default()
@@ -246,18 +246,18 @@ with gr.Blocks(
             )
 
             gr.Markdown(f"""
-                Upload the CSV file with specificities. Or use the default example CSV file by directly clicking the button below.
+                Upload the CSV file with metric. Or use the default example CSV file by directly clicking the button below.
                 """)  # noqa: F541
 
             # load the CSV file with specifities across days
-            csv_file_specificity = gr.File(
+            csv_file_metric = gr.File(
                 file_types=["csv"],
-                label="Upload CSV file with specificities across days",
+                label="Upload CSV file with metric across days",
             )
-            button_csv_specificity = gr.Button("Show CUSUM plots")
+            button_csv_metric = gr.Button("Show CUSUM plots")
 
-            plot_avg_specificity = gr.Plot(
-                label="Average Specificities for the pre-change and post-change regime",
+            plot_avg_metric = gr.Plot(
+                label="Average metric for the pre-change and post-change regime",
                 visible=False,
             )
             plot_cusum_chart = gr.Plot(label="CUSUM Chart", visible=False)
@@ -292,16 +292,16 @@ with gr.Blocks(
     )
 
     # Get the CSV file and populate plots
-    button_csv_specificity.click(
+    button_csv_metric.click(
         fn=populate_cusum_plots,
-        inputs=[csv_file_specificity, k_phase2, h_phase2, pre_change_days],
-        outputs=[plot_avg_specificity, plot_cusum_chart],
+        inputs=[csv_file_metric, k_phase2, h_phase2, pre_change_days],
+        outputs=[plot_avg_metric, plot_cusum_chart],
     )
 
-    button_csv_specificity.click(
-        fn=lambda: gr.update(visible=True), inputs=[], outputs=plot_avg_specificity
+    button_csv_metric.click(
+        fn=lambda: gr.update(visible=True), inputs=[], outputs=plot_avg_metric
     )
-    button_csv_specificity.click(
+    button_csv_metric.click(
         fn=lambda: gr.update(visible=True), inputs=[], outputs=plot_cusum_chart
     )
 
