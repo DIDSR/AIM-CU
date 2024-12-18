@@ -30,7 +30,6 @@ Run the following commands to install required dependencies (Python = 3.10 is us
    cd AIM-CU
    pip install -r requirements.txt
 
-
 Run AIM-CU.
 
 .. code-block:: shell
