@@ -27,12 +27,13 @@ def get_greattable_as_html(df: pd.DataFrame) -> gt.GT:
     return table_great_table.as_raw_html()
 
 
-def populate_summary_table_ARL0_k(summary_table_df_ARL0_k: pd.DataFrame) -> gt.GT:
+def populate_summary_table_ARL0_k(summary_table_df_ARL0_k: pd.DataFrame, h) -> gt.GT:
     """
     Populate ARLTheoretical.summary_table_df_ARL0_k.
 
     Args:
         summary_table_df_ARL0_k (pd.DataFrame): Dataframe of ARL0 and its respective values of k.
+        h (float): Normalized threshold.
 
     Returns:
         gt.GT: Table of ARL0 and k in HTML format.
@@ -41,7 +42,7 @@ def populate_summary_table_ARL0_k(summary_table_df_ARL0_k: pd.DataFrame) -> gt.G
         gt.GT(summary_table_df_ARL0_k)
         .tab_header(
             title=gt.html(
-                "Reference Values for an intended ARL<sub>0</sub> with normalized threshold, h = 4"
+                f"Reference Values for an intended ARL<sub>0</sub> with normalized threshold, h = {h}"
             )
         )
         .data_color(
@@ -76,7 +77,7 @@ def populate_summary_table_ARL0_k(summary_table_df_ARL0_k: pd.DataFrame) -> gt.G
 
 
 def populate_summary_table_ARL1_k(
-    summary_table_df_ARL1_k: pd.DataFrame, dict_ARL0_k: OrderedDict
+    summary_table_df_ARL1_k: pd.DataFrame, dict_ARL0_k: OrderedDict, h
 ) -> gt.GT:
     """
     Populate Multiindex table specific for ARLTheoretical.summary_table_df_ARL1_k
@@ -84,6 +85,7 @@ def populate_summary_table_ARL1_k(
     Args:
         summary_table_df_ARL1_k (pd.DataFrame): Dataframe with ARL1 and k values.
         dict_ARL0_k (OrderedDict): Data Dictionary with the mapping between ARL0 and k.
+        h (float): Normalized threshold.
 
     Returns:
         gt.GT: Table for ARL1 and k in HTML format.
@@ -101,7 +103,7 @@ def populate_summary_table_ARL1_k(
         gt.GT(summary_table_df_ARL1_k)
         .tab_header(
             title=gt.html(
-                "Estimate of steady state ARL (ARL<sub>1</sub>) based on the computed reference values and intended zero-state ARL (ARL<sub>0</sub>) with normalized threshold, h = 4)"
+                f"Estimate of steady state ARL (ARL<sub>1</sub>) based on the computed reference values and intended zero-state ARL (ARL<sub>0</sub>) with normalized threshold, h = {h})"
             )
         )
         .tab_stubhead(label="Shift in mean")

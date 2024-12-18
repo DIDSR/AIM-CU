@@ -41,7 +41,7 @@ Open the URL http://0.0.0.0:7860 that is running the AIM-CU locally.
 
 Demo
 ------------------
-AIM-CU can also be run through its demo available at https://huggingface.co/didsr/AIM-CU.
+AIM-CU can also be run through the demo available at https://huggingface.co/spaces/didsr/AIM-CU. If Space is paused, click on Restart button.
 
 .. toctree::
    :maxdepth: 2

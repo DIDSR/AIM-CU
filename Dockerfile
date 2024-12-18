@@ -19,7 +19,7 @@ RUN Rscript -e "install.packages('cusumcharter')"
 RUN Rscript -e "install.packages('RcppCNPy')"
 RUN Rscript -e "install.packages('spc')"
 
-WORKDIR /app
+WORKDIR /app/src/package
 COPY . /app/
 
 RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt

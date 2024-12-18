@@ -41,8 +41,8 @@ def populate_table(h: str) -> tuple[gt.GT, gt.GT]:
     )
 
     return populate_summary_table_ARL0_k(
-        summary_table_df_ARL0_k
-    ), populate_summary_table_ARL1_k(summary_table_df_ARL1_k, dict_ARL0_k)
+        summary_table_df_ARL0_k, h
+    ), populate_summary_table_ARL1_k(summary_table_df_ARL1_k, dict_ARL0_k, h)
 
 
 def calculate_reference_value_k(h: str, arl_0: str) -> float:
