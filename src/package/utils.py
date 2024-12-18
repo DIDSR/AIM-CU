@@ -55,11 +55,22 @@ def populate_summary_table_ARL0_k(summary_table_df_ARL0_k: pd.DataFrame) -> gt.G
 
     if config["control"]["save_figure"] == "true":
         table_great_table_ARL0_k.save(
-            os.path.abspath(os.path.join("../../", config["path_output"]["path_figure"], "table_ARL0_k.png")),
+            os.path.abspath(
+                os.path.join(
+                    "../../", config["path_output"]["path_figure"], "table_ARL0_k.png"
+                )
+            ),
             scale=3,
             window_size=(1200, 1600),
         )
-        print("Created", os.path.abspath(os.path.join("../../", config["path_output"]["path_figure"], "table_ARL0_k.png")))
+        print(
+            "Created",
+            os.path.abspath(
+                os.path.join(
+                    "../../", config["path_output"]["path_figure"], "table_ARL0_k.png"
+                )
+            ),
+        )
 
     return table_great_table_ARL0_k.as_raw_html()
 
@@ -111,10 +122,21 @@ def populate_summary_table_ARL1_k(
 
     if config["control"]["save_figure"] == "true":
         table_great_table_ARL1_k.save(
-            os.path.abspath(os.path.join("../../", config["path_output"]["path_figure"], "table_ARL1_k.png")),
+            os.path.abspath(
+                os.path.join(
+                    "../../", config["path_output"]["path_figure"], "table_ARL1_k.png"
+                )
+            ),
             scale=3,
             window_size=(1200, 1600),
         )
-        print("Created", os.path.abspath(os.path.join("../../", config["path_output"]["path_figure"], "table_ARL1_k.png")))
+        print(
+            "Created",
+            os.path.abspath(
+                os.path.join(
+                    "../../", config["path_output"]["path_figure"], "table_ARL1_k.png"
+                )
+            ),
+        )
 
     return table_great_table_ARL1_k.as_raw_html()

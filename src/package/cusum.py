@@ -448,8 +448,7 @@ class CUSUM:
                 os.path.join(
                     os.path.abspath(
                         os.path.join(
-                            "../../",
-                            self.config["path_output"]["path_figure"]
+                            "../../", self.config["path_output"]["path_figure"]
                         )
                     ),
                     "fig_plot_1.png",
@@ -461,8 +460,7 @@ class CUSUM:
                 os.path.join(
                     os.path.abspath(
                         os.path.join(
-                            "../../",
-                            self.config["path_output"]["path_figure"]
+                            "../../", self.config["path_output"]["path_figure"]
                         )
                     ),
                     "fig_plot_1.png",
@@ -555,8 +553,7 @@ class CUSUM:
                 os.path.join(
                     os.path.abspath(
                         os.path.join(
-                            "../../",
-                            self.config["path_output"]["path_figure"]
+                            "../../", self.config["path_output"]["path_figure"]
                         )
                     ),
                     "fig_plot_2.png",
@@ -568,8 +565,7 @@ class CUSUM:
                 os.path.join(
                     os.path.abspath(
                         os.path.join(
-                            "../../",
-                            self.config["path_output"]["path_figure"]
+                            "../../", self.config["path_output"]["path_figure"]
                         )
                     ),
                     "fig_plot_2.png",

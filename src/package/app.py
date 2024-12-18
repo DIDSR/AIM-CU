@@ -316,7 +316,9 @@ except FileNotFoundError:
 
 
 if config["control"]["save_figure"] == "true":
-    path_check = os.path.abspath(os.path.join("../../", config["path_output"]["path_figure"]))
+    path_check = os.path.abspath(
+        os.path.join("../../", config["path_output"]["path_figure"])
+    )
     if not os.path.exists(path_check):
         os.mkdir(path_check)
         print("Created", path_check)
