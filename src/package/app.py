@@ -143,7 +143,7 @@ with gr.Blocks(
 ) as demo:
     gr.Markdown(f"""
                 # AIM-CU
-                ## AIM-CU is a statistical tool for AI monitoring using cumulative sum (AIM-CU).
+                ## AIM-CU: A statistical tool for AI monitoring using cumulative sum (AIM-CU).
                 """)  # noqa: F541
 
     gr.Markdown(f"""
@@ -155,14 +155,14 @@ with gr.Blocks(
         with gr.Column():
             gr.Markdown(f"""
                         ### Phase I:
-                        Parameter choices for detecting change and detection delay estimates.
+                        Parameter choices for detecting change and detection delay estimates (theoretical calculations).
                         """)  # noqa: F541
 
             gr.Markdown(f"""
                 ### Enter h value:
                 """)  # noqa: F541
 
-            h = gr.Textbox(
+            h_phase1 = gr.Textbox(
                 label="h value =",
                 placeholder="h = normalized threshold, default = 4",
                 value="4",
@@ -216,6 +216,15 @@ with gr.Blocks(
                 "Populate Reference Values and ARL_1 tables for the given h value"
             )
 
+            gr.Markdown(f"""
+                ### Upload the CSV file with metric. Or use the default example CSV file by directly clicking the button below.
+                """)  # noqa: F541
+
+            # load the CSV file with specifities across days
+            csv_file_metric = gr.File(
+                file_types=["csv"],
+                label="Upload CSV file with metric across days",
+            )
         with gr.Column():
             gr.Markdown(f"""
                         ### Phase II:
@@ -223,7 +232,7 @@ with gr.Blocks(
                         """)  # noqa: F541
 
             gr.Markdown(f"""
-                ### Enter reference value k:
+                ### Enter required values:
                 """)  # noqa: F541
 
             with gr.Row():
@@ -245,15 +254,6 @@ with gr.Blocks(
                 value="60",
             )
 
-            gr.Markdown(f"""
-                Upload the CSV file with metric. Or use the default example CSV file by directly clicking the button below.
-                """)  # noqa: F541
-
-            # load the CSV file with specifities across days
-            csv_file_metric = gr.File(
-                file_types=["csv"],
-                label="Upload CSV file with metric across days",
-            )
             button_csv_metric = gr.Button("Show CUSUM plots")
 
             plot_avg_metric = gr.Plot(
@@ -265,7 +265,7 @@ with gr.Blocks(
     # Get the CSV file and populate tables
     button_populate_table.click(
         fn=populate_table,
-        inputs=[h],
+        inputs=[h_phase1],
         outputs=[dataframe_gt_ref_value, dataframe_gt_ARL0],
     )
     button_populate_table.click(
@@ -277,7 +277,7 @@ with gr.Blocks(
 
     # Calculate specific k for ARL_0
     button_calculate_k.click(
-        fn=calculate_reference_value_k, inputs=[h, arl_0], outputs=[output_k]
+        fn=calculate_reference_value_k, inputs=[h_phase1, arl_0], outputs=[output_k]
     )
     button_calculate_k.click(
         fn=lambda: gr.update(visible=True), inputs=[], outputs=output_k
@@ -285,7 +285,7 @@ with gr.Blocks(
 
     # Calculate specific ARL_1 for value h, value k and shift in mean
     button_calculate_ARL_1.click(
-        fn=calculate_arl1_h_k_mu1, inputs=[h, k_phase1, mu1], outputs=[output_ARL_1]
+        fn=calculate_arl1_h_k_mu1, inputs=[h_phase1, k_phase1, mu1], outputs=[output_ARL_1]
     )
     button_calculate_ARL_1.click(
         fn=lambda: gr.update(visible=True), inputs=[], outputs=output_ARL_1
