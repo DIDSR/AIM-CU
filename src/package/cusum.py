@@ -25,21 +25,21 @@ class CUSUM:
     """
 
     def __init__(self):
-        self.df_metric = None
+        self.df_metric   = None
         self.metric_type = None
 
         self.AvgDD = None
-        self.data = None
+        self.data  = None
 
-        self.h = None
+        self.h      = None
         self.in_std = None
-        self.S_hi = None
-        self.S_lo = None
+        self.S_hi   = None
+        self.S_lo   = None
 
         self.config = None
 
-        self.total_days = None
-        self.pre_change_days = None
+        self.total_days       = None
+        self.pre_change_days  = None
         self.post_change_days = None
 
     def initialize(self) -> None:
@@ -99,50 +99,50 @@ class CUSUM:
         Compute CUSUM for the observations in x
 
         Args:
-            x (list[float]): Performance metric
-            mu_0 (float): In-control mean
-            k (float): Reference value related to the magnitude of change that one is interested in detecting
+            x (list[float]): Performance metric to be monitored
+            mu_0 (float)   : In-control mean of the observations/performance metric
+            k (float)      : Reference value related to the magnitude of change that one is interested in detecting
 
         Returns:
             tuple[list[float], list[float], list[float]]: Positive cumulative sum, negative cumulative sum, and CUSUM
         """
         num_rows = np.shape(x)[0]
 
-        x_mean = np.zeros(num_rows, dtype=float)
-        # S_hi : for positive changes --------------------------
-        self.S_hi = np.zeros(num_rows, dtype=float)
+        x_mean       = np.zeros(num_rows, dtype=float)
+        # S_hi : sum of positive changes --------------------------
+        self.S_hi    = np.zeros(num_rows, dtype=float)
         self.S_hi[0] = 0.0  # starts with 0
         # Increase in mean = x-mu-k ----------------------------
-        mean_hi = np.zeros(num_rows, dtype=float)
+        mean_hi      = np.zeros(num_rows, dtype=float)
 
         # Decrease in mean = mu-k-x----------------------------
-        mean_lo = np.zeros(num_rows, dtype=float)
-        # S_lo : for negative changes --------------------------
-        self.S_lo = np.zeros(num_rows, dtype=float)
+        mean_lo      = np.zeros(num_rows, dtype=float)
+        # S_lo : sum of negative changes --------------------------
+        self.S_lo    = np.zeros(num_rows, dtype=float)
         self.S_lo[0] = 0.0  # starts with 0
         # CUSUM: Cumulative sum of x minus mu ------------------
-        cusum = np.zeros(num_rows, dtype=float)
-        cusum[0] = 0.0  # initialize with 0
+        cusum        = np.zeros(num_rows, dtype=float)
+        cusum[0]     = 0.0  # initialize with 0
 
         for i in range(0, num_rows):
-            x_mean[i] = x[i] - mu_0  # x - mean
-            mean_hi[i] = x[i] - mu_0 - k
+            x_mean[i]    = x[i] - mu_0  # x - mean
+            mean_hi[i]   = x[i] - mu_0 - k
             self.S_hi[i] = max(0, self.S_hi[i - 1] + mean_hi[i])
-            mean_lo[i] = mu_0 - k - x[i]
+            mean_lo[i]   = mu_0 - k - x[i]
             self.S_lo[i] = max(0, self.S_lo[i - 1] + mean_lo[i])
-            cusum[i] = cusum[i - 1] + x_mean[i]
+            cusum[i]     = cusum[i - 1] + x_mean[i]
 
-        x_mean = np.round(x_mean, decimals=2)
+        x_mean    = np.round(x_mean, decimals=2)
         self.S_hi = np.round(self.S_hi, decimals=2)
-        mean_lo = np.round(mean_lo, decimals=2)
+        mean_lo   = np.round(mean_lo, decimals=2)
         self.S_lo = np.round(self.S_lo, decimals=2)
-        cusum = np.round(cusum, decimals=2)
+        cusum     = np.round(cusum, decimals=2)
 
         return self.S_hi, self.S_lo, cusum
 
     def change_detection(
         self,
-        pre_change_days: int,
+        pre_change_days     : int,
         normalized_ref_value: float = 0.5,
         normalized_threshold: float = 4,
     ) -> None:
@@ -150,24 +150,22 @@ class CUSUM:
         Detects a change in the process.
 
         Args:
-            pre_change_days (int): Number of days for in-control phase.
+            pre_change_days (int)                 : Number of days for in-control phase.
             normalized_ref_value (float, optional): Normalized reference value for detecting a unit standard deviation change in mean of the process. Defaults to 0.5.
             normalized_threshold (float, optional): Normalized threshold. Defaults to 4.
         """
-        self.pre_change_days = pre_change_days
+        self.pre_change_days  = pre_change_days
         self.post_change_days = self.total_days - self.pre_change_days
 
-        ref_val = normalized_ref_value
+        ref_val       = normalized_ref_value
         control_limit = normalized_threshold
 
         DetectionTimes = np.array([], dtype=int)
-        Dj = np.array(
-            [], dtype=int
-        )  # save the Dj which are binary values indicating detection MTBFA
-        Zj = np.array([], dtype=int)  # save the Zj = min(Tj,pre-change-days)-MTBFA
-        zj = np.array([], dtype=int)  # ADD - MLE of delays
-        cj = np.array([], dtype=int)  # ADD - binary
-        self.AvgDD = np.array([])  # Average Detection Delay
+        Dj             = np.array([], dtype=int)  # save the Dj which are binary values indicating detection MTBFA
+        Zj             = np.array([], dtype=int)  # save the Zj = min(Tj,pre-change-days)-MTBFA
+        zj             = np.array([], dtype=int)  # ADD - Maximum likelihood estimate of delays
+        cj             = np.array([], dtype=int)  # ADD - binary
+        self.AvgDD     = np.array([])             # Average Detection Delay
         # D = np.array([])  # Displacement
         # FalsePos = np.array([])
         # TruePos = np.array([])
@@ -256,11 +254,11 @@ class CUSUM:
 
     def plot_histogram_plotly(self, data, xlabel, title="") -> go.Figure:
         """
-        histogram using plotly
+        Plot the histogram of the observations/performance metric being monitored using plotly
 
         Args:
-            data (_type_): Data values to show in histogram.
-            xlabel (_type_): Title of the label for X-axis.
+            data (_type_)        : Data values to show in histogram.
+            xlabel (_type_)      : Title of the label for X-axis.
             title (str, optional): Title of the plot. Defaults to "".
 
         Returns:
