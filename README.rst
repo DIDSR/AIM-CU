@@ -38,6 +38,7 @@ AIM-CU can also be run through the demo available at https://huggingface.co/spac
 
 Related References
 ------------------
+* Smriti Prathapan, Ravi K. Samala, Nathan Hadjiyski, Pierre‑François D’Haese, Nicholas Petrick, Jana Delfino, Fabien Maldonado, Brandon Nelson, Ghada Zamzmi, Phuong Nguyen, Yelena Yesha, and Berkman Sahiner, "Detecting performance drift in AI models for medical image analysis using CUSUM chart" (Journal Draft in-progress 2025)
 
 * Prathapan, S., Sahiner, B.,  Kadia, D., and Samala, R.K. 2025, AIM-CU: A statistical tool for AI Monitoring. In Medical Imaging 2025: Computer-Aided Diagnosis. SPIE. (Accepted)
 
