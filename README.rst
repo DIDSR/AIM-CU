@@ -1,8 +1,11 @@
-AIM-CU
+AIM-CU : A CUSUM-based tool for AI Monitoring
 ======
-A CUSUM-based tool for AI Monitoring
 
-AIM-CU is a statistical tool for AI monitoring using cumulative sum (AIM-CU). AIM-CU computes:
+Monitoring a clinically deployed AI device to detect performance drift is an essential step to
+ensure the safety and effectiveness of AI. 
+
+AIM-CU is a statistical tool for AI monitoring using cumulative sum (AIM-CU). 
+AIM-CU computes:
 
 * The parameter choices for change-point detection based on an acceptable false alarm rate
 * Detection delay estimates for a given displacement of the performance metric from the target for those parameter choices.
