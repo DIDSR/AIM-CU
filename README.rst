@@ -37,7 +37,7 @@ Open the URL http://0.0.0.0:7860 that is running the AIM-CU locally.
 
 Example code execution
 ----------------------
-Example code can be run in a Jupyter Notebook after opening it with `jupyter notebook` command from `/src/package` directory.
+Example code can be run in a Jupyter Notebook after opening it with ``jupyter notebook`` command from ``/src/package`` directory.
 
 Demo
 ----
