@@ -33,14 +33,18 @@ def populate_table(h: str) -> tuple[gt.GT, gt.GT]:
         h=h,
         list_ARL_0=config["params_cusum"]["list_ARL_0"],
     )
-    summary_table_df_ARL0_k = summary_table_df_ARL0_k.applymap(lambda x: '{:.2f}'.format(x) if isinstance(x, (float)) else x)
-    
+    summary_table_df_ARL0_k = summary_table_df_ARL0_k.applymap(
+        lambda x: "{:.2f}".format(x) if isinstance(x, (float)) else x
+    )
+
     summary_table_df_ARL1_k = get_ARL_1(
         h=h,
         shift_in_mean=config["params_cusum"]["shift_in_mean"],
         dict_ARL0_k=dict_ARL0_k,
     )
-    summary_table_df_ARL1_k = summary_table_df_ARL1_k.applymap(lambda x: '{:.2f}'.format(x) if isinstance(x, (float)) else x)
+    summary_table_df_ARL1_k = summary_table_df_ARL1_k.applymap(
+        lambda x: "{:.2f}".format(x) if isinstance(x, (float)) else x
+    )
 
     return populate_summary_table_ARL0_k(
         summary_table_df_ARL0_k, h
@@ -62,7 +66,7 @@ def calculate_reference_value_k(h: str, arl_0: str) -> float:
     arl_0 = float(arl_0)
 
     k = get_ref_value_k(h=h, ARL_0=arl_0)
-    k = '{:.2f}'.format(k)
+    k = "{:.2f}".format(k)
 
     return k
 
@@ -84,7 +88,7 @@ def calculate_arl1_h_k_mu1(h: str, k: str, mu1: str) -> float:
     mu1 = float(mu1)
 
     arl_1 = get_ARL_1_h_mu1_k(h=h, k=k, mu1=mu1)
-    arl_1 = '{:.2f}'.format(arl_1)
+    arl_1 = "{:.2f}".format(arl_1)
 
     return arl_1
 
@@ -289,7 +293,9 @@ with gr.Blocks(
 
     # Calculate specific ARL_1 for value h, value k and shift in mean
     button_calculate_ARL_1.click(
-        fn=calculate_arl1_h_k_mu1, inputs=[h_phase1, k_phase1, mu1], outputs=[output_ARL_1]
+        fn=calculate_arl1_h_k_mu1,
+        inputs=[h_phase1, k_phase1, mu1],
+        outputs=[output_ARL_1],
     )
     button_calculate_ARL_1.click(
         fn=lambda: gr.update(visible=True), inputs=[], outputs=output_ARL_1

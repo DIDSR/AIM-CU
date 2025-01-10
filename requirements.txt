@@ -11,3 +11,4 @@ kaleido
 selenium
 sphinx
 sphinxcontrib-napoleon
+jupyter
