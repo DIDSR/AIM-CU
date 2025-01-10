@@ -35,6 +35,10 @@ Run AIM-CU.
 
 Open the URL http://0.0.0.0:7860 that is running the AIM-CU locally.
 
+Example code execution
+----------------------
+Example code can be run in a Jupyter Notebook after opening it with `jupyter notebook` command from `/src/package` directory.
+
 Demo
 ----
 AIM-CU can also be run through the demo available at https://huggingface.co/spaces/didsr/AIM-CU. If Space is paused, click on Restart button.
