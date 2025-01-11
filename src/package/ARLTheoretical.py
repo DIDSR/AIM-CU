@@ -89,7 +89,8 @@ def get_ARL_1_h_mu1_k(h: float, k: float, mu1: float) -> float:
 def get_ARL_1(
     h: float, shift_in_mean: list[float], dict_ARL0_k: OrderedDict
 ) -> pd.DataFrame:
-    """_summary_
+    """
+    Get the ARL1 along with k values.
 
     Args:
         h (float): Normalized threshold.

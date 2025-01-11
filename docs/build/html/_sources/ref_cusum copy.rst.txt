@@ -1,5 +1,0 @@
-Gradio App
-==================
-
-.. automodule:: package.app
-    :members:

@@ -11,4 +11,5 @@ kaleido
 selenium
 sphinx
 sphinxcontrib-napoleon
+sphinx-simplepdf
 jupyter

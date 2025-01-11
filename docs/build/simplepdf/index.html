@@ -1,0 +1,2308 @@
+<!DOCTYPE html>
+<html data-content_root="./" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>
+   AIM-CU 1.0.0 documentation
+  </title>
+  <link href="_static/pygments.css?v=d75fae25" rel="stylesheet" type="text/css"/>
+  <link href="_static/main.css?v=0eace31b" rel="stylesheet" type="text/css"/>
+  <script src="_static/documentation_options.js?v=f863dfd4">
+  </script>
+  <script src="_static/doctools.js?v=9bcbadda">
+  </script>
+  <script src="_static/sphinx_highlight.js?v=dc90522c">
+  </script>
+  <link href="genindex.html" rel="index" title="Index"/>
+  <link href="search.html" rel="search" title="Search"/>
+ </head>
+ <body>
+  <article class="dont-break" id="cover">
+   <div class="container">
+    <!-- Logo -->
+    <div class="logo">
+     <p>
+     </p>
+    </div>
+    <!-- Cover middle -->
+    <div class="cover-middle">
+     <div class="title">
+      <h1 class="title-cover">
+       AIM-CU
+      </h1>
+      <p class="subtitle-cover">
+       Version 1.0.0
+      </p>
+      <span class="meta">
+      </span>
+     </div>
+     <!--
+      <div class="client-logo">
+        <img src="../data/logo_.png" alt="Logotipo">
+      </div>
+      -->
+    </div>
+    <!-- Footer -->
+    <div class="cover-footer">
+     <p>
+     </p>
+    </div>
+   </div>
+  </article>
+  <div aria-label="Main" class="sphinxsidebar" role="navigation">
+   <div class="sphinxsidebarwrapper">
+    <div>
+     <h3>
+      <a href="#">
+       Table of Contents
+      </a>
+     </h3>
+     <p class="caption" role="heading">
+      <span class="caption-text">
+       Contents:
+      </span>
+     </p>
+     <ul>
+      <li class="toctree-l1">
+       <a class="reference internal" href="#cusum">
+        CUSUM
+       </a>
+       <ul>
+        <li class="toctree-l2">
+         <a class="reference internal" href="#package.cusum.CUSUM">
+          <code class="docutils literal notranslate">
+           <span class="pre">
+            CUSUM
+           </span>
+          </code>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toctree-l1">
+       <a class="reference internal" href="#arltheoretical">
+        ARLTheoretical
+       </a>
+       <ul>
+        <li class="toctree-l2">
+         <a class="reference internal" href="#package.ARLTheoretical.get_ARL_1">
+          <code class="docutils literal notranslate">
+           <span class="pre">
+            get_ARL_1()
+           </span>
+          </code>
+         </a>
+        </li>
+        <li class="toctree-l2">
+         <a class="reference internal" href="#package.ARLTheoretical.get_ARL_1_h_mu1_k">
+          <code class="docutils literal notranslate">
+           <span class="pre">
+            get_ARL_1_h_mu1_k()
+           </span>
+          </code>
+         </a>
+        </li>
+        <li class="toctree-l2">
+         <a class="reference internal" href="#package.ARLTheoretical.get_ref_value">
+          <code class="docutils literal notranslate">
+           <span class="pre">
+            get_ref_value()
+           </span>
+          </code>
+         </a>
+        </li>
+        <li class="toctree-l2">
+         <a class="reference internal" href="#package.ARLTheoretical.get_ref_value_k">
+          <code class="docutils literal notranslate">
+           <span class="pre">
+            get_ref_value_k()
+           </span>
+          </code>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toctree-l1">
+       <a class="reference internal" href="#utils">
+        Utils
+       </a>
+       <ul>
+        <li class="toctree-l2">
+         <a class="reference internal" href="#package.utils.get_greattable_as_html">
+          <code class="docutils literal notranslate">
+           <span class="pre">
+            get_greattable_as_html()
+           </span>
+          </code>
+         </a>
+        </li>
+        <li class="toctree-l2">
+         <a class="reference internal" href="#package.utils.populate_summary_table_ARL0_k">
+          <code class="docutils literal notranslate">
+           <span class="pre">
+            populate_summary_table_ARL0_k()
+           </span>
+          </code>
+         </a>
+        </li>
+        <li class="toctree-l2">
+         <a class="reference internal" href="#package.utils.populate_summary_table_ARL1_k">
+          <code class="docutils literal notranslate">
+           <span class="pre">
+            populate_summary_table_ARL1_k()
+           </span>
+          </code>
+         </a>
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </div>
+   </div>
+  </div>
+  <div class="document">
+   <div class="documentwrapper">
+    <div class="bodywrapper">
+     <div class="body" role="main">
+      <section id="aim-cu-documentation">
+       <h1>
+        AIM-CU documentation
+        <a class="headerlink" href="#aim-cu-documentation" title="Link to this heading">
+         &para;
+        </a>
+       </h1>
+       <p>
+        A CUSUM-based tool for AI Monitoring
+       </p>
+       <p>
+        AIM-CU is a statistical tool for AI monitoring using cumulative sum (AIM-CU). AIM-CU computes:
+       </p>
+       <ul class="simple">
+        <li>
+         <p>
+          The parameter choices for change-point detection based on an acceptable false alarm rate
+         </p>
+        </li>
+        <li>
+         <p>
+          Detection delay estimates for a given displacement of the performance metric from the target for those parameter choices.
+         </p>
+        </li>
+       </ul>
+       <section id="code-execution">
+        <h2>
+         Code execution
+         <a class="headerlink" href="#code-execution" title="Link to this heading">
+          &para;
+         </a>
+        </h2>
+        <p>
+         Clone AIM-CU repository.
+        </p>
+        <div class="highlight-shell notranslate">
+         <div class="highlight">
+          <pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/DIDSR/AIM-CU.git
+</pre>
+         </div>
+        </div>
+        <p>
+         Run the following commands to install required dependencies (Python = 3.10 is used).
+        </p>
+        <div class="highlight-shell notranslate">
+         <div class="highlight">
+          <pre><span></span>apt-get<span class="w"> </span>-y<span class="w"> </span>install<span class="w"> </span>python3
+apt-get<span class="w"> </span>-y<span class="w"> </span>install<span class="w"> </span>pip
+<span class="nb">cd</span><span class="w"> </span>AIM-CU
+pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</pre>
+         </div>
+        </div>
+        <p>
+         Run AIM-CU.
+        </p>
+        <div class="highlight-shell notranslate">
+         <div class="highlight">
+          <pre><span></span>python3<span class="w"> </span>app.py
+</pre>
+         </div>
+        </div>
+        <p>
+         Open the URL
+         <a class="reference external" href="http://0.0.0.0:7860">
+          http://0.0.0.0:7860
+         </a>
+         that is running the AIM-CU locally.
+        </p>
+       </section>
+       <section id="demo">
+        <h2>
+         Demo
+         <a class="headerlink" href="#demo" title="Link to this heading">
+          &para;
+         </a>
+        </h2>
+        <p>
+         AIM-CU can also be run through the demo available at
+         <a class="reference external" href="https://huggingface.co/spaces/didsr/AIM-CU">
+          https://huggingface.co/spaces/didsr/AIM-CU
+         </a>
+         . If Space is paused, click on Restart button.
+        </p>
+        <div class="toctree-wrapper compound">
+         <span id="document-ref_cusum">
+         </span>
+         <section id="module-package.cusum">
+          <span id="cusum">
+          </span>
+          <h3>
+           CUSUM
+           <a class="headerlink" href="#module-package.cusum" title="Link to this heading">
+            &para;
+           </a>
+          </h3>
+          <p>
+           Cumulative Sum (CUSUM)
+          </p>
+          <p>
+           @author: smriti.prathapan
+          </p>
+          <dl class="py class">
+           <dt class="sig sig-object py" id="package.cusum.CUSUM">
+            <em class="property">
+             <span class="pre">
+              class
+             </span>
+             <span class="w">
+             </span>
+            </em>
+            <span class="sig-prename descclassname">
+             <span class="pre">
+              package.cusum.
+             </span>
+            </span>
+            <span class="sig-name descname">
+             <span class="pre">
+              CUSUM
+             </span>
+            </span>
+            <a class="headerlink" href="#package.cusum.CUSUM" title="Link to this definition">
+             &para;
+            </a>
+           </dt>
+           <dd>
+            <p>
+             CUSUM class and its functionalities.
+            </p>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="package.cusum.CUSUM.change_detection">
+              <span class="sig-name descname">
+               <span class="pre">
+                change_detection
+               </span>
+              </span>
+              <span class="sig-paren">
+               (
+              </span>
+              <em class="sig-param">
+               <span class="n">
+                <span class="pre">
+                 pre_change_days
+                </span>
+               </span>
+               <span class="p">
+                <span class="pre">
+                 :
+                </span>
+               </span>
+               <span class="w">
+               </span>
+               <span class="n">
+                <span class="pre">
+                 int
+                </span>
+               </span>
+              </em>
+              ,
+              <em class="sig-param">
+               <span class="n">
+                <span class="pre">
+                 normalized_ref_value
+                </span>
+               </span>
+               <span class="p">
+                <span class="pre">
+                 :
+                </span>
+               </span>
+               <span class="w">
+               </span>
+               <span class="n">
+                <span class="pre">
+                 float
+                </span>
+               </span>
+               <span class="w">
+               </span>
+               <span class="o">
+                <span class="pre">
+                 =
+                </span>
+               </span>
+               <span class="w">
+               </span>
+               <span class="default_value">
+                <span class="pre">
+                 0.5
+                </span>
+               </span>
+              </em>
+              ,
+              <em class="sig-param">
+               <span class="n">
+                <span class="pre">
+                 normalized_threshold
+                </span>
+               </span>
+               <span class="p">
+                <span class="pre">
+                 :
+                </span>
+               </span>
+               <span class="w">
+               </span>
+               <span class="n">
+                <span class="pre">
+                 float
+                </span>
+               </span>
+               <span class="w">
+               </span>
+               <span class="o">
+                <span class="pre">
+                 =
+                </span>
+               </span>
+               <span class="w">
+               </span>
+               <span class="default_value">
+                <span class="pre">
+                 4
+                </span>
+               </span>
+              </em>
+              <span class="sig-paren">
+               )
+              </span>
+              <span class="sig-return">
+               <span class="sig-return-icon">
+                &rarr;
+               </span>
+               <span class="sig-return-typehint">
+                <span class="pre">
+                 None
+                </span>
+               </span>
+              </span>
+              <a class="headerlink" href="#package.cusum.CUSUM.change_detection" title="Link to this definition">
+               &para;
+              </a>
+             </dt>
+             <dd>
+              <p>
+               Detects a change in the process.
+              </p>
+              <dl class="field-list simple">
+               <dt class="field-odd">
+                Parameters
+                <span class="colon">
+                 :
+                </span>
+               </dt>
+               <dd class="field-odd">
+                <ul class="simple">
+                 <li>
+                  <p>
+                   <strong>
+                    pre_change_days
+                   </strong>
+                   (
+                   <em>
+                    int
+                   </em>
+                   ) &ndash; Number of days for in-control phase.
+                  </p>
+                 </li>
+                 <li>
+                  <p>
+                   <strong>
+                    normalized_ref_value
+                   </strong>
+                   (
+                   <em>
+                    float
+                   </em>
+                   <em>
+                    ,
+                   </em>
+                   <em>
+                    optional
+                   </em>
+                   ) &ndash; Normalized reference value for detecting a unit standard deviation change in mean of the process. Defaults to 0.5.
+                  </p>
+                 </li>
+                 <li>
+                  <p>
+                   <strong>
+                    normalized_threshold
+                   </strong>
+                   (
+                   <em>
+                    float
+                   </em>
+                   <em>
+                    ,
+                   </em>
+                   <em>
+                    optional
+                   </em>
+                   ) &ndash; Normalized threshold. Defaults to 4.
+                  </p>
+                 </li>
+                </ul>
+               </dd>
+              </dl>
+             </dd>
+            </dl>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="package.cusum.CUSUM.compute_cusum">
+              <span class="sig-name descname">
+               <span class="pre">
+                compute_cusum
+               </span>
+              </span>
+              <span class="sig-paren">
+               (
+              </span>
+              <em class="sig-param">
+               <span class="n">
+                <span class="pre">
+                 x
+                </span>
+               </span>
+               <span class="p">
+                <span class="pre">
+                 :
+                </span>
+               </span>
+               <span class="w">
+               </span>
+               <span class="n">
+                <span class="pre">
+                 list
+                </span>
+                <span class="p">
+                 <span class="pre">
+                  [
+                 </span>
+                </span>
+                <span class="pre">
+                 float
+                </span>
+                <span class="p">
+                 <span class="pre">
+                  ]
+                 </span>
+                </span>
+               </span>
+              </em>
+              ,
+              <em class="sig-param">
+               <span class="n">
+                <span class="pre">
+                 mu_0
+                </span>
+               </span>
+               <span class="p">
+                <span class="pre">
+                 :
+                </span>
+               </span>
+               <span class="w">
+               </span>
+               <span class="n">
+                <span class="pre">
+                 float
+                </span>
+               </span>
+              </em>
+              ,
+              <em class="sig-param">
+               <span class="n">
+                <span class="pre">
+                 k
+                </span>
+               </span>
+               <span class="p">
+                <span class="pre">
+                 :
+                </span>
+               </span>
+               <span class="w">
+               </span>
+               <span class="n">
+                <span class="pre">
+                 float
+                </span>
+               </span>
+              </em>
+              <span class="sig-paren">
+               )
+              </span>
+              <span class="sig-return">
+               <span class="sig-return-icon">
+                &rarr;
+               </span>
+               <span class="sig-return-typehint">
+                <span class="pre">
+                 tuple
+                </span>
+                <span class="p">
+                 <span class="pre">
+                  [
+                 </span>
+                </span>
+                <span class="pre">
+                 list
+                </span>
+                <span class="p">
+                 <span class="pre">
+                  [
+                 </span>
+                </span>
+                <span class="pre">
+                 float
+                </span>
+                <span class="p">
+                 <span class="pre">
+                  ]
+                 </span>
+                </span>
+                <span class="p">
+                 <span class="pre">
+                  ,
+                 </span>
+                </span>
+                <span class="w">
+                </span>
+                <span class="pre">
+                 list
+                </span>
+                <span class="p">
+                 <span class="pre">
+                  [
+                 </span>
+                </span>
+                <span class="pre">
+                 float
+                </span>
+                <span class="p">
+                 <span class="pre">
+                  ]
+                 </span>
+                </span>
+                <span class="p">
+                 <span class="pre">
+                  ,
+                 </span>
+                </span>
+                <span class="w">
+                </span>
+                <span class="pre">
+                 list
+                </span>
+                <span class="p">
+                 <span class="pre">
+                  [
+                 </span>
+                </span>
+                <span class="pre">
+                 float
+                </span>
+                <span class="p">
+                 <span class="pre">
+                  ]
+                 </span>
+                </span>
+                <span class="p">
+                 <span class="pre">
+                  ]
+                 </span>
+                </span>
+               </span>
+              </span>
+              <a class="headerlink" href="#package.cusum.CUSUM.compute_cusum" title="Link to this definition">
+               &para;
+              </a>
+             </dt>
+             <dd>
+              <p>
+               Compute CUSUM for the observations in x
+              </p>
+              <dl class="field-list simple">
+               <dt class="field-odd">
+                Parameters
+                <span class="colon">
+                 :
+                </span>
+               </dt>
+               <dd class="field-odd">
+                <ul class="simple">
+                 <li>
+                  <p>
+                   <strong>
+                    x
+                   </strong>
+                   (
+                   <em>
+                    list
+                   </em>
+                   <em>
+                    [
+                   </em>
+                   <em>
+                    float
+                   </em>
+                   <em>
+                    ]
+                   </em>
+                   ) &ndash; Performance metric to be monitored
+                  </p>
+                 </li>
+                 <li>
+                  <p>
+                   <strong>
+                    mu_0
+                   </strong>
+                   (
+                   <em>
+                    float
+                   </em>
+                   ) &ndash; In-control mean of the observations/performance metric
+                  </p>
+                 </li>
+                 <li>
+                  <p>
+                   <strong>
+                    k
+                   </strong>
+                   (
+                   <em>
+                    float
+                   </em>
+                   ) &ndash; Reference value related to the magnitude of change that one is interested in detecting
+                  </p>
+                 </li>
+                </ul>
+               </dd>
+               <dt class="field-even">
+                Returns
+                <span class="colon">
+                 :
+                </span>
+               </dt>
+               <dd class="field-even">
+                <p>
+                 Positive cumulative sum, negative cumulative sum, and CUSUM
+                </p>
+               </dd>
+               <dt class="field-odd">
+                Return type
+                <span class="colon">
+                 :
+                </span>
+               </dt>
+               <dd class="field-odd">
+                <p>
+                 tuple[list[float], list[float], list[float]]
+                </p>
+               </dd>
+              </dl>
+             </dd>
+            </dl>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="package.cusum.CUSUM.initialize">
+              <span class="sig-name descname">
+               <span class="pre">
+                initialize
+               </span>
+              </span>
+              <span class="sig-paren">
+               (
+              </span>
+              <span class="sig-paren">
+               )
+              </span>
+              <span class="sig-return">
+               <span class="sig-return-icon">
+                &rarr;
+               </span>
+               <span class="sig-return-typehint">
+                <span class="pre">
+                 None
+                </span>
+               </span>
+              </span>
+              <a class="headerlink" href="#package.cusum.CUSUM.initialize" title="Link to this definition">
+               &para;
+              </a>
+             </dt>
+             <dd>
+              <p>
+               Initialize with the configuration file.
+              </p>
+             </dd>
+            </dl>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="package.cusum.CUSUM.plot_cusum_plotly">
+              <span class="sig-name descname">
+               <span class="pre">
+                plot_cusum_plotly
+               </span>
+              </span>
+              <span class="sig-paren">
+               (
+              </span>
+              <span class="sig-paren">
+               )
+              </span>
+              <span class="sig-return">
+               <span class="sig-return-icon">
+                &rarr;
+               </span>
+               <span class="sig-return-typehint">
+                <span class="pre">
+                 Figure
+                </span>
+               </span>
+              </span>
+              <a class="headerlink" href="#package.cusum.CUSUM.plot_cusum_plotly" title="Link to this definition">
+               &para;
+              </a>
+             </dt>
+             <dd>
+              <p>
+               Plot CUSUM value using Plotly
+              </p>
+              <dl class="field-list simple">
+               <dt class="field-odd">
+                Returns
+                <span class="colon">
+                 :
+                </span>
+               </dt>
+               <dd class="field-odd">
+                <p>
+                 CUSUM plot using Plotly graph object.
+                </p>
+               </dd>
+               <dt class="field-even">
+                Return type
+                <span class="colon">
+                 :
+                </span>
+               </dt>
+               <dd class="field-even">
+                <p>
+                 go.Figure
+                </p>
+               </dd>
+              </dl>
+             </dd>
+            </dl>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="package.cusum.CUSUM.plot_histogram_plotly">
+              <span class="sig-name descname">
+               <span class="pre">
+                plot_histogram_plotly
+               </span>
+              </span>
+              <span class="sig-paren">
+               (
+              </span>
+              <em class="sig-param">
+               <span class="n">
+                <span class="pre">
+                 data
+                </span>
+               </span>
+              </em>
+              ,
+              <em class="sig-param">
+               <span class="n">
+                <span class="pre">
+                 xlabel
+                </span>
+               </span>
+              </em>
+              ,
+              <em class="sig-param">
+               <span class="n">
+                <span class="pre">
+                 title
+                </span>
+               </span>
+               <span class="o">
+                <span class="pre">
+                 =
+                </span>
+               </span>
+               <span class="default_value">
+                <span class="pre">
+                 ''
+                </span>
+               </span>
+              </em>
+              <span class="sig-paren">
+               )
+              </span>
+              <span class="sig-return">
+               <span class="sig-return-icon">
+                &rarr;
+               </span>
+               <span class="sig-return-typehint">
+                <span class="pre">
+                 Figure
+                </span>
+               </span>
+              </span>
+              <a class="headerlink" href="#package.cusum.CUSUM.plot_histogram_plotly" title="Link to this definition">
+               &para;
+              </a>
+             </dt>
+             <dd>
+              <p>
+               Plot the histogram of the observations/performance metric being monitored using plotly
+              </p>
+              <dl class="field-list simple">
+               <dt class="field-odd">
+                Parameters
+                <span class="colon">
+                 :
+                </span>
+               </dt>
+               <dd class="field-odd">
+                <ul class="simple">
+                 <li>
+                  <p>
+                   <strong>
+                    data
+                   </strong>
+                   (
+                   <em>
+                    _type_
+                   </em>
+                   ) &ndash; Data values to show in histogram.
+                  </p>
+                 </li>
+                 <li>
+                  <p>
+                   <strong>
+                    xlabel
+                   </strong>
+                   (
+                   <em>
+                    _type_
+                   </em>
+                   ) &ndash; Title of the label for X-axis.
+                  </p>
+                 </li>
+                 <li>
+                  <p>
+                   <strong>
+                    title
+                   </strong>
+                   (
+                   <em>
+                    str
+                   </em>
+                   <em>
+                    ,
+                   </em>
+                   <em>
+                    optional
+                   </em>
+                   ) &ndash; Title of the plot. Defaults to &ldquo;&rdquo;.
+                  </p>
+                 </li>
+                </ul>
+               </dd>
+               <dt class="field-even">
+                Returns
+                <span class="colon">
+                 :
+                </span>
+               </dt>
+               <dd class="field-even">
+                <p>
+                 Histogram as Plotly graph object.
+                </p>
+               </dd>
+               <dt class="field-odd">
+                Return type
+                <span class="colon">
+                 :
+                </span>
+               </dt>
+               <dd class="field-odd">
+                <p>
+                 go.Figure
+                </p>
+               </dd>
+              </dl>
+             </dd>
+            </dl>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="package.cusum.CUSUM.plot_input_metric_plotly">
+              <span class="sig-name descname">
+               <span class="pre">
+                plot_input_metric_plotly
+               </span>
+              </span>
+              <span class="sig-paren">
+               (
+              </span>
+              <span class="sig-paren">
+               )
+              </span>
+              <span class="sig-return">
+               <span class="sig-return-icon">
+                &rarr;
+               </span>
+               <span class="sig-return-typehint">
+                <span class="pre">
+                 Figure
+                </span>
+               </span>
+              </span>
+              <a class="headerlink" href="#package.cusum.CUSUM.plot_input_metric_plotly" title="Link to this definition">
+               &para;
+              </a>
+             </dt>
+             <dd>
+              <p>
+               Plot the input metric using Plotly.
+              </p>
+              <dl class="field-list simple">
+               <dt class="field-odd">
+                Returns
+                <span class="colon">
+                 :
+                </span>
+               </dt>
+               <dd class="field-odd">
+                <p>
+                 Scatter plot as Plotly graph object.
+                </p>
+               </dd>
+               <dt class="field-even">
+                Return type
+                <span class="colon">
+                 :
+                </span>
+               </dt>
+               <dd class="field-even">
+                <p>
+                 go.Figure
+                </p>
+               </dd>
+              </dl>
+             </dd>
+            </dl>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="package.cusum.CUSUM.set_df_metric_csv">
+              <span class="sig-name descname">
+               <span class="pre">
+                set_df_metric_csv
+               </span>
+              </span>
+              <span class="sig-paren">
+               (
+              </span>
+              <em class="sig-param">
+               <span class="n">
+                <span class="pre">
+                 data_csv
+                </span>
+               </span>
+               <span class="p">
+                <span class="pre">
+                 :
+                </span>
+               </span>
+               <span class="w">
+               </span>
+               <span class="n">
+                <span class="pre">
+                 DataFrame
+                </span>
+               </span>
+              </em>
+              <span class="sig-paren">
+               )
+              </span>
+              <span class="sig-return">
+               <span class="sig-return-icon">
+                &rarr;
+               </span>
+               <span class="sig-return-typehint">
+                <span class="pre">
+                 None
+                </span>
+               </span>
+              </span>
+              <a class="headerlink" href="#package.cusum.CUSUM.set_df_metric_csv" title="Link to this definition">
+               &para;
+              </a>
+             </dt>
+             <dd>
+              <p>
+               Assign the performance metric data to be used for CUSUM.
+              </p>
+              <dl class="field-list simple">
+               <dt class="field-odd">
+                Parameters
+                <span class="colon">
+                 :
+                </span>
+               </dt>
+               <dd class="field-odd">
+                <p>
+                 <strong>
+                  data_csv
+                 </strong>
+                 (
+                 <em>
+                  DataFrame
+                 </em>
+                 <em>
+                  or
+                 </em>
+                 <em>
+                  TextFileReader
+                 </em>
+                 ) &ndash; A comma-separated values (csv) file is returned as two-dimensional data structure with labeled axes.
+                </p>
+               </dd>
+              </dl>
+             </dd>
+            </dl>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="package.cusum.CUSUM.set_df_metric_default">
+              <span class="sig-name descname">
+               <span class="pre">
+                set_df_metric_default
+               </span>
+              </span>
+              <span class="sig-paren">
+               (
+              </span>
+              <span class="sig-paren">
+               )
+              </span>
+              <span class="sig-return">
+               <span class="sig-return-icon">
+                &rarr;
+               </span>
+               <span class="sig-return-typehint">
+                <span class="pre">
+                 None
+                </span>
+               </span>
+              </span>
+              <a class="headerlink" href="#package.cusum.CUSUM.set_df_metric_default" title="Link to this definition">
+               &para;
+              </a>
+             </dt>
+             <dd>
+              <p>
+               Read the provided performance metric data to be used for CUSUM for an example.
+              </p>
+             </dd>
+            </dl>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="package.cusum.CUSUM.set_timeline">
+              <span class="sig-name descname">
+               <span class="pre">
+                set_timeline
+               </span>
+              </span>
+              <span class="sig-paren">
+               (
+              </span>
+              <em class="sig-param">
+               <span class="n">
+                <span class="pre">
+                 data
+                </span>
+               </span>
+               <span class="p">
+                <span class="pre">
+                 :
+                </span>
+               </span>
+               <span class="w">
+               </span>
+               <span class="n">
+                <span class="pre">
+                 ndarray
+                </span>
+               </span>
+              </em>
+              <span class="sig-paren">
+               )
+              </span>
+              <span class="sig-return">
+               <span class="sig-return-icon">
+                &rarr;
+               </span>
+               <span class="sig-return-typehint">
+                <span class="pre">
+                 None
+                </span>
+               </span>
+              </span>
+              <a class="headerlink" href="#package.cusum.CUSUM.set_timeline" title="Link to this definition">
+               &para;
+              </a>
+             </dt>
+             <dd>
+              <p>
+               Set the timeline of observations.
+              </p>
+              <dl class="field-list simple">
+               <dt class="field-odd">
+                Parameters
+                <span class="colon">
+                 :
+                </span>
+               </dt>
+               <dd class="field-odd">
+                <p>
+                 <strong>
+                  data
+                 </strong>
+                 (
+                 <em>
+                  np.ndarray
+                 </em>
+                 ) &ndash; Data of the metric values across the observations.
+                </p>
+               </dd>
+              </dl>
+             </dd>
+            </dl>
+           </dd>
+          </dl>
+         </section>
+         <span id="document-ref_theoretical">
+         </span>
+         <section id="module-package.ARLTheoretical">
+          <span id="arltheoretical">
+          </span>
+          <h3>
+           ARLTheoretical
+           <a class="headerlink" href="#module-package.ARLTheoretical" title="Link to this heading">
+            &para;
+           </a>
+          </h3>
+          <p>
+           ARLTheoretical
+          </p>
+          <p>
+           @author: smriti.prathapan
+          </p>
+          <dl class="py function">
+           <dt class="sig sig-object py" id="package.ARLTheoretical.get_ARL_1">
+            <span class="sig-prename descclassname">
+             <span class="pre">
+              package.ARLTheoretical.
+             </span>
+            </span>
+            <span class="sig-name descname">
+             <span class="pre">
+              get_ARL_1
+             </span>
+            </span>
+            <span class="sig-paren">
+             (
+            </span>
+            <em class="sig-param">
+             <span class="n">
+              <span class="pre">
+               h
+              </span>
+             </span>
+             <span class="p">
+              <span class="pre">
+               :
+              </span>
+             </span>
+             <span class="w">
+             </span>
+             <span class="n">
+              <span class="pre">
+               float
+              </span>
+             </span>
+            </em>
+            ,
+            <em class="sig-param">
+             <span class="n">
+              <span class="pre">
+               shift_in_mean
+              </span>
+             </span>
+             <span class="p">
+              <span class="pre">
+               :
+              </span>
+             </span>
+             <span class="w">
+             </span>
+             <span class="n">
+              <span class="pre">
+               list
+              </span>
+              <span class="p">
+               <span class="pre">
+                [
+               </span>
+              </span>
+              <span class="pre">
+               float
+              </span>
+              <span class="p">
+               <span class="pre">
+                ]
+               </span>
+              </span>
+             </span>
+            </em>
+            ,
+            <em class="sig-param">
+             <span class="n">
+              <span class="pre">
+               dict_ARL0_k
+              </span>
+             </span>
+             <span class="p">
+              <span class="pre">
+               :
+              </span>
+             </span>
+             <span class="w">
+             </span>
+             <span class="n">
+              <span class="pre">
+               OrderedDict
+              </span>
+             </span>
+            </em>
+            <span class="sig-paren">
+             )
+            </span>
+            <span class="sig-return">
+             <span class="sig-return-icon">
+              &rarr;
+             </span>
+             <span class="sig-return-typehint">
+              <span class="pre">
+               DataFrame
+              </span>
+             </span>
+            </span>
+            <a class="headerlink" href="#package.ARLTheoretical.get_ARL_1" title="Link to this definition">
+             &para;
+            </a>
+           </dt>
+           <dd>
+            <p>
+             Get the ARL1 along with k values.
+            </p>
+            <dl class="field-list simple">
+             <dt class="field-odd">
+              Parameters
+              <span class="colon">
+               :
+              </span>
+             </dt>
+             <dd class="field-odd">
+              <ul class="simple">
+               <li>
+                <p>
+                 <strong>
+                  h
+                 </strong>
+                 (
+                 <em>
+                  float
+                 </em>
+                 ) &ndash; Normalized threshold.
+                </p>
+               </li>
+               <li>
+                <p>
+                 <strong>
+                  shift_in_mean
+                 </strong>
+                 (
+                 <em>
+                  list
+                 </em>
+                 <em>
+                  [
+                 </em>
+                 <em>
+                  float
+                 </em>
+                 <em>
+                  ]
+                 </em>
+                 ) &ndash; List of the values of shift in mean.
+                </p>
+               </li>
+               <li>
+                <p>
+                 <strong>
+                  dict_ARL0_k
+                 </strong>
+                 (
+                 <em>
+                  OrderedDict
+                 </em>
+                 ) &ndash; Data dictionary of ARL0 and k
+                </p>
+               </li>
+              </ul>
+             </dd>
+             <dt class="field-even">
+              Returns
+              <span class="colon">
+               :
+              </span>
+             </dt>
+             <dd class="field-even">
+              <p>
+               Table for ARL1 and k values.
+              </p>
+             </dd>
+             <dt class="field-odd">
+              Return type
+              <span class="colon">
+               :
+              </span>
+             </dt>
+             <dd class="field-odd">
+              <p>
+               pd.DataFrame
+              </p>
+             </dd>
+            </dl>
+           </dd>
+          </dl>
+          <dl class="py function">
+           <dt class="sig sig-object py" id="package.ARLTheoretical.get_ARL_1_h_mu1_k">
+            <span class="sig-prename descclassname">
+             <span class="pre">
+              package.ARLTheoretical.
+             </span>
+            </span>
+            <span class="sig-name descname">
+             <span class="pre">
+              get_ARL_1_h_mu1_k
+             </span>
+            </span>
+            <span class="sig-paren">
+             (
+            </span>
+            <em class="sig-param">
+             <span class="n">
+              <span class="pre">
+               h
+              </span>
+             </span>
+             <span class="p">
+              <span class="pre">
+               :
+              </span>
+             </span>
+             <span class="w">
+             </span>
+             <span class="n">
+              <span class="pre">
+               float
+              </span>
+             </span>
+            </em>
+            ,
+            <em class="sig-param">
+             <span class="n">
+              <span class="pre">
+               k
+              </span>
+             </span>
+             <span class="p">
+              <span class="pre">
+               :
+              </span>
+             </span>
+             <span class="w">
+             </span>
+             <span class="n">
+              <span class="pre">
+               float
+              </span>
+             </span>
+            </em>
+            ,
+            <em class="sig-param">
+             <span class="n">
+              <span class="pre">
+               mu1
+              </span>
+             </span>
+             <span class="p">
+              <span class="pre">
+               :
+              </span>
+             </span>
+             <span class="w">
+             </span>
+             <span class="n">
+              <span class="pre">
+               float
+              </span>
+             </span>
+            </em>
+            <span class="sig-paren">
+             )
+            </span>
+            <span class="sig-return">
+             <span class="sig-return-icon">
+              &rarr;
+             </span>
+             <span class="sig-return-typehint">
+              <span class="pre">
+               float
+              </span>
+             </span>
+            </span>
+            <a class="headerlink" href="#package.ARLTheoretical.get_ARL_1_h_mu1_k" title="Link to this definition">
+             &para;
+            </a>
+           </dt>
+           <dd>
+            <p>
+             Calculate ARL_1 with given Shift in Mean (mu1) and k.
+            </p>
+            <dl class="field-list simple">
+             <dt class="field-odd">
+              Parameters
+              <span class="colon">
+               :
+              </span>
+             </dt>
+             <dd class="field-odd">
+              <ul class="simple">
+               <li>
+                <p>
+                 <strong>
+                  h
+                 </strong>
+                 (
+                 <em>
+                  float
+                 </em>
+                 ) &ndash; Normalized threshold.
+                </p>
+               </li>
+               <li>
+                <p>
+                 <strong>
+                  k
+                 </strong>
+                 (
+                 <em>
+                  float
+                 </em>
+                 ) &ndash; Normalized reference value.
+                </p>
+               </li>
+               <li>
+                <p>
+                 <strong>
+                  mu1
+                 </strong>
+                 (
+                 <em>
+                  float
+                 </em>
+                 ) &ndash; Intended shift in mean.
+                </p>
+               </li>
+              </ul>
+             </dd>
+             <dt class="field-even">
+              Returns
+              <span class="colon">
+               :
+              </span>
+             </dt>
+             <dd class="field-even">
+              <p>
+               Detection delay (ARL1).
+              </p>
+             </dd>
+             <dt class="field-odd">
+              Return type
+              <span class="colon">
+               :
+              </span>
+             </dt>
+             <dd class="field-odd">
+              <p>
+               float
+              </p>
+             </dd>
+            </dl>
+           </dd>
+          </dl>
+          <dl class="py function">
+           <dt class="sig sig-object py" id="package.ARLTheoretical.get_ref_value">
+            <span class="sig-prename descclassname">
+             <span class="pre">
+              package.ARLTheoretical.
+             </span>
+            </span>
+            <span class="sig-name descname">
+             <span class="pre">
+              get_ref_value
+             </span>
+            </span>
+            <span class="sig-paren">
+             (
+            </span>
+            <em class="sig-param">
+             <span class="n">
+              <span class="pre">
+               h
+              </span>
+             </span>
+             <span class="p">
+              <span class="pre">
+               :
+              </span>
+             </span>
+             <span class="w">
+             </span>
+             <span class="n">
+              <span class="pre">
+               float
+              </span>
+             </span>
+            </em>
+            ,
+            <em class="sig-param">
+             <span class="n">
+              <span class="pre">
+               list_ARL_0
+              </span>
+             </span>
+             <span class="p">
+              <span class="pre">
+               :
+              </span>
+             </span>
+             <span class="w">
+             </span>
+             <span class="n">
+              <span class="pre">
+               list
+              </span>
+              <span class="p">
+               <span class="pre">
+                [
+               </span>
+              </span>
+              <span class="pre">
+               float
+              </span>
+              <span class="p">
+               <span class="pre">
+                ]
+               </span>
+              </span>
+             </span>
+            </em>
+            <span class="sig-paren">
+             )
+            </span>
+            <span class="sig-return">
+             <span class="sig-return-icon">
+              &rarr;
+             </span>
+             <span class="sig-return-typehint">
+              <span class="pre">
+               tuple
+              </span>
+              <span class="p">
+               <span class="pre">
+                [
+               </span>
+              </span>
+              <span class="pre">
+               DataFrame
+              </span>
+              <span class="p">
+               <span class="pre">
+                ,
+               </span>
+              </span>
+              <span class="w">
+              </span>
+              <span class="pre">
+               OrderedDict
+              </span>
+              <span class="p">
+               <span class="pre">
+                ]
+               </span>
+              </span>
+             </span>
+            </span>
+            <a class="headerlink" href="#package.ARLTheoretical.get_ref_value" title="Link to this definition">
+             &para;
+            </a>
+           </dt>
+           <dd>
+            <p>
+             provides normalized reference values k for provided list of ARL0, given the value of normalized threshold h.
+            </p>
+            <dl class="field-list simple">
+             <dt class="field-odd">
+              Parameters
+              <span class="colon">
+               :
+              </span>
+             </dt>
+             <dd class="field-odd">
+              <ul class="simple">
+               <li>
+                <p>
+                 <strong>
+                  h
+                 </strong>
+                 (
+                 <em>
+                  float
+                 </em>
+                 ) &ndash; Normalized threshold.
+                </p>
+               </li>
+               <li>
+                <p>
+                 <strong>
+                  list_ARL_0
+                 </strong>
+                 (
+                 <em>
+                  list
+                 </em>
+                 ) &ndash; List of ARL0 values.
+                </p>
+               </li>
+              </ul>
+             </dd>
+             <dt class="field-even">
+              Returns
+              <span class="colon">
+               :
+              </span>
+             </dt>
+             <dd class="field-even">
+              <p>
+               Dataframe of ARL0 and k, Data dictionary of ARL0 and k; where k is normalized reference value.
+              </p>
+             </dd>
+             <dt class="field-odd">
+              Return type
+              <span class="colon">
+               :
+              </span>
+             </dt>
+             <dd class="field-odd">
+              <p>
+               tuple[pd.Dataframe, OrderedDict]
+              </p>
+             </dd>
+            </dl>
+           </dd>
+          </dl>
+          <dl class="py function">
+           <dt class="sig sig-object py" id="package.ARLTheoretical.get_ref_value_k">
+            <span class="sig-prename descclassname">
+             <span class="pre">
+              package.ARLTheoretical.
+             </span>
+            </span>
+            <span class="sig-name descname">
+             <span class="pre">
+              get_ref_value_k
+             </span>
+            </span>
+            <span class="sig-paren">
+             (
+            </span>
+            <em class="sig-param">
+             <span class="n">
+              <span class="pre">
+               h
+              </span>
+             </span>
+             <span class="p">
+              <span class="pre">
+               :
+              </span>
+             </span>
+             <span class="w">
+             </span>
+             <span class="n">
+              <span class="pre">
+               float
+              </span>
+             </span>
+            </em>
+            ,
+            <em class="sig-param">
+             <span class="n">
+              <span class="pre">
+               ARL_0
+              </span>
+             </span>
+             <span class="p">
+              <span class="pre">
+               :
+              </span>
+             </span>
+             <span class="w">
+             </span>
+             <span class="n">
+              <span class="pre">
+               float
+              </span>
+             </span>
+            </em>
+            <span class="sig-paren">
+             )
+            </span>
+            <span class="sig-return">
+             <span class="sig-return-icon">
+              &rarr;
+             </span>
+             <span class="sig-return-typehint">
+              <span class="pre">
+               float
+              </span>
+             </span>
+            </span>
+            <a class="headerlink" href="#package.ARLTheoretical.get_ref_value_k" title="Link to this definition">
+             &para;
+            </a>
+           </dt>
+           <dd>
+            <p>
+             Calculation for the reference value for given h and ARL_0.
+            </p>
+            <dl class="field-list simple">
+             <dt class="field-odd">
+              Parameters
+              <span class="colon">
+               :
+              </span>
+             </dt>
+             <dd class="field-odd">
+              <ul class="simple">
+               <li>
+                <p>
+                 <strong>
+                  h
+                 </strong>
+                 (
+                 <em>
+                  float
+                 </em>
+                 ) &ndash; Normalized threshold.
+                </p>
+               </li>
+               <li>
+                <p>
+                 <strong>
+                  ARL_0
+                 </strong>
+                 (
+                 <em>
+                  float
+                 </em>
+                 ) &ndash; ARL0 value.
+                </p>
+               </li>
+              </ul>
+             </dd>
+             <dt class="field-even">
+              Returns
+              <span class="colon">
+               :
+              </span>
+             </dt>
+             <dd class="field-even">
+              <p>
+               Normalized reference value k.
+              </p>
+             </dd>
+             <dt class="field-odd">
+              Return type
+              <span class="colon">
+               :
+              </span>
+             </dt>
+             <dd class="field-odd">
+              <p>
+               float
+              </p>
+             </dd>
+            </dl>
+           </dd>
+          </dl>
+         </section>
+         <span id="document-ref_utils">
+         </span>
+         <section id="module-package.utils">
+          <span id="utils">
+          </span>
+          <h3>
+           Utils
+           <a class="headerlink" href="#module-package.utils" title="Link to this heading">
+            &para;
+           </a>
+          </h3>
+          <p>
+           Utilities to handle different operations
+          </p>
+          <dl class="py function">
+           <dt class="sig sig-object py" id="package.utils.get_greattable_as_html">
+            <span class="sig-prename descclassname">
+             <span class="pre">
+              package.utils.
+             </span>
+            </span>
+            <span class="sig-name descname">
+             <span class="pre">
+              get_greattable_as_html
+             </span>
+            </span>
+            <span class="sig-paren">
+             (
+            </span>
+            <em class="sig-param">
+             <span class="n">
+              <span class="pre">
+               df
+              </span>
+             </span>
+             <span class="p">
+              <span class="pre">
+               :
+              </span>
+             </span>
+             <span class="w">
+             </span>
+             <span class="n">
+              <span class="pre">
+               DataFrame
+              </span>
+             </span>
+            </em>
+            <span class="sig-paren">
+             )
+            </span>
+            <span class="sig-return">
+             <span class="sig-return-icon">
+              &rarr;
+             </span>
+             <span class="sig-return-typehint">
+              <span class="pre">
+               GT
+              </span>
+             </span>
+            </span>
+            <a class="headerlink" href="#package.utils.get_greattable_as_html" title="Link to this definition">
+             &para;
+            </a>
+           </dt>
+           <dd>
+            <p>
+             Get the great_table as HTML from Pandas dataframe.
+            </p>
+            <dl class="field-list simple">
+             <dt class="field-odd">
+              Parameters
+              <span class="colon">
+               :
+              </span>
+             </dt>
+             <dd class="field-odd">
+              <p>
+               <strong>
+                df
+               </strong>
+               (
+               <em>
+                pd.DataFrame
+               </em>
+               ) &ndash; Dataframe to rendera as a table.
+              </p>
+             </dd>
+             <dt class="field-even">
+              Returns
+              <span class="colon">
+               :
+              </span>
+             </dt>
+             <dd class="field-even">
+              <p>
+               Table in HTML format.
+              </p>
+             </dd>
+             <dt class="field-odd">
+              Return type
+              <span class="colon">
+               :
+              </span>
+             </dt>
+             <dd class="field-odd">
+              <p>
+               gt.GT
+              </p>
+             </dd>
+            </dl>
+           </dd>
+          </dl>
+          <dl class="py function">
+           <dt class="sig sig-object py" id="package.utils.populate_summary_table_ARL0_k">
+            <span class="sig-prename descclassname">
+             <span class="pre">
+              package.utils.
+             </span>
+            </span>
+            <span class="sig-name descname">
+             <span class="pre">
+              populate_summary_table_ARL0_k
+             </span>
+            </span>
+            <span class="sig-paren">
+             (
+            </span>
+            <em class="sig-param">
+             <span class="n">
+              <span class="pre">
+               summary_table_df_ARL0_k
+              </span>
+             </span>
+             <span class="p">
+              <span class="pre">
+               :
+              </span>
+             </span>
+             <span class="w">
+             </span>
+             <span class="n">
+              <span class="pre">
+               DataFrame
+              </span>
+             </span>
+            </em>
+            ,
+            <em class="sig-param">
+             <span class="n">
+              <span class="pre">
+               h
+              </span>
+             </span>
+            </em>
+            <span class="sig-paren">
+             )
+            </span>
+            <span class="sig-return">
+             <span class="sig-return-icon">
+              &rarr;
+             </span>
+             <span class="sig-return-typehint">
+              <span class="pre">
+               GT
+              </span>
+             </span>
+            </span>
+            <a class="headerlink" href="#package.utils.populate_summary_table_ARL0_k" title="Link to this definition">
+             &para;
+            </a>
+           </dt>
+           <dd>
+            <p>
+             Populate ARLTheoretical.summary_table_df_ARL0_k.
+            </p>
+            <dl class="field-list simple">
+             <dt class="field-odd">
+              Parameters
+              <span class="colon">
+               :
+              </span>
+             </dt>
+             <dd class="field-odd">
+              <ul class="simple">
+               <li>
+                <p>
+                 <strong>
+                  summary_table_df_ARL0_k
+                 </strong>
+                 (
+                 <em>
+                  pd.DataFrame
+                 </em>
+                 ) &ndash; Dataframe of ARL0 and its respective values of k.
+                </p>
+               </li>
+               <li>
+                <p>
+                 <strong>
+                  h
+                 </strong>
+                 (
+                 <em>
+                  float
+                 </em>
+                 ) &ndash; Normalized threshold.
+                </p>
+               </li>
+              </ul>
+             </dd>
+             <dt class="field-even">
+              Returns
+              <span class="colon">
+               :
+              </span>
+             </dt>
+             <dd class="field-even">
+              <p>
+               Table of ARL0 and k in HTML format.
+              </p>
+             </dd>
+             <dt class="field-odd">
+              Return type
+              <span class="colon">
+               :
+              </span>
+             </dt>
+             <dd class="field-odd">
+              <p>
+               gt.GT
+              </p>
+             </dd>
+            </dl>
+           </dd>
+          </dl>
+          <dl class="py function">
+           <dt class="sig sig-object py" id="package.utils.populate_summary_table_ARL1_k">
+            <span class="sig-prename descclassname">
+             <span class="pre">
+              package.utils.
+             </span>
+            </span>
+            <span class="sig-name descname">
+             <span class="pre">
+              populate_summary_table_ARL1_k
+             </span>
+            </span>
+            <span class="sig-paren">
+             (
+            </span>
+            <em class="sig-param">
+             <span class="n">
+              <span class="pre">
+               summary_table_df_ARL1_k
+              </span>
+             </span>
+             <span class="p">
+              <span class="pre">
+               :
+              </span>
+             </span>
+             <span class="w">
+             </span>
+             <span class="n">
+              <span class="pre">
+               DataFrame
+              </span>
+             </span>
+            </em>
+            ,
+            <em class="sig-param">
+             <span class="n">
+              <span class="pre">
+               dict_ARL0_k
+              </span>
+             </span>
+             <span class="p">
+              <span class="pre">
+               :
+              </span>
+             </span>
+             <span class="w">
+             </span>
+             <span class="n">
+              <span class="pre">
+               OrderedDict
+              </span>
+             </span>
+            </em>
+            ,
+            <em class="sig-param">
+             <span class="n">
+              <span class="pre">
+               h
+              </span>
+             </span>
+            </em>
+            <span class="sig-paren">
+             )
+            </span>
+            <span class="sig-return">
+             <span class="sig-return-icon">
+              &rarr;
+             </span>
+             <span class="sig-return-typehint">
+              <span class="pre">
+               GT
+              </span>
+             </span>
+            </span>
+            <a class="headerlink" href="#package.utils.populate_summary_table_ARL1_k" title="Link to this definition">
+             &para;
+            </a>
+           </dt>
+           <dd>
+            <p>
+             Populate Multiindex table specific for ARLTheoretical.summary_table_df_ARL1_k
+            </p>
+            <dl class="field-list simple">
+             <dt class="field-odd">
+              Parameters
+              <span class="colon">
+               :
+              </span>
+             </dt>
+             <dd class="field-odd">
+              <ul class="simple">
+               <li>
+                <p>
+                 <strong>
+                  summary_table_df_ARL1_k
+                 </strong>
+                 (
+                 <em>
+                  pd.DataFrame
+                 </em>
+                 ) &ndash; Dataframe with ARL1 and k values.
+                </p>
+               </li>
+               <li>
+                <p>
+                 <strong>
+                  dict_ARL0_k
+                 </strong>
+                 (
+                 <em>
+                  OrderedDict
+                 </em>
+                 ) &ndash; Data Dictionary with the mapping between ARL0 and k.
+                </p>
+               </li>
+               <li>
+                <p>
+                 <strong>
+                  h
+                 </strong>
+                 (
+                 <em>
+                  float
+                 </em>
+                 ) &ndash; Normalized threshold.
+                </p>
+               </li>
+              </ul>
+             </dd>
+             <dt class="field-even">
+              Returns
+              <span class="colon">
+               :
+              </span>
+             </dt>
+             <dd class="field-even">
+              <p>
+               Table for ARL1 and k in HTML format.
+              </p>
+             </dd>
+             <dt class="field-odd">
+              Return type
+              <span class="colon">
+               :
+              </span>
+             </dt>
+             <dd class="field-odd">
+              <p>
+               gt.GT
+              </p>
+             </dd>
+            </dl>
+           </dd>
+          </dl>
+         </section>
+        </div>
+       </section>
+      </section>
+      <div class="clearer">
+      </div>
+     </div>
+    </div>
+   </div>
+   <div class="clearer">
+   </div>
+  </div>
+  <article id="back-cover">
+   <div class="container">
+    <div class="back-cover-footer">
+     <p>
+     </p>
+     <p>
+      Created using
+      <a href="http://sphinx-doc.org/">
+       Sphinx
+      </a>
+      8.1.3.
+     </p>
+    </div>
+   </div>
+  </article>
+ </body>
+</html>

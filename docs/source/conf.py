@@ -13,7 +13,8 @@ sys.path.insert(0, os.path.abspath('../../src/'))
 project = 'AIM-CU'
 copyright = '2024, Smriti Prathapan, Berkman Sahiner, Dhaval Kadia, Ravi K. Samala'
 author = 'Smriti Prathapan, Berkman Sahiner, Dhaval Kadia, Ravi K. Samala'
-release = '0.0.1'
+release = '1.0.0'
+version = '1.0.0'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -24,6 +25,7 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.autosummary',
               'sphinx.ext.duration',
               'sphinx_tabs.tabs',
+              'sphinx_simplepdf',
             #   'sphinxcontrib.inkscapeconverter',
               ]
 
