@@ -152,7 +152,7 @@ class CUSUM:
 
     def change_detection(
         self,
-        pre_change_days     : int,
+        initial_days        : int   = 30,
         normalized_ref_value: float = 0.5,
         normalized_threshold: float = 4,
     ) -> None:
@@ -164,7 +164,7 @@ class CUSUM:
             normalized_ref_value (float, optional): Normalized reference value for detecting a unit standard deviation change in mean of the process. Defaults to 0.5.
             normalized_threshold (float, optional): Normalized threshold. Defaults to 4.
         """
-        self.pre_change_days  = pre_change_days
+        self.pre_change_days  = initial_days      # This is the #initial days that we assume to be in-control - user enters or default = 30
         self.post_change_days = self.total_days - self.pre_change_days
 
         ref_val       = normalized_ref_value
@@ -178,8 +178,8 @@ class CUSUM:
         self.AvgDD     = np.array([])             # Average Detection Delay
         
 
-        # CUSUM for day0-60: outcomes are detection delay and #FP, #TP, MTBFA, False alarm rate
-        in_control_data = self.data[: self.pre_change_days]
+        # CUSUM outcomes are detection delay and #FP, #TP
+        in_control_data = self.data[: self.pre_change_days]  #Assume the input data has more than 30 observations
         self.in_std     = np.std(in_control_data)
         x               = np.array(self.data)
 
@@ -190,6 +190,24 @@ class CUSUM:
 
         # Call compute CUSUM function with x (observatoins), in-control mean (mu) and k (drift or reference value)
         self.S_hi, self.S_lo, cusum = self.compute_cusum(x, mu_0, k)
+
+        # Check the variations in self.S_hi and self.S_lo to determine whether there was a change in the data
+        S_hi_last_known_zero = np.where(self.S_hi == 0)[0]          #Find all the indices where self.S_hi was 0 
+        S_hi_start_of_change = S_hi_last_known_zero[-1] + 1         #Fetch the last entry where self.S_hi was 0
+
+        S_lo_last_known_zero = np.where(self.S_lo == 0)[0]          #Find all the indices where self.S_lo was 0 
+        S_lo_start_of_change = S_lo_last_known_zero[-1] + 1         #Fetch the last entry where self.S_lo was 0
+        
+        #Display the print messages in the UI
+        if ((S_lo_start_of_change < S_hi_start_of_change) and (self.S_lo[S_lo_start_of_change+10] > self.h)):    #check if the changes in the next 10 observations exceed the threshold
+            print(f"Change-point with respect to S_lo is: {S_lo_start_of_change}")                               #Use this change-point to generate histograms
+            self.pre_change_days = S_lo_start_of_change
+
+        elif ((S_hi_start_of_change < S_lo_start_of_change) and (self.S_hi[S_hi_start_of_change+10] > self.h)):
+            print(f"Change-point with respect to S_hi is: {S_hi_start_of_change}")
+            self.pre_change_days = S_hi_start_of_change
+        else:
+            print(f"No change")
 
         # False positives and Total alarms
         falsePos = 0
