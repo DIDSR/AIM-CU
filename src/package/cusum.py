@@ -25,23 +25,25 @@ class CUSUM:
     """
 
     def __init__(self):
-        self.df_metric   = None
+        self.df_metric = None
         self.metric_type = None
 
         self.AvgDD = None
-        self.data  = None
+        self.data = None
 
-        self.h      = None
+        self.h = None
         self.in_std = None
-        self.S_hi   = None
-        self.S_lo   = None
+        self.in_mu = None
+        self.S_hi = None
+        self.S_lo = None
 
         self.config = None
 
-        self.total_days       = None
-        self.pre_change_days  = None
+        self.total_days = None
+        self.pre_change_days = None
         self.post_change_days = None
-        self.init_days        = None
+
+        self.init_days = None
 
     def initialize(self) -> None:
         """
@@ -56,14 +58,20 @@ class CUSUM:
             print("Error: config.toml not found at", path_file_config)
             sys.exit(1)
 
-    def set_init_days(self, init_days: int) -> None:
+    def set_init_stats(self, init_days: int = 30) -> None:
         """
-        Set initial days to find in-control mean and standard deviation.
+        Use initial days to find in-control mean and standard deviation.
 
         Args:
-            init_days (int): Initial days when observations are considered stable.
+            init_days (int, optional): Initial days when observations are considered stable. Defaults to 30.
         """
         self.init_days = init_days
+
+        in_control_data = self.data[
+            : self.init_days
+        ]  # Assume the input data has more than 30 observations
+        self.in_std = np.std(in_control_data)
+        self.in_mu = np.mean(in_control_data)  # In-control mean
 
     def set_timeline(self, data: np.ndarray) -> None:
         """
@@ -118,41 +126,40 @@ class CUSUM:
         """
         num_rows = np.shape(x)[0]
 
-        x_mean       = np.zeros(num_rows, dtype=float)
-        #S_hi : sum of positive changes --------------------------
-        self.S_hi    = np.zeros(num_rows, dtype=float)
+        x_mean = np.zeros(num_rows, dtype=float)
+        # S_hi : sum of positive changes --------------------------
+        self.S_hi = np.zeros(num_rows, dtype=float)
         self.S_hi[0] = 0.0  # starts with 0
-        #Increase in mean = x-mu-k ----------------------------
-        mean_hi      = np.zeros(num_rows, dtype=float)
+        # Increase in mean = x-mu-k ----------------------------
+        mean_hi = np.zeros(num_rows, dtype=float)
 
-        #Decrease in mean = mu-k-x----------------------------
-        mean_lo      = np.zeros(num_rows, dtype=float)
-        #S_lo : sum of negative changes --------------------------
-        self.S_lo    = np.zeros(num_rows, dtype=float)
+        # Decrease in mean = mu-k-x----------------------------
+        mean_lo = np.zeros(num_rows, dtype=float)
+        # S_lo : sum of negative changes --------------------------
+        self.S_lo = np.zeros(num_rows, dtype=float)
         self.S_lo[0] = 0.0  # starts with 0
-        #CUSUM: Cumulative sum of x minus mu ------------------
-        cusum        = np.zeros(num_rows, dtype=float)
-        cusum[0]     = 0.0  # initialize with 0
+        # CUSUM: Cumulative sum of x minus mu ------------------
+        cusum = np.zeros(num_rows, dtype=float)
+        cusum[0] = 0.0  # initialize with 0
 
         for i in range(0, num_rows):
-            x_mean[i]    = x[i] - mu_0  # x - mean
-            mean_hi[i]   = x[i] - mu_0 - k
+            x_mean[i] = x[i] - mu_0  # x - mean
+            mean_hi[i] = x[i] - mu_0 - k
             self.S_hi[i] = max(0, self.S_hi[i - 1] + mean_hi[i])
-            mean_lo[i]   = mu_0 - k - x[i]
+            mean_lo[i] = mu_0 - k - x[i]
             self.S_lo[i] = max(0, self.S_lo[i - 1] + mean_lo[i])
-            cusum[i]     = cusum[i - 1] + x_mean[i]
+            cusum[i] = cusum[i - 1] + x_mean[i]
 
-        x_mean    = np.round(x_mean, decimals=2)
+        x_mean = np.round(x_mean, decimals=2)
         self.S_hi = np.round(self.S_hi, decimals=2)
-        mean_lo   = np.round(mean_lo, decimals=2)
+        mean_lo = np.round(mean_lo, decimals=2)
         self.S_lo = np.round(self.S_lo, decimals=2)
-        cusum     = np.round(cusum, decimals=2)
+        cusum = np.round(cusum, decimals=2)
 
         return self.S_hi, self.S_lo, cusum
 
     def change_detection(
         self,
-        initial_days        : int   = 30,
         normalized_ref_value: float = 0.5,
         normalized_threshold: float = 4,
     ) -> None:
@@ -164,46 +171,57 @@ class CUSUM:
             normalized_ref_value (float, optional): Normalized reference value for detecting a unit standard deviation change in mean of the process. Defaults to 0.5.
             normalized_threshold (float, optional): Normalized threshold. Defaults to 4.
         """
-        self.pre_change_days  = initial_days      # This is the #initial days that we assume to be in-control - user enters or default = 30
-        self.post_change_days = self.total_days - self.pre_change_days
+        self.pre_change_days = self.init_days  # This is the #initial days that we assume to be in-control - user enters or default = 30
 
-        ref_val       = normalized_ref_value
+        ref_val = normalized_ref_value
         control_limit = normalized_threshold
 
         DetectionTimes = np.array([], dtype=int)
-        Dj             = np.array([], dtype=int)  # save the Dj which are binary values indicating detection MTBFA
-        Zj             = np.array([], dtype=int)  # save the Zj = min(Tj,pre-change-days)-MTBFA
-        zj             = np.array([], dtype=int)  # ADD - Maximum likelihood estimate of delays
-        cj             = np.array([], dtype=int)  # ADD - binary - whether there is a change-detection (1) or not (0)
-        self.AvgDD     = np.array([])             # Average Detection Delay
-        
+        Dj = np.array(
+            [], dtype=int
+        )  # save the Dj which are binary values indicating detection MTBFA
+        Zj = np.array([], dtype=int)  # save the Zj = min(Tj,pre-change-days)-MTBFA
+        zj = np.array([], dtype=int)  # ADD - Maximum likelihood estimate of delays
+        cj = np.array(
+            [], dtype=int
+        )  # ADD - binary - whether there is a change-detection (1) or not (0)
+        self.AvgDD = np.array([])  # Average Detection Delay
 
-        # CUSUM outcomes are detection delay and #FP, #TP
-        in_control_data = self.data[: self.pre_change_days]  #Assume the input data has more than 30 observations
-        self.in_std     = np.std(in_control_data)
-        x               = np.array(self.data)
+        self.h = control_limit * self.in_std  # Threhold
+        k = ref_val * self.in_std  # Reference value
 
-        mu_0   = np.mean(in_control_data) # In-control mean
-
-        self.h = control_limit * self.in_std #Threhold
-        k      = ref_val * self.in_std       #Reference value
+        x = np.array(self.data)
 
         # Call compute CUSUM function with x (observatoins), in-control mean (mu) and k (drift or reference value)
-        self.S_hi, self.S_lo, cusum = self.compute_cusum(x, mu_0, k)
+        self.S_hi, self.S_lo, cusum = self.compute_cusum(x, self.in_mu, k)
 
         # Check the variations in self.S_hi and self.S_lo to determine whether there was a change in the data
-        S_hi_last_known_zero = np.where(self.S_hi == 0)[0]          #Find all the indices where self.S_hi was 0 
-        S_hi_start_of_change = S_hi_last_known_zero[-1] + 1         #Fetch the last entry where self.S_hi was 0
+        S_hi_last_known_zero = np.where(self.S_hi == 0)[
+            0
+        ]  # Find all the indices where self.S_hi was 0
+        S_hi_start_of_change = (
+            S_hi_last_known_zero[-1] + 1
+        )  # Fetch the last entry where self.S_hi was 0
 
-        S_lo_last_known_zero = np.where(self.S_lo == 0)[0]          #Find all the indices where self.S_lo was 0 
-        S_lo_start_of_change = S_lo_last_known_zero[-1] + 1         #Fetch the last entry where self.S_lo was 0
-        
-        #Display the print messages in the UI
-        if ((S_lo_start_of_change < S_hi_start_of_change) and (self.S_lo[S_lo_start_of_change+10] > self.h)):    #check if the changes in the next 10 observations exceed the threshold
-            print(f"Change-point with respect to S_lo is: {S_lo_start_of_change}")                               #Use this change-point to generate histograms
+        S_lo_last_known_zero = np.where(self.S_lo == 0)[
+            0
+        ]  # Find all the indices where self.S_lo was 0
+        S_lo_start_of_change = (
+            S_lo_last_known_zero[-1] + 1
+        )  # Fetch the last entry where self.S_lo was 0
+
+        # Display the print messages in the UI
+        if (S_lo_start_of_change < S_hi_start_of_change) and (
+            self.S_lo[S_lo_start_of_change + 10] > self.h
+        ):  # check if the changes in the next 10 observations exceed the threshold
+            print(
+                f"Change-point with respect to S_lo is: {S_lo_start_of_change}"
+            )  # Use this change-point to generate histograms
             self.pre_change_days = S_lo_start_of_change
 
-        elif ((S_hi_start_of_change < S_lo_start_of_change) and (self.S_hi[S_hi_start_of_change+10] > self.h)):
+        elif (S_hi_start_of_change < S_lo_start_of_change) and (
+            self.S_hi[S_hi_start_of_change + 10] > self.h
+        ):
             print(f"Change-point with respect to S_hi is: {S_hi_start_of_change}")
             self.pre_change_days = S_hi_start_of_change
         else:
@@ -211,15 +229,17 @@ class CUSUM:
 
         # False positives and Total alarms
         falsePos = 0
-        alarms   = 0
-        avddd    = 0  # this is the delay from the paper: td-ts (z_k-v) where v is the changepoint and z_k is the time of detection
+        alarms = 0
+        avddd = 0  # this is the delay from the paper: td-ts (z_k-v) where v is the changepoint and z_k is the time of detection
 
         for i in range(0, self.pre_change_days):
             if (self.S_hi[i] > self.h) or (self.S_lo[i] > self.h):
-                falsePos       += 1  # False Positives
-                DetectionTimes = np.append(DetectionTimes, i + 1)  # time at which a false positive is detected
-                Dj             = np.append(Dj, 1)
-                Zj             = np.append(Zj, min(i, self.pre_change_days))
+                falsePos += 1  # False Positives
+                DetectionTimes = np.append(
+                    DetectionTimes, i + 1
+                )  # time at which a false positive is detected
+                Dj = np.append(Dj, 1)
+                Zj = np.append(Zj, min(i, self.pre_change_days))
                 break
 
         # If there is no false positive, Zj = pre_change_days, Dj = 0
@@ -232,8 +252,8 @@ class CUSUM:
         for i in range(self.pre_change_days, self.total_days):
             if (self.S_hi[i] > self.h) or (self.S_lo[i] > self.h):
                 alarms += 1  # True Positive: break after detecting one TP
-                cj      = np.append(cj, 1)
-                zj      = np.append(zj, min(i, self.total_days) - self.pre_change_days)
+                cj = np.append(cj, 1)
+                zj = np.append(zj, min(i, self.total_days) - self.pre_change_days)
                 break
 
         # If there is no true detection, zj = total simulation days, cj = 0
@@ -242,7 +262,6 @@ class CUSUM:
             zj = np.append(zj, self.total_days)
 
         self.AvgDD = np.append(self.AvgDD, avddd)  # ADD estimate from the paper
-        
 
     def plot_histogram_plotly(self, data, xlabel, title="") -> go.Figure:
         """

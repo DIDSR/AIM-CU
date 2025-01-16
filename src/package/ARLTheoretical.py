@@ -78,9 +78,10 @@ def get_ARL_1_h_mu1_k(h: float, k: float, mu1: float) -> float:
     Returns:
         float: Detection delay (ARL1).
     """
-    
+
     ARL_1 = np.round(
-        spc.xcusum_ad_(k=k, h=h, mu1=mu1, mu0=0, sided="two", r=20), decimals=2).tolist()[0] #Changing decimals to 2 digits to match the results from paper
+        spc.xcusum_ad_(k=k, h=h, mu1=mu1, mu0=0, sided="two", r=20), decimals=2
+    ).tolist()[0]  # Changing decimals to 2 digits to match the results from paper
 
     return ARL_1
 
@@ -111,7 +112,10 @@ def get_ARL_1(
 
         for mu1 in shift_in_mean:
             ARL_1 = np.round(
-                spc.xcusum_ad_(k=k, h=h, mu1=mu1, mu0=0, sided="two", r=20), decimals=2).tolist()[0] #Changing decimals to 2 digits to match the results from paper
+                spc.xcusum_ad_(k=k, h=h, mu1=mu1, mu0=0, sided="two", r=20), decimals=2
+            ).tolist()[
+                0
+            ]  # Changing decimals to 2 digits to match the results from paper
             list_ARL_1.append(ARL_1)
 
         dict_data_ARL1_k[ARL_0] = list_ARL_1

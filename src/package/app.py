@@ -17,6 +17,26 @@ import great_tables as gt
 import plotly.graph_objects as go
 
 
+def set_init_days(file_csv_metric: gr.File) -> tuple[float, float]:
+    """
+    Set initial days and get in-control mean and standard deviation.
+
+    Args:
+        file_csv_metric (gr.File): CSV file with metric data
+
+    Returns:
+        tuple[float, float]: In-control mean and standard deviation.
+    """
+    init_days = int(config["initialization"]["initial_days"])
+
+    data_csv_metric = pd.read_csv(file_csv_metric.name)
+    obj_cusum.set_df_metric_csv(data_csv_metric)
+
+    obj_cusum.set_init_stats(init_days=init_days)
+
+    return "{:.2f}".format(obj_cusum.in_mu), "{:.2f}".format(obj_cusum.in_std)
+
+
 def populate_table(h: str) -> tuple[gt.GT, gt.GT]:
     """
     Populate tables for ARL0 and ARL1 given the value of h
@@ -94,37 +114,22 @@ def calculate_arl1_h_k_mu1(h: str, k: str, mu1: str) -> float:
 
 
 def populate_cusum_plots(
-    file_csv_metric: gr.File,
-    ref_value: str,
-    normalized_threshold: str,
-    pre_change_days: str,
+    ref_value: str, normalized_threshold: str
 ) -> tuple[go.Figure, go.Figure]:
     """
     Populate CUSUM plots
 
     Args:
-        file_csv_metric (gr.File): CSV file with metric data
         ref_value (str): Normalized reference value for detecting a unit standard deviation change in mean of the process.
         normalized_threshold (str): Normalized threshold.
-        pre_change_days (str): Number of days for in-control phase.
 
     Returns:
         tuple[go.Figure, go.Figure]: Scatter plot as Plotly graph object; CUSUM plot using Plotly graph object.
     """
     ref_value = float(ref_value)
     normalized_threshold = float(normalized_threshold)
-    pre_change_days = int(pre_change_days)
-
-    if file_csv_metric is not None:
-        # upload CSV file
-        data_csv_metric = pd.read_csv(file_csv_metric.name)
-        obj_cusum.set_df_metric_csv(data_csv_metric)
-    else:
-        # use the example CSV data
-        obj_cusum.set_df_metric_default()
 
     obj_cusum.change_detection(
-        pre_change_days=pre_change_days,
         normalized_ref_value=ref_value,
         normalized_threshold=normalized_threshold,
     )
@@ -171,8 +176,25 @@ with gr.Blocks(
                 label="Upload CSV file with metric across days",
             )
 
-            in_control_mean = gr.Textbox(label="In-control mean", interactive=False)
-            in_control_std = gr.Textbox(label="In-control standard deviation", interactive=False)
+            gr.Markdown(f"""
+                ### Initial days of observations are considered as 30.
+                """)  # noqa: F541
+
+            with gr.Row():
+                with gr.Column():
+                    in_control_mean = gr.Textbox(
+                        label="In-control mean", interactive=False
+                    )
+                with gr.Column():
+                    in_control_std = gr.Textbox(
+                        label="In-control standard deviation", interactive=False
+                    )
+
+            csv_file_metric.change(
+                fn=set_init_days,
+                inputs=[csv_file_metric],
+                outputs=[in_control_mean, in_control_std],
+            )
 
             gr.Markdown(f"""
                         ### Phase I:
@@ -259,12 +281,6 @@ with gr.Blocks(
                     value="0.5",
                 )
 
-            pre_change_days = gr.Textbox(
-                label="In-control days =",
-                placeholder="Number of days for in-control phase, default = 60",
-                value="60",
-            )
-
             button_csv_metric = gr.Button("Show CUSUM plots")
 
             plot_avg_metric = gr.Plot(
@@ -307,7 +323,7 @@ with gr.Blocks(
     # Get the CSV file and populate plots
     button_csv_metric.click(
         fn=populate_cusum_plots,
-        inputs=[csv_file_metric, k_phase2, h_phase2, pre_change_days],
+        inputs=[k_phase2, h_phase2],
         outputs=[plot_avg_metric, plot_cusum_chart],
     )
 
@@ -317,6 +333,7 @@ with gr.Blocks(
     button_csv_metric.click(
         fn=lambda: gr.update(visible=True), inputs=[], outputs=plot_cusum_chart
     )
+
 
 try:
     path_file_config = os.path.abspath("../../config/config.toml")
