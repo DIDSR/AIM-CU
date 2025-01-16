@@ -162,6 +162,19 @@ with gr.Blocks(
     with gr.Row():
         with gr.Column():
             gr.Markdown(f"""
+                ### Upload the CSV file with metric. Or use the default example CSV file by directly clicking the button below.
+                """)  # noqa: F541
+
+            # load the CSV file with specifities across days
+            csv_file_metric = gr.File(
+                file_types=["csv"],
+                label="Upload CSV file with metric across days",
+            )
+
+            in_control_mean = gr.Textbox(label="In-control mean", interactive=False)
+            in_control_std = gr.Textbox(label="In-control standard deviation", interactive=False)
+
+            gr.Markdown(f"""
                         ### Phase I:
                         Parameter choices for detecting change and detection delay estimates (theoretical calculations).
                         """)  # noqa: F541
@@ -222,16 +235,6 @@ with gr.Blocks(
 
             button_populate_table = gr.Button(
                 "Populate Reference Values and ARL_1 tables for the given h value"
-            )
-
-            gr.Markdown(f"""
-                ### Upload the CSV file with metric. Or use the default example CSV file by directly clicking the button below.
-                """)  # noqa: F541
-
-            # load the CSV file with specifities across days
-            csv_file_metric = gr.File(
-                file_types=["csv"],
-                label="Upload CSV file with metric across days",
             )
         with gr.Column():
             gr.Markdown(f"""

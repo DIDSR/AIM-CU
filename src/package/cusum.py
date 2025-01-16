@@ -41,6 +41,7 @@ class CUSUM:
         self.total_days       = None
         self.pre_change_days  = None
         self.post_change_days = None
+        self.init_days        = None
 
     def initialize(self) -> None:
         """
@@ -54,6 +55,15 @@ class CUSUM:
         except FileNotFoundError:
             print("Error: config.toml not found at", path_file_config)
             sys.exit(1)
+
+    def set_init_days(self, init_days: int) -> None:
+        """
+        Set initial days to find in-control mean and standard deviation.
+
+        Args:
+            init_days (int): Initial days when observations are considered stable.
+        """
+        self.init_days = init_days
 
     def set_timeline(self, data: np.ndarray) -> None:
         """

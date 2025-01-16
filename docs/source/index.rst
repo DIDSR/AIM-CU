@@ -46,6 +46,7 @@ AIM-CU can also be run through the demo available at https://huggingface.co/spac
    :maxdepth: 2
    :caption: Contents:
 
+   ref_method
    ref_cusum
    ref_theoretical
    ref_utils
