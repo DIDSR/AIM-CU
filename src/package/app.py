@@ -172,7 +172,7 @@ with gr.Blocks(
 
             # load the CSV file with specifities across days
             csv_file_metric = gr.File(
-                file_types=["csv"],
+                # file_types=["csv"],
                 label="Upload CSV file with metric across days",
             )
 
