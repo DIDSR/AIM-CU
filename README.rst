@@ -1,6 +1,11 @@
 AIM-CU : A CUSUM-based tool for AI Monitoring
 ======
 
+.. image:: assets/AIM-CU-Overview.drawio.png
+    :width: 800
+    :align: center
+    :alt: AIM-CU flowchart
+
 Monitoring a clinically deployed AI device to detect performance drift is an essential step to
 ensure the safety and effectiveness of AI. 
 
