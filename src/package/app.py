@@ -177,6 +177,11 @@ with gr.Blocks(
             )
 
             gr.Markdown(f"""
+                        ### Phase I:
+                        Parameter choices for detecting change and detection delay estimates (theoretical calculations).
+                        """)  # noqa: F541
+
+            gr.Markdown(f"""
                 ### Initial days of observations are considered as 30.
                 """)  # noqa: F541
 
@@ -195,11 +200,6 @@ with gr.Blocks(
                 inputs=[csv_file_metric],
                 outputs=[in_control_mean, in_control_std],
             )
-
-            gr.Markdown(f"""
-                        ### Phase I:
-                        Parameter choices for detecting change and detection delay estimates (theoretical calculations).
-                        """)  # noqa: F541
 
             gr.Markdown(f"""
                 ### Enter h value:

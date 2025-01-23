@@ -7,6 +7,7 @@ import pandas as pd
 import great_tables as gt
 from collections import OrderedDict
 import tomli
+import numpy as np
 
 with open(os.path.abspath("../../config/config.toml"), "rb") as file_config:
     config = tomli.load(file_config)
@@ -91,7 +92,7 @@ def populate_summary_table_ARL1_k(
         gt.GT: Table for ARL1 and k in HTML format.
     """
     list_ARL_0 = [str(ARL_0) for ARL_0 in dict_ARL0_k.keys()]
-    list_k = [k for k in dict_ARL0_k.values()]
+    list_k = ['{:.2f}'.format(k) for k in dict_ARL0_k.values()]
 
     format_k_ARL_0 = lambda k, ARL_0: gt.html(str(k) + "<br>" + "(" + str(ARL_0) + ")")
 
