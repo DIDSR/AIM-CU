@@ -3,7 +3,7 @@ Documentation
 
 Read the documentation
 ----------------------
-Access the documentation from `index.html <docs/build/html/index.html>`_
+Access the documentation from `index.html <build/html/index.html>`_
 
 Generate Sphinx documentation
 -----------------------------
