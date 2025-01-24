@@ -165,8 +165,8 @@ cython_debug/
 figure/
 
 # temporary exclusion of sphinx docs
-docs/build
-docs/build/doctrees
-docs/build/simplepdf/_static
+# docs/build
+# docs/build/doctrees
+# docs/build/simplepdf/_static
 
-docs/build/simplepdf
+# docs/build/simplepdf

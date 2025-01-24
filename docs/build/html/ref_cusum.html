@@ -15,7 +15,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="ARLTheoretical" href="ref_theoretical.html" />
-    <link rel="prev" title="Performance Assessment for CUSUM" href="ref_method.html" />
+    <link rel="prev" title="Methods" href="ref_method.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -43,7 +43,7 @@
 <dd><p>CUSUM class and its functionalities.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="package.cusum.CUSUM.change_detection">
-<span class="sig-name descname"><span class="pre">change_detection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pre_change_days</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalized_ref_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalized_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#package.cusum.CUSUM.change_detection" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">change_detection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">normalized_ref_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalized_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#package.cusum.CUSUM.change_detection" title="Link to this definition">¶</a></dt>
 <dd><p>Detects a change in the process.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -150,6 +150,17 @@
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="package.cusum.CUSUM.set_init_stats">
+<span class="sig-name descname"><span class="pre">set_init_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">init_days</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">30</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#package.cusum.CUSUM.set_init_stats" title="Link to this definition">¶</a></dt>
+<dd><p>Use initial days to find in-control mean and standard deviation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>init_days</strong> (<em>int</em><em>, </em><em>optional</em>) – Initial days when observations are considered stable. Defaults to 30.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="package.cusum.CUSUM.set_timeline">
 <span class="sig-name descname"><span class="pre">set_timeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#package.cusum.CUSUM.set_timeline" title="Link to this definition">¶</a></dt>
 <dd><p>Set the timeline of observations.</p>
@@ -199,7 +210,7 @@
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="ref_method.html">Performance Assessment for CUSUM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ref_method.html">Methods</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">CUSUM</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#package.cusum.CUSUM"><code class="docutils literal notranslate"><span class="pre">CUSUM</span></code></a></li>
 </ul>
@@ -212,7 +223,7 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="ref_method.html" title="previous chapter">Performance Assessment for CUSUM</a></li>
+      <li>Previous: <a href="ref_method.html" title="previous chapter">Methods</a></li>
       <li>Next: <a href="ref_theoretical.html" title="next chapter">ARLTheoretical</a></li>
   </ul></li>
 </ul>

@@ -71,23 +71,6 @@
        <a class="reference internal" href="#methods">
         Methods
        </a>
-       <ul>
-        <li class="toctree-l2">
-         <a class="reference internal" href="#performance-assessment-for-cusum">
-          Performance Assessment for CUSUM
-         </a>
-        </li>
-        <li class="toctree-l2">
-         <a class="reference internal" href="#mean-time-between-false-alarms-mtbfa">
-          Mean time between false alarms (MTBFA)
-         </a>
-        </li>
-        <li class="toctree-l2">
-         <a class="reference internal" href="#average-detection-delay-add">
-          Average Detection Delay (ADD)
-         </a>
-        </li>
-       </ul>
       </li>
       <li class="toctree-l1">
        <a class="reference internal" href="#cusum">
@@ -350,147 +333,6 @@ in-control mean, the CUSUM scheme accumulates deviations that are
            </span>
            .
           </p>
-          <section id="performance-assessment-for-cusum">
-           <span id="subsec3">
-           </span>
-           <h4>
-            Performance Assessment for CUSUM
-            <a class="headerlink" href="#performance-assessment-for-cusum" title="Link to this heading">
-             &para;
-            </a>
-           </h4>
-           <p>
-            Let
-            <em>
-             d=0,&hellip;n-1
-            </em>
-            indicate the days (or time), where
-            <em>
-             n
-            </em>
-            is the total
-length of time during which the AI model performance is monitored. We
-assume that the AI model performance is in-control between days 0 and
-            <span class="math notranslate nohighlight">
-             \(d_s\)
-            </span>
-            ,
-            <span class="math notranslate nohighlight">
-             \(d_s&lt;d_{n-1}\)
-            </span>
-            , and a change in performance occurs on
-day
-            <span class="math notranslate nohighlight">
-             \(d_s\)
-            </span>
-            such that
-            <span class="math notranslate nohighlight">
-             \(x_{0...d_{s-1}}\)
-            </span>
-            and
-            <span class="math notranslate nohighlight">
-             \(x_{d_{s}...d_{n-1}}\)
-            </span>
-            are AI performance measure values for the
-pre-change and the post-change periods respectively.
-           </p>
-           <p>
-            In this setting, three different cases are of interest:
-           </p>
-           <ul class="simple">
-            <li>
-             <p>
-              Change-point is detected at
-              <span class="math notranslate nohighlight">
-               \(d_d : d_d \ge d_s\)
-              </span>
-              with a
-detection delay
-              <span class="math notranslate nohighlight">
-               \(d_d - d_s\)
-              </span>
-              .
-             </p>
-            </li>
-            <li>
-             <p>
-              Change-point is detected at
-              <span class="math notranslate nohighlight">
-               \(d_d : d_d &lt; d_s\)
-              </span>
-              . This is called a
-false alarm (type-I error).
-             </p>
-            </li>
-            <li>
-             <p>
-              Change-point is not detected. This is a missed detection (type-II
-error).
-             </p>
-            </li>
-           </ul>
-          </section>
-          <section id="mean-time-between-false-alarms-mtbfa">
-           <h4>
-            Mean time between false alarms (MTBFA)
-            <a class="headerlink" href="#mean-time-between-false-alarms-mtbfa" title="Link to this heading">
-             &para;
-            </a>
-           </h4>
-           <div class="math notranslate nohighlight">
-            \[\label{MTBFA_estimate}
-    \widehat{MTBFA} = \frac{\sum_{j=1} ^{N} z_j}{\sum_{j=1} ^{N} d_j}\]
-           </div>
-           <p>
-            where
-            <span class="math notranslate nohighlight">
-             \(N\)
-            </span>
-            is the number of independent experiments,
-            <span class="math notranslate nohighlight">
-             \(d_j\)
-            </span>
-            is
-a binary value for each experiment indicating whether or not a change
-was detected in the pre-change regime,
-            <span class="math notranslate nohighlight">
-             \(d_j \in \{0,1\}\)
-            </span>
-            and
-            <span class="math notranslate nohighlight">
-             \(z_j = min(d_d(j), d_s)\)
-            </span>
-            .
-           </p>
-          </section>
-          <section id="average-detection-delay-add">
-           <h4>
-            Average Detection Delay (ADD)
-            <a class="headerlink" href="#average-detection-delay-add" title="Link to this heading">
-             &para;
-            </a>
-           </h4>
-           <div class="math notranslate nohighlight">
-            \[\label{ADD_estimate}
-    \widehat{ADD} = \frac{\sum_{j=1} ^{N} z_j- d_s}{\sum_{j=1} ^{N} c_j}\]
-           </div>
-           <p>
-            where
-            <span class="math notranslate nohighlight">
-             \(c_j\)
-            </span>
-            is a binary value for each experiment indicating
-whether or not a change was detected in the post change regime,
-            <span class="math notranslate nohighlight">
-             \(c_j \in \{0,1\}\)
-            </span>
-            and
-            <span class="math notranslate nohighlight">
-             \(z_j = min(d_d(j), n)\)
-            </span>
-            .
-           </p>
-          </section>
          </section>
          <span id="document-ref_cusum">
          </span>
@@ -546,26 +388,6 @@ whether or not a change was detected in the post change regime,
               <span class="sig-paren">
                (
               </span>
-              <em class="sig-param">
-               <span class="n">
-                <span class="pre">
-                 pre_change_days
-                </span>
-               </span>
-               <span class="p">
-                <span class="pre">
-                 :
-                </span>
-               </span>
-               <span class="w">
-               </span>
-               <span class="n">
-                <span class="pre">
-                 int
-                </span>
-               </span>
-              </em>
-              ,
               <em class="sig-param">
                <span class="n">
                 <span class="pre">
@@ -1370,6 +1192,98 @@ whether or not a change was detected in the post change regime,
               <p>
                Read the provided performance metric data to be used for CUSUM for an example.
               </p>
+             </dd>
+            </dl>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="package.cusum.CUSUM.set_init_stats">
+              <span class="sig-name descname">
+               <span class="pre">
+                set_init_stats
+               </span>
+              </span>
+              <span class="sig-paren">
+               (
+              </span>
+              <em class="sig-param">
+               <span class="n">
+                <span class="pre">
+                 init_days
+                </span>
+               </span>
+               <span class="p">
+                <span class="pre">
+                 :
+                </span>
+               </span>
+               <span class="w">
+               </span>
+               <span class="n">
+                <span class="pre">
+                 int
+                </span>
+               </span>
+               <span class="w">
+               </span>
+               <span class="o">
+                <span class="pre">
+                 =
+                </span>
+               </span>
+               <span class="w">
+               </span>
+               <span class="default_value">
+                <span class="pre">
+                 30
+                </span>
+               </span>
+              </em>
+              <span class="sig-paren">
+               )
+              </span>
+              <span class="sig-return">
+               <span class="sig-return-icon">
+                &rarr;
+               </span>
+               <span class="sig-return-typehint">
+                <span class="pre">
+                 None
+                </span>
+               </span>
+              </span>
+              <a class="headerlink" href="#package.cusum.CUSUM.set_init_stats" title="Link to this definition">
+               &para;
+              </a>
+             </dt>
+             <dd>
+              <p>
+               Use initial days to find in-control mean and standard deviation.
+              </p>
+              <dl class="field-list simple">
+               <dt class="field-odd">
+                Parameters
+                <span class="colon">
+                 :
+                </span>
+               </dt>
+               <dd class="field-odd">
+                <p>
+                 <strong>
+                  init_days
+                 </strong>
+                 (
+                 <em>
+                  int
+                 </em>
+                 <em>
+                  ,
+                 </em>
+                 <em>
+                  optional
+                 </em>
+                 ) &ndash; Initial days when observations are considered stable. Defaults to 30.
+                </p>
+               </dd>
+              </dl>
              </dd>
             </dl>
             <dl class="py method">

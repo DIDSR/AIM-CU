@@ -1,6 +1,10 @@
 Documentation
 =============
 
+Read the documentation
+----------------------
+Access the documentation from `index.html <docs/build/html/index.html>`_
+
 Generate Sphinx documentation
 -----------------------------
 Run the below command from ``/src/package``.
