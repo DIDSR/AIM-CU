@@ -167,6 +167,6 @@ figure/
 # temporary exclusion of sphinx docs
 # docs/build
 # docs/build/doctrees
-# docs/build/simplepdf/_static
+docs/build/simplepdf/_static
 
 # docs/build/simplepdf
