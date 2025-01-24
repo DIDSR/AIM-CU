@@ -185,13 +185,6 @@ with gr.Blocks(
                 ### Initial days of observations are considered as 30.
                 """)  # noqa: F541
 
-            # with gr.Row():
-            #     with gr.Column():
-            #         init_days = gr.Textbox(
-            #             label="Initial days", interactive=False,
-            #             placeholder="Suggested value = 30"
-            #         )
-
             with gr.Row():
                 with gr.Column():
                     in_control_mean = gr.Textbox(
