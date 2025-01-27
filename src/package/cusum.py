@@ -517,7 +517,7 @@ class CUSUM:
                 y=[self.h / self.in_std, self.h / self.in_std],
                 mode="lines",
                 name="Threshold (H)",
-                line=dict(color="firebrick", dash="dash"),
+                line=dict(color="skyblue", dash="dash"),
             )
         )
 
