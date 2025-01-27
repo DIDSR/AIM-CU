@@ -40,7 +40,3 @@ shift_in_mean = [
     1.5,
     1.6,
 ]
-
-# Initial days when observations are considered stable
-[initialization]
-initial_days = 30

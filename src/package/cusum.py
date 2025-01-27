@@ -58,9 +58,9 @@ class CUSUM:
             print("Error: config.toml not found at", path_file_config)
             sys.exit(1)
 
-    def set_init_stats(self, init_days: int = 30) -> None:
+    def set_init_stats(self, init_days: int) -> None:
         """
-        Use initial days to find in-control mean and standard deviation.
+        Use initial days to calculate in-control mean and standard deviation.
 
         Args:
             init_days (int, optional): Initial days when observations are considered stable. Defaults to 30.

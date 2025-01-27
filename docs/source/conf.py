@@ -26,7 +26,9 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.duration',
               'sphinx_tabs.tabs',
               'sphinx_simplepdf',
-            #   'sphinxcontrib.inkscapeconverter',
+              # 'sphinxcontrib.inkscapeconverter',
+              # 'rinoh.frontend.sphinx',
+              # 'sphinx_pdf_generate'
               ]
 
 templates_path = ['_templates']

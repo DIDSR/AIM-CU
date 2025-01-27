@@ -22,3 +22,5 @@ As a PDF file:
     sphinx-build -M simplepdf ../../docs/source ../../docs/build --fail-on-warning
 
 Navigate to ``/docs/build`` and find ``html`` and ``simplepdf`` folders.
+
+.. sphinx-build -b rinoh ../../docs/source ../../docs/build --fail-on-warning

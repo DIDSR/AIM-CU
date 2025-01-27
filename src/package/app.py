@@ -17,17 +17,18 @@ import great_tables as gt
 import plotly.graph_objects as go
 
 
-def set_init_days(file_csv_metric: gr.File) -> tuple[float, float]:
+def set_init_days(file_csv_metric: gr.File, init_days: str) -> tuple[float, float]:
     """
     Set initial days and get in-control mean and standard deviation.
 
     Args:
         file_csv_metric (gr.File): CSV file with metric data
+        init_days (str): initial days to calculate in-control mean and standard deviation
 
     Returns:
         tuple[float, float]: In-control mean and standard deviation.
     """
-    init_days = int(config["initialization"]["initial_days"])
+    init_days = int(init_days)
 
     data_csv_metric = pd.read_csv(file_csv_metric.name)
     obj_cusum.set_df_metric_csv(data_csv_metric)
@@ -176,14 +177,14 @@ with gr.Blocks(
                 label="Upload CSV file with metric across days",
             )
 
-            gr.Markdown(f"""
-                        ### Phase I:
-                        Parameter choices for detecting change and detection delay estimates (theoretical calculations).
-                        """)  # noqa: F541
-
-            gr.Markdown(f"""
-                ### Initial days of observations are considered as 30.
-                """)  # noqa: F541
+            with gr.Row():
+                with gr.Column():
+                    init_days = gr.Textbox(
+                        label="Initial days",
+                        placeholder="30"
+                    )
+                with gr.Column():
+                    button_calculate_incontrol_params = gr.Button("Calculate parameters")
 
             with gr.Row():
                 with gr.Column():
@@ -195,11 +196,10 @@ with gr.Blocks(
                         label="In-control standard deviation", interactive=False
                     )
 
-            csv_file_metric.change(
-                fn=set_init_days,
-                inputs=[csv_file_metric],
-                outputs=[in_control_mean, in_control_std],
-            )
+            gr.Markdown(f"""
+                        ### Phase I:
+                        Parameter choices for detecting change and detection delay estimates (theoretical calculations).
+                        """)  # noqa: F541
 
             gr.Markdown(f"""
                 ### Enter h value:
@@ -258,6 +258,21 @@ with gr.Blocks(
             button_populate_table = gr.Button(
                 "Populate Reference Values and ARL_1 tables for the given h value"
             )
+
+            gr.Markdown(f"""
+                ### Workflow:
+                Phase I:
+                - Upload CSV file with matric across days.
+                - Enter initial days.
+                - Calculate parameters.
+                - Check parameter choices in Phase 1, for Phase 2. (optional)
+                
+                Phase II:
+                - Enter h and k values.
+                - Get CUSUM plots.
+                """)  # noqa: F541
+
+            # table_param_description = gr.Dataframe(value=pd.read_csv("../../assets/params.csv"))
         with gr.Column():
             gr.Markdown(f"""
                         ### Phase II:
@@ -288,6 +303,12 @@ with gr.Blocks(
                 visible=False,
             )
             plot_cusum_chart = gr.Plot(label="CUSUM Chart", visible=False)
+
+    button_calculate_incontrol_params.click(
+                fn=set_init_days,
+                inputs=[csv_file_metric, init_days],
+                outputs=[in_control_mean, in_control_std],
+            )
 
     # Get the CSV file and populate tables
     button_populate_table.click(
