@@ -272,7 +272,7 @@ with gr.Blocks(
                 - Get CUSUM plots.
                 """)  # noqa: F541
 
-            # table_param_description = gr.Dataframe(value=pd.read_csv("../../assets/params.csv"))
+            table_param_description = gr.Dataframe(value=pd.read_csv("../../assets/params.csv"))
         with gr.Column():
             gr.Markdown(f"""
                         ### Phase II:
