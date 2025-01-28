@@ -373,7 +373,7 @@ class CUSUM:
 
         fig.update_layout(
             title={
-                "text": "Average metric for pre- and post-change regime, and histogram",
+                "text": "Pre- and post-change observations and their respective histograms",
                 "font": {"size": font_size_title, "weight": "bold"},
             },
             xaxis_title={
