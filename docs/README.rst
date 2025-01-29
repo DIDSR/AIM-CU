@@ -16,7 +16,8 @@ HTML format:
     sphinx-build -M html ../../docs/source ../../docs/build --fail-on-warning
 
 As a PDF file:
-Required: Latex ``sudo apt-get install texlive-full``
+
+Required: Install latex - ``sudo apt-get install texlive-full``
 
 .. code-block:: shell
 
