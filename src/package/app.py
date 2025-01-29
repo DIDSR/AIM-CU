@@ -168,6 +168,10 @@ with gr.Blocks(
     with gr.Row():
         with gr.Column():
             gr.Markdown(f"""
+                        ### Phase I:
+                        """)  # noqa: F541
+
+            gr.Markdown(f"""
                 ### Upload the CSV file with metric. Or use the default example CSV file by directly clicking the button below.
                 """)  # noqa: F541
 
@@ -197,7 +201,6 @@ with gr.Blocks(
                     )
 
             gr.Markdown(f"""
-                        ### Phase I:
                         Parameter choices for detecting change and detection delay estimates (theoretical calculations).
                         """)  # noqa: F541
 
