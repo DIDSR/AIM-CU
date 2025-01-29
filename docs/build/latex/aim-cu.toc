@@ -1,0 +1,9 @@
+\babel@toc {english}{}\relax 
+\contentsline {chapter}{\numberline {1}Code execution}{3}{chapter.1}%
+\contentsline {chapter}{\numberline {2}Demo}{5}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Methods}{5}{section.2.1}%
+\contentsline {section}{\numberline {2.2}CUSUM}{5}{section.2.2}%
+\contentsline {section}{\numberline {2.3}ARLTheoretical}{7}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Utils}{8}{section.2.4}%
+\contentsline {chapter}{Python Module Index}{11}{section*.21}%
+\contentsline {chapter}{Index}{13}{section*.22}%

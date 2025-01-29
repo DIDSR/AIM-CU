@@ -16,11 +16,10 @@ HTML format:
     sphinx-build -M html ../../docs/source ../../docs/build --fail-on-warning
 
 As a PDF file:
+Required: Latex ``sudo apt-get install texlive-full``
 
 .. code-block:: shell
 
-    sphinx-build -M simplepdf ../../docs/source ../../docs/build --fail-on-warning
+    sphinx-build -M latexpdf ../../docs/source ../../docs/build --fail-on-warning
 
-Navigate to ``/docs/build`` and find ``html`` and ``simplepdf`` folders.
-
-.. sphinx-build -b rinoh ../../docs/source ../../docs/build --fail-on-warning
+Access it from `aim-cu.pdf <build/latex/aim-cu.pdf>`_
