@@ -1,6 +1,16 @@
 Methods
 =======
 
+CUSUM parameters
+----------------
+
+.. csv-table:: Table: CUSUM parameters
+   :file: ../../assets/params.csv
+   :header-rows: 1
+
+CUSUM chart
+-----------
+
 A two-sided CUSUM control chart computes the cumulative differences or
 deviations of individual observations from the target mean (or
 in-control mean, :math:`\mu_{in}`). The positive and negative cumulative

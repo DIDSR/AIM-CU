@@ -36,6 +36,45 @@
             
   <section id="methods">
 <h1>Methods<a class="headerlink" href="#methods" title="Link to this heading">¶</a></h1>
+<section id="cusum-parameters">
+<h2>CUSUM parameters<a class="headerlink" href="#cusum-parameters" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text">Table: CUSUM parameters</span><a class="headerlink" href="#id1" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>μ_in</p></td>
+<td><p>The mean of the performance metric when the process is in-control, i.e., when there is no performance drift</p></td>
+</tr>
+<tr class="row-odd"><td><p>ARL_0</p></td>
+<td><p>Number of observations before the control chart signals a false detection</p></td>
+</tr>
+<tr class="row-even"><td><p>σ_in</p></td>
+<td><p>The in-control standard deviation of the metric</p></td>
+</tr>
+<tr class="row-odd"><td><p>ARL_1</p></td>
+<td><p>Number of observations before the control chart signals a true detection</p></td>
+</tr>
+<tr class="row-even"><td><p>k</p></td>
+<td><p>The normalized reference value, which is related to the magnitude of change that one is interested in detecting. k = 0.5 is the default choice for detecting a unit standard deviation change</p></td>
+</tr>
+<tr class="row-odd"><td><p>S_hi</p></td>
+<td><p>Cumulative sum of positive changes in the metric</p></td>
+</tr>
+<tr class="row-even"><td><p>h</p></td>
+<td><p>The normalized threshold or control limit (default =4). This threshold determines when the control chart signals a detection</p></td>
+</tr>
+<tr class="row-odd"><td><p>S_lo</p></td>
+<td><p>Cumulative sum of negative changes in the metric</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="cusum-chart">
+<h2>CUSUM chart<a class="headerlink" href="#cusum-chart" title="Link to this heading">¶</a></h2>
 <p>A two-sided CUSUM control chart computes the cumulative differences or
 deviations of individual observations from the target mean (or
 in-control mean, <span class="math notranslate nohighlight">\(\mu_{in}\)</span>). The positive and negative cumulative
@@ -52,6 +91,7 @@ negative changes. To detect a change in the observed values from the
 in-control mean, the CUSUM scheme accumulates deviations that are
 <span class="math notranslate nohighlight">\(K\)</span> units away from the in-control mean. Let <span class="math notranslate nohighlight">\(\sigma_{in}\)</span>
 denote the in-control standard deviation of <span class="math notranslate nohighlight">\(x_d\)</span>.</p>
+</section>
 </section>
 
 
@@ -89,7 +129,11 @@ denote the in-control standard deviation of <span class="math notranslate nohigh
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Methods</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Methods</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#cusum-parameters">CUSUM parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cusum-chart">CUSUM chart</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="ref_cusum.html">CUSUM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ref_theoretical.html">ARLTheoretical</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ref_utils.html">Utils</a></li>

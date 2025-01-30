@@ -52,3 +52,10 @@ html_theme_options = {
   'github_repo': 'AIM-CU',
 }
 # html_sidebars = {'**': ['searchbox.html', 'globaltoc.html', 'sourcelink.html']}
+
+latex_elements = {
+    'preamble': r'''
+    \DeclareUnicodeCharacter{03BC}{\textmu}
+    \DeclareUnicodeCharacter{03C3}{\ensuremath{\sigma}}
+    ''',
+}
