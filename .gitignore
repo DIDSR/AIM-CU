@@ -165,6 +165,6 @@ cython_debug/
 figure/
 
 # temporary exclusion of sphinx docs
-docs/build/doctrees
-docs/build/latex/*
-!docs/build/latex/aim-cu.pdf
+# docs/build/doctrees/
+# docs/build/latex/*
+# !docs/build/latex/aim-cu.pdf
