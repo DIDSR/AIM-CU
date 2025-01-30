@@ -1341,7 +1341,6 @@ INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/txfonts/t1xtt.tfm
 INPUT /usr/share/texmf/fonts/tfm/public/tex-gyre/ec-qtmri.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/txfonts/t1xbtt.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/txfonts/t1xttsl.tfm
-INPUT /usr/share/texmf/fonts/tfm/public/tex-gyre/ts1-qtmri.tfm
 INPUT ./aim-cu.ind
 INPUT aim-cu.ind
 INPUT ./aim-cu.ind

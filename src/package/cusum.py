@@ -263,24 +263,6 @@ class CUSUM:
 
         self.AvgDD = np.append(self.AvgDD, avddd)  # ADD estimate from the paper
 
-    def plot_histogram_plotly(self, data, xlabel, title="") -> go.Figure:
-        """
-        Plot the histogram of the observations/performance metric being monitored using plotly
-
-        Args:
-            data (_type_)        : Data values to show in histogram.
-            xlabel (_type_)      : Title of the label for X-axis.
-            title (str, optional): Title of the plot. Defaults to "".
-
-        Returns:
-            go.Figure: Histogram as Plotly graph object.
-        """
-        fig = go.Figure(data=[go.Histogram(x=data, nbinsx=30)])
-        fig.update_layout(title="[TITLE=?]", xaxis_title=xlabel, yaxis_title="Count")
-        fig.update_layout(plot_bgcolor=self.config["color"]["blue_005"])
-
-        return fig
-
     def plot_input_metric_plotly(self) -> go.Figure:
         """
         Plot the input metric using Plotly.

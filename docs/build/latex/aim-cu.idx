@@ -5,18 +5,17 @@
 \indexentry{compute\_cusum() (package.cusum.CUSUM method)@\spxentry{compute\_cusum()}\spxextra{package.cusum.CUSUM method}|hyperpage}{5}
 \indexentry{initialize() (package.cusum.CUSUM method)@\spxentry{initialize()}\spxextra{package.cusum.CUSUM method}|hyperpage}{6}
 \indexentry{plot\_cusum\_plotly() (package.cusum.CUSUM method)@\spxentry{plot\_cusum\_plotly()}\spxextra{package.cusum.CUSUM method}|hyperpage}{6}
-\indexentry{plot\_histogram\_plotly() (package.cusum.CUSUM method)@\spxentry{plot\_histogram\_plotly()}\spxextra{package.cusum.CUSUM method}|hyperpage}{6}
 \indexentry{plot\_input\_metric\_plotly() (package.cusum.CUSUM method)@\spxentry{plot\_input\_metric\_plotly()}\spxextra{package.cusum.CUSUM method}|hyperpage}{6}
 \indexentry{set\_df\_metric\_csv() (package.cusum.CUSUM method)@\spxentry{set\_df\_metric\_csv()}\spxextra{package.cusum.CUSUM method}|hyperpage}{6}
 \indexentry{set\_df\_metric\_default() (package.cusum.CUSUM method)@\spxentry{set\_df\_metric\_default()}\spxextra{package.cusum.CUSUM method}|hyperpage}{6}
 \indexentry{set\_init\_stats() (package.cusum.CUSUM method)@\spxentry{set\_init\_stats()}\spxextra{package.cusum.CUSUM method}|hyperpage}{6}
-\indexentry{set\_timeline() (package.cusum.CUSUM method)@\spxentry{set\_timeline()}\spxextra{package.cusum.CUSUM method}|hyperpage}{7}
+\indexentry{set\_timeline() (package.cusum.CUSUM method)@\spxentry{set\_timeline()}\spxextra{package.cusum.CUSUM method}|hyperpage}{6}
 \indexentry{module@\spxentry{module}!package.ARLTheoretical@\spxentry{package.ARLTheoretical}|hyperpage}{7}
 \indexentry{package.ARLTheoretical@\spxentry{package.ARLTheoretical}!module@\spxentry{module}|hyperpage}{7}
 \indexentry{get\_ARL\_1() (in module package.ARLTheoretical)@\spxentry{get\_ARL\_1()}\spxextra{in module package.ARLTheoretical}|hyperpage}{7}
 \indexentry{get\_ARL\_1\_h\_mu1\_k() (in module package.ARLTheoretical)@\spxentry{get\_ARL\_1\_h\_mu1\_k()}\spxextra{in module package.ARLTheoretical}|hyperpage}{7}
 \indexentry{get\_ref\_value() (in module package.ARLTheoretical)@\spxentry{get\_ref\_value()}\spxextra{in module package.ARLTheoretical}|hyperpage}{7}
-\indexentry{get\_ref\_value\_k() (in module package.ARLTheoretical)@\spxentry{get\_ref\_value\_k()}\spxextra{in module package.ARLTheoretical}|hyperpage}{8}
+\indexentry{get\_ref\_value\_k() (in module package.ARLTheoretical)@\spxentry{get\_ref\_value\_k()}\spxextra{in module package.ARLTheoretical}|hyperpage}{7}
 \indexentry{module@\spxentry{module}!package.utils@\spxentry{package.utils}|hyperpage}{8}
 \indexentry{package.utils@\spxentry{package.utils}!module@\spxentry{module}|hyperpage}{8}
 \indexentry{get\_greattable\_as\_html() (in module package.utils)@\spxentry{get\_greattable\_as\_html()}\spxextra{in module package.utils}|hyperpage}{8}

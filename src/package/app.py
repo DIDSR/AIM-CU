@@ -183,12 +183,11 @@ with gr.Blocks(
 
             with gr.Row():
                 with gr.Column():
-                    init_days = gr.Textbox(
-                        label="Initial days",
-                        placeholder="30"
-                    )
+                    init_days = gr.Textbox(label="Initial days", placeholder="30")
                 with gr.Column():
-                    button_calculate_incontrol_params = gr.Button("Calculate parameters")
+                    button_calculate_incontrol_params = gr.Button(
+                        "Calculate parameters"
+                    )
 
             with gr.Row():
                 with gr.Column():
@@ -275,7 +274,9 @@ with gr.Blocks(
                 - Get CUSUM plots.
                 """)  # noqa: F541
 
-            table_param_description = gr.Dataframe(value=pd.read_csv("../../assets/params.csv"))
+            table_param_description = gr.Dataframe(
+                value=pd.read_csv("../../assets/params.csv")
+            )
         with gr.Column():
             gr.Markdown(f"""
                         ### Phase II:
@@ -308,10 +309,10 @@ with gr.Blocks(
             plot_cusum_chart = gr.Plot(label="CUSUM Chart", visible=False)
 
     button_calculate_incontrol_params.click(
-                fn=set_init_days,
-                inputs=[csv_file_metric, init_days],
-                outputs=[in_control_mean, in_control_std],
-            )
+        fn=set_init_days,
+        inputs=[csv_file_metric, init_days],
+        outputs=[in_control_mean, in_control_std],
+    )
 
     # Get the CSV file and populate tables
     button_populate_table.click(

@@ -16,7 +16,7 @@
 		\hyperpage{7}
   \item \spxentry{get\_greattable\_as\_html()}\spxextra{in module package.utils}, \hyperpage{8}
   \item \spxentry{get\_ref\_value()}\spxextra{in module package.ARLTheoretical}, \hyperpage{7}
-  \item \spxentry{get\_ref\_value\_k()}\spxextra{in module package.ARLTheoretical}, \hyperpage{8}
+  \item \spxentry{get\_ref\_value\_k()}\spxextra{in module package.ARLTheoretical}, \hyperpage{7}
 
   \indexspace
   \bigletter I
@@ -38,7 +38,6 @@
   \item \spxentry{package.utils}
     \subitem \spxentry{module}, \hyperpage{8}
   \item \spxentry{plot\_cusum\_plotly()}\spxextra{package.cusum.CUSUM method}, \hyperpage{6}
-  \item \spxentry{plot\_histogram\_plotly()}\spxextra{package.cusum.CUSUM method}, \hyperpage{6}
   \item \spxentry{plot\_input\_metric\_plotly()}\spxextra{package.cusum.CUSUM method}, 
 		\hyperpage{6}
   \item \spxentry{populate\_summary\_table\_ARL0\_k()}\spxextra{in module package.utils}, 
@@ -51,6 +50,6 @@
   \item \spxentry{set\_df\_metric\_csv()}\spxextra{package.cusum.CUSUM method}, \hyperpage{6}
   \item \spxentry{set\_df\_metric\_default()}\spxextra{package.cusum.CUSUM method}, \hyperpage{6}
   \item \spxentry{set\_init\_stats()}\spxextra{package.cusum.CUSUM method}, \hyperpage{6}
-  \item \spxentry{set\_timeline()}\spxextra{package.cusum.CUSUM method}, \hyperpage{7}
+  \item \spxentry{set\_timeline()}\spxextra{package.cusum.CUSUM method}, \hyperpage{6}
 
 \end{sphinxtheindex}
