@@ -4,7 +4,7 @@ Methods
 CUSUM parameters
 ----------------
 
-.. csv-table:: Table: CUSUM parameters
+.. csv-table:: CUSUM parameters
    :file: ../../assets/params.csv
    :header-rows: 1
 
