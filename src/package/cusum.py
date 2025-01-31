@@ -263,6 +263,89 @@ class CUSUM:
 
         self.AvgDD = np.append(self.AvgDD, avddd)  # ADD estimate from the paper
 
+    def plot_input_metric_plotly_raw(self) -> go.Figure:
+        """
+        Plot AI output using Plotly.
+
+        Returns:
+            go.Figure: Scatter plot as Plotly graph object.
+        """
+        x1 = np.arange(self.init_days)
+        y1 = self.data[: self.init_days]
+
+        x2 = np.arange(self.init_days, self.total_days, 1)
+        y2 = self.data[self.init_days : self.total_days]
+
+        fig = make_subplots(
+            rows=1,
+            cols=1,
+            shared_yaxes=True,
+            horizontal_spacing=0.02,
+        )
+
+        font_size_title = 20
+        font_size_legend = 18
+
+        # separate in sublots
+        fig.add_trace(
+            go.Scatter(
+                x=x1,
+                y=y1,
+                mode="markers",
+                marker=dict(color="lime", size=10),
+                opacity=0.4,
+            ),
+            row=1,
+            col=1,
+        )
+        fig.add_trace(
+            go.Scatter(
+                x=x2,
+                y=y2,
+                mode="markers",
+                marker=dict(color="lime", size=10),
+                opacity=0.2,
+            ),
+            row=1,
+            col=1,
+        )
+
+        fig.add_vrect(
+            x0=0,
+            x1=self.init_days,
+            annotation_text="Initial days",
+            annotation_position="top right",
+            fillcolor="palegreen",
+            opacity=0.25,
+            line_width=0,
+        )
+
+        fig.update_layout(
+            title={
+                "text": "AI output",
+                "font": {"size": font_size_title, "weight": "bold"},
+            },
+            xaxis_title={
+                "text": "Length of observations",
+                "font": {"size": font_size_legend, "weight": "bold"},
+            },
+            yaxis_title={
+                "text": "AI model metric",
+                "font": {"size": font_size_legend, "weight": "bold"},
+            },
+            xaxis=dict(dtick=20),
+        )
+
+        fig.update_layout(plot_bgcolor=self.config["color"]["blue_005"])
+
+        fig.update_layout(
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+        )
+
+        fig.update_layout(showlegend=False)
+
+        return fig
+
     def plot_input_metric_plotly(self) -> go.Figure:
         """
         Plot the input metric using Plotly.
@@ -295,7 +378,7 @@ class CUSUM:
                 x=x1,
                 y=y1,
                 mode="markers",
-                name=f"""In-control S<sub>p</sub>""",
+                name=f"""In-control data""",
                 marker=dict(color="darkturquoise", size=10),
                 opacity=0.4,
             ),
@@ -307,7 +390,7 @@ class CUSUM:
                 x=x2,
                 y=y2,
                 mode="markers",
-                name=f"""Out-of-control S<sub>p</sub>""",
+                name=f"""Out-of-control data""",
                 marker=dict(color="coral", size=10),
                 opacity=0.4,
             ),
@@ -359,7 +442,7 @@ class CUSUM:
                 "font": {"size": font_size_title, "weight": "bold"},
             },
             xaxis_title={
-                "text": "Length of Simulation (days)",
+                "text": "Length of observations",
                 "font": {"size": font_size_legend, "weight": "bold"},
             },
             yaxis_title={
@@ -510,7 +593,7 @@ class CUSUM:
                 y=[
                     0,
                     np.max(self.S_lo / self.in_std),
-                ],  # [! np.max(self.S_lo / self.in_std)?]
+                ],
                 mode="lines",
                 name="Change-point",
                 line=dict(color="grey", dash="dash"),

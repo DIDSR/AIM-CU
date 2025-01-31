@@ -17,7 +17,9 @@ import great_tables as gt
 import plotly.graph_objects as go
 
 
-def set_init_days(file_csv_metric: gr.File, init_days: str) -> tuple[float, float]:
+def set_init_days(
+    file_csv_metric: gr.File, init_days: str
+) -> tuple[float, float, go.Figure]:
     """
     Set initial days and get in-control mean and standard deviation.
 
@@ -26,7 +28,7 @@ def set_init_days(file_csv_metric: gr.File, init_days: str) -> tuple[float, floa
         init_days (str): initial days to calculate in-control mean and standard deviation
 
     Returns:
-        tuple[float, float]: In-control mean and standard deviation.
+        tuple[float, float, go.Figure]: In-control mean and standard deviation, and observation data plot.
     """
     init_days = int(init_days)
 
@@ -35,7 +37,11 @@ def set_init_days(file_csv_metric: gr.File, init_days: str) -> tuple[float, floa
 
     obj_cusum.set_init_stats(init_days=init_days)
 
-    return "{:.2f}".format(obj_cusum.in_mu), "{:.2f}".format(obj_cusum.in_std)
+    return (
+        "{:.2f}".format(obj_cusum.in_mu),
+        "{:.2f}".format(obj_cusum.in_std),
+        obj_cusum.plot_input_metric_plotly_raw(),
+    )
 
 
 def populate_table(h: str) -> tuple[gt.GT, gt.GT]:
@@ -177,7 +183,6 @@ with gr.Blocks(
 
             # load the CSV file with specifities across days
             csv_file_metric = gr.File(
-                # file_types=["csv"],
                 label="Upload CSV file with metric across days",
             )
 
@@ -198,6 +203,8 @@ with gr.Blocks(
                     in_control_std = gr.Textbox(
                         label="In-control standard deviation", interactive=False
                     )
+
+            plot_observation_data = gr.Plot(label="AI output", visible=False)
 
             gr.Markdown(f"""
                         Parameter choices for detecting change and detection delay estimates (theoretical calculations).
@@ -311,7 +318,11 @@ with gr.Blocks(
     button_calculate_incontrol_params.click(
         fn=set_init_days,
         inputs=[csv_file_metric, init_days],
-        outputs=[in_control_mean, in_control_std],
+        outputs=[in_control_mean, in_control_std, plot_observation_data],
+    )
+
+    button_calculate_incontrol_params.click(
+        fn=lambda: gr.update(visible=True), inputs=[], outputs=plot_observation_data
     )
 
     # Get the CSV file and populate tables
