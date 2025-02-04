@@ -178,12 +178,12 @@ with gr.Blocks(
                         """)  # noqa: F541
 
             gr.Markdown(f"""
-                ### Upload the CSV file with metric.
+                ### Upload the AI output.
                 """)  # noqa: F541
 
             # load the CSV file with specifities across days
             csv_file_metric = gr.File(
-                label="Upload CSV file with metric across days",
+                label="Upload the AI output",
             )
 
             with gr.Row():
@@ -271,7 +271,7 @@ with gr.Blocks(
             gr.Markdown(f"""
                 ### Workflow:
                 Phase I:
-                - Upload CSV file with matric across days.
+                - Upload the AI output.
                 - Enter initial days.
                 - Calculate parameters.
                 - Check parameter choices in Phase 1, for Phase 2. (optional)
