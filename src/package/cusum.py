@@ -606,7 +606,7 @@ class CUSUM:
                 "font": {"size": font_size_title, "weight": "bold"},
             },
             xaxis_title={
-                "text": "Length of Simulation (Days)",
+                "text": "Length of observations",
                 "font": {"size": font_size_legend, "weight": "bold"},
             },
             yaxis_title={
