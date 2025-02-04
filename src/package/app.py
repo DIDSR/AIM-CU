@@ -178,7 +178,7 @@ with gr.Blocks(
                         """)  # noqa: F541
 
             gr.Markdown(f"""
-                ### Upload the CSV file with metric. Or use the default example CSV file by directly clicking the button below.
+                ### Upload the CSV file with metric.
                 """)  # noqa: F541
 
             # load the CSV file with specifities across days
