@@ -31,7 +31,7 @@ class CUSUM:
         self.AvgDD = None
         self.data = None
 
-        self.h = None
+        self.H = None
         self.in_std = None
         self.in_mu = None
         self.S_hi = None
@@ -187,7 +187,7 @@ class CUSUM:
         )  # ADD - binary - whether there is a change-detection (1) or not (0)
         self.AvgDD = np.array([])  # Average Detection Delay
 
-        self.h = control_limit * self.in_std  # Threhold
+        self.H = control_limit * self.in_std  # Threhold
         k = ref_val * self.in_std  # Reference value
 
         x = np.array(self.data)
@@ -212,7 +212,7 @@ class CUSUM:
 
         # Display the print messages in the UI
         if (S_lo_start_of_change < S_hi_start_of_change) and (
-            self.S_lo[S_lo_start_of_change + 10] > self.h
+            self.S_lo[S_lo_start_of_change + 10] > self.H
         ):  # check if the changes in the next 10 observations exceed the threshold
             print(
                 f"Change-point with respect to S_lo is: {S_lo_start_of_change}"
@@ -220,7 +220,7 @@ class CUSUM:
             self.pre_change_days = S_lo_start_of_change
 
         elif (S_hi_start_of_change < S_lo_start_of_change) and (
-            self.S_hi[S_hi_start_of_change + 10] > self.h
+            self.S_hi[S_hi_start_of_change + 10] > self.H
         ):
             print(f"Change-point with respect to S_hi is: {S_hi_start_of_change}")
             self.pre_change_days = S_hi_start_of_change
@@ -233,7 +233,7 @@ class CUSUM:
         avddd = 0  # this is the delay from the paper: td-ts (z_k-v) where v is the changepoint and z_k is the time of detection
 
         for i in range(0, self.pre_change_days):
-            if (self.S_hi[i] > self.h) or (self.S_lo[i] > self.h):
+            if (self.S_hi[i] > self.H) or (self.S_lo[i] > self.H):
                 falsePos += 1  # False Positives
                 DetectionTimes = np.append(
                     DetectionTimes, i + 1
@@ -250,7 +250,7 @@ class CUSUM:
         # Delay to detect the first changepoint
         # delay = 0
         for i in range(self.pre_change_days, self.total_days):
-            if (self.S_hi[i] > self.h) or (self.S_lo[i] > self.h):
+            if (self.S_hi[i] > self.H) or (self.S_lo[i] > self.H):
                 alarms += 1  # True Positive: break after detecting one TP
                 cj = np.append(cj, 1)
                 zj = np.append(zj, min(i, self.total_days) - self.pre_change_days)
@@ -579,9 +579,9 @@ class CUSUM:
         fig.add_trace(
             go.Scatter(
                 x=[0, len(self.S_lo)],
-                y=[self.h / self.in_std, self.h / self.in_std],
+                y=[self.H / self.in_std, self.H / self.in_std],
                 mode="lines",
-                name="Threshold (H)",
+                name="Threshold (h)",
                 line=dict(color="skyblue", dash="dash"),
             )
         )
