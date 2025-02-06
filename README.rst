@@ -1,7 +1,7 @@
 AIM-CU: A CUSUM-based tool for AI Monitoring
 ======
 
-.. image:: assets/AIM-CU-Overview.drawio.png
+.. image:: assets/AIM-CU-Overview.png
     :width: 800
     :align: center
     :alt: AIM-CU flowchart
