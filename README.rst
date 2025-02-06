@@ -1,4 +1,4 @@
-AIM-CU : A CUSUM-based tool for AI Monitoring
+AIM-CU: A CUSUM-based tool for AI Monitoring
 ======
 
 .. image:: assets/AIM-CU-Overview.drawio.png
@@ -6,10 +6,10 @@ AIM-CU : A CUSUM-based tool for AI Monitoring
     :align: center
     :alt: AIM-CU flowchart
 
-Monitoring a clinically deployed AI device to detect performance drift is an essential step to
-ensure the safety and effectiveness of AI. 
+Monitoring a clinically deployed AI device to detect performance drift is an essential step to ensure the safety and effectiveness of AI. 
 
-AIM-CU is a statistical tool for AI monitoring using cumulative sum (AIM-CU). 
+AIM-CU is a statistical tool for AI monitoring using cumulative sum (AIM-CU).
+
 AIM-CU computes:
 
 * The parameter choices for change-point detection based on an acceptable false alarm rate
@@ -17,22 +17,22 @@ AIM-CU computes:
 
 System setup
 ------------
-Make sure R is installed in the system. Instructions for linux:
+Make sure R is installed in the system. Instructions for linux (the below setup is only performed in linux):
 
 .. code-block:: shell
 
-    RUN wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc |  tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc
-    RUN add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/"
-    RUN apt-get install -y --no-install-recommends r-base r-base-dev
+    wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc |  tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc
+    add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/"
+    apt-get install -y --no-install-recommends r-base r-base-dev
 
     # setup R configs
-    RUN echo "r <- getOption('repos'); r['CRAN'] <- 'http://cran.us.r-project.org'; options(repos = r);" > ~/.Rprofile
-    RUN Rscript -e "install.packages('ggplot2')"
-    RUN Rscript -e "install.packages('hexbin')"
-    RUN Rscript -e "install.packages('lazyeval')"
-    RUN Rscript -e "install.packages('cusumcharter')"
-    RUN Rscript -e "install.packages('RcppCNPy')"
-    RUN Rscript -e "install.packages('spc')"
+    echo "r <- getOption('repos'); r['CRAN'] <- 'http://cran.us.r-project.org'; options(repos = r);" > ~/.Rprofile
+    Rscript -e "install.packages('ggplot2')"
+    Rscript -e "install.packages('hexbin')"
+    Rscript -e "install.packages('lazyeval')"
+    Rscript -e "install.packages('cusumcharter')"
+    Rscript -e "install.packages('RcppCNPy')"
+    Rscript -e "install.packages('spc')"
 
 Code execution
 --------------
@@ -55,17 +55,30 @@ Run AIM-CU.
 
 .. code-block:: shell
 
+    cd src/package
     python3 app.py
 
 Open the URL http://0.0.0.0:7860 that is running the AIM-CU locally.
 
 Example code execution
 ----------------------
-Example code can be run in a Jupyter Notebook after opening it with ``jupyter notebook`` command from ``/src/package`` directory.
+Example code can be run in a Jupyter Notebook after opening it with ``jupyter notebook`` command from ``/src/package/`` directory. The tool is designed to used through UI, not from console.
 
 Demo
 ----
 AIM-CU can also be run through the demo available at https://huggingface.co/spaces/didsr/AIM-CU. If Space is paused, click on Restart button.
+
+Usability
+---------
+* Example AI output CSV file is available as `config/spec-60-60.csv <config/spec-60-60.csv>`_ to be uploaded in monitoring phase.
+
+* Workflow instruction to run the tool is available at bottom-left of UI.
+
+* Sample UI output is available at `assets/ui.png <assets/ui.png>`_.
+
+* Setting ``control:save_figure`` to ``true`` from `config.toml <config/config.toml>`_ will save tables and plots in `figure/ <figure/>`_.
+
+* Running AIM-CU does not take time longer than a few seconds, and it does not require GPU.
 
 Related References
 ------------------
@@ -76,7 +89,6 @@ Related References
 * Prathapan, S., Samala, R.K., Hadjiyski, N., D’Haese, P.F., Maldonado, F., Nguyen, P., Yesha, Y. and Sahiner, B., 2024, April. Quantifying input data drift in medical machine learning models by detecting change-points in time-series data. In Medical Imaging 2024: Computer-Aided Diagnosis (Vol. 12927, pp. 67-76). SPIE. https://doi.org/10.1117/12.3008771
 
 * Smriti Prathapan, Ravi K. Samala, Nathan Hadjiyski, Pierre‑François D’Haese, Nicholas Petrick, Jana Delfino, Fabien Maldonado, Brandon Nelson, Ghada Zamzmi, Phuong Nguyen, Yelena Yesha, and Berkman Sahiner, "Post-market Monitoring of AI-enabled Medical Devices for Radiology and Healthcare Applications" (FDA-UMiami Collaboration Poster, September 2023)
-
 
 Disclaimer
 ----------

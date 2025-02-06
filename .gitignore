@@ -162,7 +162,7 @@ cython_debug/
 #.idea/
 
 # for AIM-CU
-figure/
+# figure/
 
 # temporary exclusion of sphinx docs
 docs/build/doctrees/

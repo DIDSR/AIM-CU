@@ -59,7 +59,7 @@ def populate_summary_table_ARL0_k(summary_table_df_ARL0_k: pd.DataFrame, h) -> g
         table_great_table_ARL0_k.save(
             os.path.abspath(
                 os.path.join(
-                    "../../", config["path_output"]["path_figure"], "table_ARL0_k.png"
+                    "../../", config["path_output"]["path_figure"], "fig_table_h_arl0_k.png"
                 )
             ),
             scale=3,
@@ -69,7 +69,7 @@ def populate_summary_table_ARL0_k(summary_table_df_ARL0_k: pd.DataFrame, h) -> g
             "Created",
             os.path.abspath(
                 os.path.join(
-                    "../../", config["path_output"]["path_figure"], "table_ARL0_k.png"
+                    "../../", config["path_output"]["path_figure"], "fig_table_h_arl0_k.png"
                 )
             ),
         )
@@ -127,7 +127,7 @@ def populate_summary_table_ARL1_k(
         table_great_table_ARL1_k.save(
             os.path.abspath(
                 os.path.join(
-                    "../../", config["path_output"]["path_figure"], "table_ARL1_k.png"
+                    "../../", config["path_output"]["path_figure"], "fig_table_h_k_arl1.png"
                 )
             ),
             scale=3,
@@ -137,7 +137,7 @@ def populate_summary_table_ARL1_k(
             "Created",
             os.path.abspath(
                 os.path.join(
-                    "../../", config["path_output"]["path_figure"], "table_ARL1_k.png"
+                    "../../", config["path_output"]["path_figure"], "fig_table_h_k_arl1.png"
                 )
             ),
         )

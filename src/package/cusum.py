@@ -326,7 +326,7 @@ class CUSUM:
                 "font": {"size": font_size_title, "weight": "bold"},
             },
             xaxis_title={
-                "text": "Length of observations",
+                "text": "Number of baseline observations",
                 "font": {"size": font_size_legend, "weight": "bold"},
             },
             yaxis_title={
@@ -442,7 +442,7 @@ class CUSUM:
                 "font": {"size": font_size_title, "weight": "bold"},
             },
             xaxis_title={
-                "text": "Length of observations",
+                "text": "Number of baseline observations",
                 "font": {"size": font_size_legend, "weight": "bold"},
             },
             yaxis_title={
@@ -525,7 +525,7 @@ class CUSUM:
                             "../../", self.config["path_output"]["path_figure"]
                         )
                     ),
-                    "fig_plot_1.png",
+                    "fig_plot_average_metric.png",
                 ),
                 scale=3,
             )
@@ -537,7 +537,7 @@ class CUSUM:
                             "../../", self.config["path_output"]["path_figure"]
                         )
                     ),
-                    "fig_plot_1.png",
+                    "fig_plot_average_metric.png",
                 ),
             )
 
@@ -606,7 +606,7 @@ class CUSUM:
                 "font": {"size": font_size_title, "weight": "bold"},
             },
             xaxis_title={
-                "text": "Length of observations",
+                "text": "Number of baseline observations",
                 "font": {"size": font_size_legend, "weight": "bold"},
             },
             yaxis_title={
@@ -630,7 +630,7 @@ class CUSUM:
                             "../../", self.config["path_output"]["path_figure"]
                         )
                     ),
-                    "fig_plot_2.png",
+                    "fig_plot_cusum_chart.png",
                 ),
                 scale=3,
             )
@@ -642,7 +642,7 @@ class CUSUM:
                             "../../", self.config["path_output"]["path_figure"]
                         )
                     ),
-                    "fig_plot_2.png",
+                    "fig_plot_cusum_chart.png",
                 ),
             )
 
