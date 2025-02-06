@@ -41,6 +41,24 @@
 <li><p>The parameter choices for change-point detection based on an acceptable false alarm rate</p></li>
 <li><p>Detection delay estimates for a given displacement of the performance metric from the target for those parameter choices.</p></li>
 </ul>
+<section id="system-setup">
+<h2>System setup<a class="headerlink" href="#system-setup" title="Link to this heading">¶</a></h2>
+<p>Make sure R is installed in the system. Instructions for linux:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>RUN<span class="w"> </span>wget<span class="w"> </span>-qO-<span class="w"> </span>https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc<span class="w"> </span><span class="p">|</span><span class="w">  </span>tee<span class="w"> </span>-a<span class="w"> </span>/etc/apt/trusted.gpg.d/cran_ubuntu_key.asc
+RUN<span class="w"> </span>add-apt-repository<span class="w"> </span><span class="s2">&quot;deb https://cloud.r-project.org/bin/linux/ubuntu </span><span class="k">$(</span>lsb_release<span class="w"> </span>-cs<span class="k">)</span><span class="s2">-cran40/&quot;</span>
+RUN<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>--no-install-recommends<span class="w"> </span>r-base<span class="w"> </span>r-base-dev
+
+<span class="c1"># setup R configs</span>
+RUN<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;r &lt;- getOption(&#39;repos&#39;); r[&#39;CRAN&#39;] &lt;- &#39;http://cran.us.r-project.org&#39;; options(repos = r);&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>~/.Rprofile
+RUN<span class="w"> </span>Rscript<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;install.packages(&#39;ggplot2&#39;)&quot;</span>
+RUN<span class="w"> </span>Rscript<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;install.packages(&#39;hexbin&#39;)&quot;</span>
+RUN<span class="w"> </span>Rscript<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;install.packages(&#39;lazyeval&#39;)&quot;</span>
+RUN<span class="w"> </span>Rscript<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;install.packages(&#39;cusumcharter&#39;)&quot;</span>
+RUN<span class="w"> </span>Rscript<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;install.packages(&#39;RcppCNPy&#39;)&quot;</span>
+RUN<span class="w"> </span>Rscript<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;install.packages(&#39;spc&#39;)&quot;</span>
+</pre></div>
+</div>
+</section>
 <section id="code-execution">
 <h2>Code execution<a class="headerlink" href="#code-execution" title="Link to this heading">¶</a></h2>
 <p>Clone AIM-CU repository.</p>

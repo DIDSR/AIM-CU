@@ -15,6 +15,25 @@ AIM-CU computes:
 * The parameter choices for change-point detection based on an acceptable false alarm rate
 * Detection delay estimates for a given displacement of the performance metric from the target for those parameter choices.
 
+System setup
+------------
+Make sure R is installed in the system. Instructions for linux:
+
+.. code-block:: shell
+
+    RUN wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc |  tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc
+    RUN add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/"
+    RUN apt-get install -y --no-install-recommends r-base r-base-dev
+
+    # setup R configs
+    RUN echo "r <- getOption('repos'); r['CRAN'] <- 'http://cran.us.r-project.org'; options(repos = r);" > ~/.Rprofile
+    RUN Rscript -e "install.packages('ggplot2')"
+    RUN Rscript -e "install.packages('hexbin')"
+    RUN Rscript -e "install.packages('lazyeval')"
+    RUN Rscript -e "install.packages('cusumcharter')"
+    RUN Rscript -e "install.packages('RcppCNPy')"
+    RUN Rscript -e "install.packages('spc')"
+
 Code execution
 --------------
 Clone AIM-CU repository.
