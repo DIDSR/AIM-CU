@@ -313,7 +313,7 @@ class CUSUM:
         fig.add_vrect(
             x0=0,
             x1=self.init_days,
-            annotation_text="Number of baseline observations",
+            annotation_text="Baseline observations",
             annotation_position="top right",
             fillcolor="palegreen",
             opacity=0.25,
