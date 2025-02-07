@@ -24,11 +24,11 @@ def set_init_days(
     file_csv_metric: gr.File, init_days: str
 ) -> tuple[float, float, go.Figure]:
     """
-    Set initial days and get in-control mean and standard deviation.
+    Set number of baseline observations and get in-control mean and standard deviation.
 
     Args:
         file_csv_metric (gr.File): CSV file with metric data
-        init_days (str): initial days to calculate in-control mean and standard deviation
+        init_days (str): Number of baseline observations to calculate in-control mean and standard deviation
 
     Returns:
         tuple[float, float, go.Figure]: In-control mean and standard deviation, and observation data plot.
@@ -191,7 +191,7 @@ with gr.Blocks(
 
             with gr.Row():
                 with gr.Column():
-                    init_days = gr.Textbox(label="Initial days", placeholder="30")
+                    init_days = gr.Textbox(label="Number of baseline observations", placeholder="30")
                 with gr.Column():
                     button_calculate_incontrol_params = gr.Button(
                         "Calculate parameters"
@@ -275,7 +275,7 @@ with gr.Blocks(
                 ### Workflow:
                 Phase I:
                 - Upload the AI output (CSV file).
-                - Enter initial days.
+                - Enter number of baseline observations.
                 - Calculate parameters.
                 - Check parameter choices in Phase 1, for Phase 2. (optional)
                 

@@ -60,10 +60,10 @@ class CUSUM:
 
     def set_init_stats(self, init_days: int) -> None:
         """
-        Use initial days to calculate in-control mean and standard deviation.
+        Use number of baseline observations to calculate in-control mean and standard deviation.
 
         Args:
-            init_days (int, optional): Initial days when observations are considered stable. Defaults to 30.
+            init_days (int, optional): Number of baseline observations when observations are considered stable. Defaults to 30.
         """
         self.init_days = init_days
 
@@ -171,7 +171,7 @@ class CUSUM:
             normalized_ref_value (float, optional): Normalized reference value for detecting a unit standard deviation change in mean of the process. Defaults to 0.5.
             normalized_threshold (float, optional): Normalized threshold. Defaults to 4.
         """
-        self.pre_change_days = self.init_days  # This is the #initial days that we assume to be in-control - user enters or default = 30
+        self.pre_change_days = self.init_days  # This is the number of baseline observations that we assume to be in-control - user enters or default = 30
 
         ref_val = normalized_ref_value
         control_limit = normalized_threshold
@@ -313,7 +313,7 @@ class CUSUM:
         fig.add_vrect(
             x0=0,
             x1=self.init_days,
-            annotation_text="Initial days",
+            annotation_text="Number of baseline observations",
             annotation_position="top right",
             fillcolor="palegreen",
             opacity=0.25,
@@ -326,7 +326,7 @@ class CUSUM:
                 "font": {"size": font_size_title, "weight": "bold"},
             },
             xaxis_title={
-                "text": "Number of baseline observations",
+                "text": "Time",
                 "font": {"size": font_size_legend, "weight": "bold"},
             },
             yaxis_title={
@@ -442,7 +442,7 @@ class CUSUM:
                 "font": {"size": font_size_title, "weight": "bold"},
             },
             xaxis_title={
-                "text": "Number of baseline observations",
+                "text": "Time",
                 "font": {"size": font_size_legend, "weight": "bold"},
             },
             yaxis_title={
@@ -525,7 +525,7 @@ class CUSUM:
                             "../../", self.config["path_output"]["path_figure"]
                         )
                     ),
-                    "fig_plot_average_metric.png",
+                    "fig_plot_data_distribution.png",
                 ),
                 scale=3,
             )
@@ -537,7 +537,7 @@ class CUSUM:
                             "../../", self.config["path_output"]["path_figure"]
                         )
                     ),
-                    "fig_plot_average_metric.png",
+                    "fig_plot_data_distribution.png",
                 ),
             )
 
@@ -606,7 +606,7 @@ class CUSUM:
                 "font": {"size": font_size_title, "weight": "bold"},
             },
             xaxis_title={
-                "text": "Number of baseline observations",
+                "text": "Time",
                 "font": {"size": font_size_legend, "weight": "bold"},
             },
             yaxis_title={
