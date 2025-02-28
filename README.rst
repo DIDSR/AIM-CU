@@ -17,7 +17,7 @@ AIM-CU computes:
 
 System setup
 ------------
-Make sure R is installed in the system. There is no specific version that this relies on, but here we have used R version 4.1.2 (2021-11-01). 
+Make sure R is installed in the system. There is no specific version that this relies on. Here we have used R version 4.1.2 (2021-11-01). 
 Instructions for Linux (the below setup is only performed in Linux):
 
 .. code-block:: shell
