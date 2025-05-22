@@ -129,7 +129,7 @@ def get_ARL_1(
 utils = rpackages.importr("utils")
 spc = rpackages.importr("spc")
 # select a mirror for R packages
-utils.chooseCRANmirror(ind=1)  # select the first mirror in the list
+# utils.chooseCRANmirror(ind=1)  # select the first mirror in the list
 
 # R package names
 packnames = ("ggplot2", "hexbin", "lazyeval", "cusumcharter", "RcppCNPy", "spc")
