@@ -67,7 +67,7 @@ Example code can be run through Jupyter Notebook. Do this by entering the ``jupy
 
 Demo
 ----
-AIM-CU can also be run through the demo available at https://huggingface.co/spaces/didsr/AIM-CU. If Space is paused, click on Restart button.
+AIM-CU can also be run through the demo available at https://huggingface.co/spaces/didsr/AIM-CU. If Space is paused, click on Restart button. Note: this Space uses a custom Docker container; build may break due to latest package updates pulled by HuggingFace.
 
 Usability
 ---------

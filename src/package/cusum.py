@@ -361,13 +361,7 @@ class CUSUM:
         y2 = self.data[self.pre_change_days : self.total_days]
         mean_y2 = np.mean(y2)
 
-        fig = make_subplots(
-            rows=1,
-            cols=2,
-            column_widths=[0.7, 0.3],
-            shared_yaxes=True,
-            horizontal_spacing=0.02,
-        )
+        fig = go.Figure()
 
         font_size_title = 20
         font_size_legend = 18
@@ -382,8 +376,6 @@ class CUSUM:
                 marker=dict(color="darkturquoise", size=10),
                 opacity=0.4,
             ),
-            row=1,
-            col=1,
         )
         fig.add_trace(
             go.Scatter(
@@ -394,8 +386,6 @@ class CUSUM:
                 marker=dict(color="coral", size=10),
                 opacity=0.4,
             ),
-            row=1,
-            col=1,
         )
 
         # add horizontal lines
@@ -407,8 +397,6 @@ class CUSUM:
                 name="In-control mean",
                 line=dict(color="darkturquoise", dash="dash"),
             ),
-            row=1,
-            col=1,
         )
         fig.add_trace(
             go.Scatter(
@@ -418,8 +406,6 @@ class CUSUM:
                 name="Out-of-control mean",
                 line=dict(color="coral", dash="dash"),
             ),
-            row=1,
-            col=1,
         )
 
         # add vertical line
@@ -432,13 +418,11 @@ class CUSUM:
                 line=dict(color="grey", dash="dash"),
                 # textfont=dict(size=18)
             ),
-            row=1,
-            col=1,
         )
 
         fig.update_layout(
             title={
-                "text": "Pre- and post-change observations and their respective histograms",
+                "text": "Pre- and post-change observations",
                 "font": {"size": font_size_title, "weight": "bold"},
             },
             xaxis_title={
@@ -458,64 +442,64 @@ class CUSUM:
             legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
         )
 
-        # add histogram (like marginal histogram)
-        nbinsx = 15  # 6
+        # # add histogram (like marginal histogram)
+        # nbinsx = 15  # 6
 
-        # add subplots
-        fig.add_trace(
-            go.Histogram(
-                y=self.data[: self.pre_change_days],
-                nbinsy=nbinsx,
-                # name=f"""Pre-change S<sub>p</sub>""",
-                showlegend=False,
-                marker=dict(color="mediumturquoise"),
-                opacity=0.4,
-                orientation="h",
-            ),
-            row=1,
-            col=2,
-        )
+        # # add subplots
+        # fig.add_trace(
+        #     go.Histogram(
+        #         y=self.data[: self.pre_change_days],
+        #         nbinsy=nbinsx,
+        #         # name=f"""Pre-change S<sub>p</sub>""",
+        #         showlegend=False,
+        #         marker=dict(color="mediumturquoise"),
+        #         opacity=0.4,
+        #         orientation="h",
+        #     ),
+        #     row=1,
+        #     col=2,
+        # )
 
-        fig.add_trace(
-            go.Histogram(
-                y=self.data[self.pre_change_days : self.total_days],
-                nbinsy=nbinsx,
-                # name=f"""Post-change S<sub>p</sub>""",
-                showlegend=False,
-                marker=dict(color="coral"),
-                opacity=0.4,
-                orientation="h",
-            ),
-            row=1,
-            col=2,
-        )
+        # fig.add_trace(
+        #     go.Histogram(
+        #         y=self.data[self.pre_change_days : self.total_days],
+        #         nbinsy=nbinsx,
+        #         # name=f"""Post-change S<sub>p</sub>""",
+        #         showlegend=False,
+        #         marker=dict(color="coral"),
+        #         opacity=0.4,
+        #         orientation="h",
+        #     ),
+        #     row=1,
+        #     col=2,
+        # )
 
-        fig.add_trace(
-            go.Scatter(
-                x=[0, 20],  # [! y_max can should be used]
-                y=[
-                    np.mean(self.data[: self.pre_change_days]),
-                    np.mean(self.data[: self.pre_change_days]),
-                ],
-                mode="lines",
-                # name="Reference mean",
-                showlegend=False,
-                line=dict(color="mediumturquoise", dash="dash"),
-            ),
-            row=1,
-            col=2,
-        )
+        # fig.add_trace(
+        #     go.Scatter(
+        #         x=[0, 20],  # [! y_max can should be used]
+        #         y=[
+        #             np.mean(self.data[: self.pre_change_days]),
+        #             np.mean(self.data[: self.pre_change_days]),
+        #         ],
+        #         mode="lines",
+        #         # name="Reference mean",
+        #         showlegend=False,
+        #         line=dict(color="mediumturquoise", dash="dash"),
+        #     ),
+        #     row=1,
+        #     col=2,
+        # )
 
-        fig.update_xaxes(
-            title_text="Count",
-            title_font_size=font_size_legend,
-            title_font_weight="bold",
-            row=1,
-            col=2,
-        )
+        # fig.update_xaxes(
+        #     title_text="Count",
+        #     title_font_size=font_size_legend,
+        #     title_font_weight="bold",
+        #     row=1,
+        #     col=2,
+        # )
 
-        # update layout
-        fig.update_layout(barmode="overlay")
+        # # update layout
+        # fig.update_layout(barmode="overlay")
 
         if self.config["control"]["save_figure"] == "true":
             fig.write_image(
@@ -527,7 +511,7 @@ class CUSUM:
                     ),
                     "fig_plot_data_distribution.png",
                 ),
-                scale=3,
+                scale=6,
             )
             print(
                 "Created",
@@ -555,14 +539,13 @@ class CUSUM:
         font_size_title = 20
         font_size_legend = 18
 
-        # add subplots
         fig.add_trace(
             go.Scatter(
                 x=list(range(len(self.S_hi))),
                 y=self.S_hi / self.in_std,
                 mode="lines",
                 name=f"""Positive changes (S<sub>hi</sub>)""",
-                marker=dict(color="greenyellow", size=10),
+                marker=dict(color="rgb(0, 209, 209)", size=10),
             )
         )
         fig.add_trace(
@@ -582,21 +565,7 @@ class CUSUM:
                 y=[self.H / self.in_std, self.H / self.in_std],
                 mode="lines",
                 name="Threshold (h)",
-                line=dict(color="skyblue", dash="dash"),
-            )
-        )
-
-        # add vertical line
-        fig.add_trace(
-            go.Scatter(
-                x=[self.pre_change_days, self.pre_change_days],
-                y=[
-                    0,
-                    np.max(self.S_lo / self.in_std),
-                ],
-                mode="lines",
-                name="Change-point",
-                line=dict(color="grey", dash="dash"),
+                line=dict(color="rgb(250, 0, 125)", dash="dash"),
             )
         )
 
@@ -616,7 +585,28 @@ class CUSUM:
             xaxis=dict(dtick=20),
         )
 
-        fig.update_layout(plot_bgcolor=self.config["color"]["blue_005"])
+
+        fig.add_shape(
+            type="rect",
+            x0=0, x1=60,
+            y0=0, y1=1,  # use relative values (0 to 1) for full y-range
+            xref="x", yref="paper",  # "paper" for full plot height
+            fillcolor=self.config["color"]["blue_005"],
+            opacity=0.8,
+            layer="below",
+            line_width=0,
+        )
+
+        fig.add_shape(
+            type="rect",
+            x0=60, x1=len(self.S_lo),  # x1=1 means extend to right edge of plot (paper coordinates)
+            y0=0, y1=1,
+            xref="x", yref="paper",
+            fillcolor="rgb(253, 243, 235)",
+            opacity=0.8,
+            layer="below",
+            line_width=0,
+        )
 
         fig.update_layout(
             legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
@@ -632,7 +622,7 @@ class CUSUM:
                     ),
                     "fig_plot_cusum_chart.png",
                 ),
-                scale=3,
+                scale=6,
             )
             print(
                 "Created",
