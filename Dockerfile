@@ -22,6 +22,7 @@ RUN Rscript -e "install.packages('spc')"
 WORKDIR /app/src/package
 COPY . /app/
 
-RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
+RUN pip install --use-pep517 --no-cache-dir --upgrade -r /app/requirements.txt
+RUN pip install --upgrade gradio gradio_client
 
 CMD ["python3", "app.py"]

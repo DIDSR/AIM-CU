@@ -17,7 +17,7 @@ blue_100 = "#007CBA"
 
 # controls
 [control]
-save_figure = "true"
+save_figure = "false"
 
 # CUSUM parameters
 [params_cusum]
