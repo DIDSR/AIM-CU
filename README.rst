@@ -8,7 +8,7 @@ AIM-CU: A CUSUM-based tool for AI Monitoring
 
 Monitoring a clinically deployed AI device to detect performance drift is an essential step to ensure the safety and effectiveness of AI. 
 
-AIM-CU is a statistical tool for AI monitoring using cumulative sum (AIM-CU).
+AIM-CU is a statistical tool for AI monitoring based on a cumulative sum (AIM-CU) approach.
 
 AIM-CU computes:
 
@@ -17,7 +17,8 @@ AIM-CU computes:
 
 System setup
 ------------
-Make sure R is installed in the system. Instructions for linux (the below setup is only performed in linux):
+Make sure R is installed in the system. There is no specific version that this relies on. Here we have used R version 4.1.2 (2021-11-01). 
+Instructions for Linux (the below setup is only performed in Linux):
 
 .. code-block:: shell
 
@@ -62,7 +63,7 @@ Open the URL http://0.0.0.0:7860 that is running the AIM-CU locally.
 
 Example code execution
 ----------------------
-Example code can be run in a Jupyter Notebook after opening it with ``jupyter notebook`` command from ``/src/package/`` directory. The tool is designed to used through UI, not from console.
+Example code can be run through Jupyter Notebook. Do this by entering the ``jupyter notebook`` command from the ``/src/package/`` directory. The tool is designed to be used through a GUI, not from the console.
 
 Demo
 ----
@@ -78,7 +79,7 @@ Usability
 
 * Setting ``control:save_figure`` to ``true`` from `config.toml <config/config.toml>`_ will save tables and plots in `figure/ <figure/>`_.
 
-* Running AIM-CU does not take time longer than a few seconds, and it does not require GPU.
+* Running AIM-CU usually only takes a few seconds, and it does not require a GPU to run.
 
 Related References
 ------------------
