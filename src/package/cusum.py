@@ -588,7 +588,7 @@ class CUSUM:
 
         fig.add_shape(
             type="rect",
-            x0=0, x1=60,
+            x0=0, x1=self.pre_change_days,
             y0=0, y1=1,  # use relative values (0 to 1) for full y-range
             xref="x", yref="paper",  # "paper" for full plot height
             fillcolor=self.config["color"]["blue_005"],
@@ -599,7 +599,7 @@ class CUSUM:
 
         fig.add_shape(
             type="rect",
-            x0=60, x1=len(self.S_lo),  # x1=1 means extend to right edge of plot (paper coordinates)
+            x0=self.pre_change_days, x1=len(self.S_lo),  # x1=1 means extend to right edge of plot (paper coordinates)
             y0=0, y1=1,
             xref="x", yref="paper",
             fillcolor="rgb(253, 243, 235)",
