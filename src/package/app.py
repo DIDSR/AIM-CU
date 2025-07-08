@@ -98,7 +98,7 @@ def calculate_reference_value_k(h: str, arl_0: str) -> float:
     k = get_ref_value_k(h=h, ARL_0=arl_0)
     k = "{:.2f}".format(k)
 
-    return k
+    return k, k, k
 
 
 def calculate_arl1_h_k_mu1(h: str, k: str, mu1: str) -> float:
@@ -220,7 +220,7 @@ with gr.Blocks(
             h_phase1 = gr.Textbox(
                 label="h value =",
                 placeholder="h = normalized threshold, default = 4. Range: between 4 and 5 ([4, 5])",
-                value="4",
+                value="3",
                 autofocus=True,
             )
 
@@ -301,7 +301,7 @@ with gr.Blocks(
                 h_phase2 = gr.Textbox(
                     label="h value =",
                     placeholder="normalized threshold, default = 4. Range: between 4 and 5 ([4, 5])",
-                    value="4",
+                    value="3",
                 )
 
                 k_phase2 = gr.Textbox(
@@ -313,7 +313,7 @@ with gr.Blocks(
             button_csv_metric = gr.Button("Show CUSUM plots")
 
             plot_avg_metric = gr.Plot(
-                label="Average metric for the pre-change and post-change regime",
+                label="AI model performance",
                 visible=False,
             )
             plot_cusum_chart = gr.Plot(label="CUSUM Chart", visible=False)
@@ -343,7 +343,7 @@ with gr.Blocks(
 
     # Calculate specific k for ARL_0
     button_calculate_k.click(
-        fn=calculate_reference_value_k, inputs=[h_phase1, arl_0], outputs=[output_k]
+        fn=calculate_reference_value_k, inputs=[h_phase1, arl_0], outputs=[output_k, k_phase1, k_phase2]
     )
     button_calculate_k.click(
         fn=lambda: gr.update(visible=True), inputs=[], outputs=output_k
