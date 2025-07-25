@@ -442,65 +442,6 @@ class CUSUM:
             legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
         )
 
-        # # add histogram (like marginal histogram)
-        # nbinsx = 15  # 6
-
-        # # add subplots
-        # fig.add_trace(
-        #     go.Histogram(
-        #         y=self.data[: self.pre_change_days],
-        #         nbinsy=nbinsx,
-        #         # name=f"""Pre-change S<sub>p</sub>""",
-        #         showlegend=False,
-        #         marker=dict(color="mediumturquoise"),
-        #         opacity=0.4,
-        #         orientation="h",
-        #     ),
-        #     row=1,
-        #     col=2,
-        # )
-
-        # fig.add_trace(
-        #     go.Histogram(
-        #         y=self.data[self.pre_change_days : self.total_days],
-        #         nbinsy=nbinsx,
-        #         # name=f"""Post-change S<sub>p</sub>""",
-        #         showlegend=False,
-        #         marker=dict(color="coral"),
-        #         opacity=0.4,
-        #         orientation="h",
-        #     ),
-        #     row=1,
-        #     col=2,
-        # )
-
-        # fig.add_trace(
-        #     go.Scatter(
-        #         x=[0, 20],  # [! y_max can should be used]
-        #         y=[
-        #             np.mean(self.data[: self.pre_change_days]),
-        #             np.mean(self.data[: self.pre_change_days]),
-        #         ],
-        #         mode="lines",
-        #         # name="Reference mean",
-        #         showlegend=False,
-        #         line=dict(color="mediumturquoise", dash="dash"),
-        #     ),
-        #     row=1,
-        #     col=2,
-        # )
-
-        # fig.update_xaxes(
-        #     title_text="Count",
-        #     title_font_size=font_size_legend,
-        #     title_font_weight="bold",
-        #     row=1,
-        #     col=2,
-        # )
-
-        # # update layout
-        # fig.update_layout(barmode="overlay")
-
         if self.config["control"]["save_figure"] == "true":
             fig.write_image(
                 os.path.join(
