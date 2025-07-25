@@ -58,4 +58,5 @@ latex_elements = {
     \DeclareUnicodeCharacter{03BC}{\textmu}
     \DeclareUnicodeCharacter{03C3}{\ensuremath{\sigma}}
     ''',
+    'classoptions': ',oneside',
 }
