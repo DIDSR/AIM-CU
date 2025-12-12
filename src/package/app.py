@@ -257,8 +257,10 @@ with gr.Blocks(
                 k_phase1 = gr.Textbox(
                     label="k value =", placeholder="k", value="0.2996"
                 )
+                
+                # example: if std_in=0.03 and shift in mean (in original data)=0.045, then the value that the user enter will be 0.045/0.03=1.5
                 mu1 = gr.Textbox(
-                    label="Shift in mean value =",
+                    label="Shift in mean value (expressed in term of in-control standard deviation) =",
                     placeholder="Shift in mean value",
                     value="1.2",
                 )
