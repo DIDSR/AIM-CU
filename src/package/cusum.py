@@ -111,7 +111,7 @@ class CUSUM:
         self.set_timeline(self.data)
 
     def compute_cusum(
-        self, x: list[float], mu_0: float, k: float
+        self, x: list[float], mu_0: float, ref_val: float
     ) -> tuple[list[float], list[float], list[float]]:
         """
         Compute CUSUM for the observations in x
@@ -119,7 +119,7 @@ class CUSUM:
         Args:
             x (list[float]): Performance metric to be monitored
             mu_0 (float)   : In-control mean of the observations/performance metric
-            k (float)      : Reference value related to the magnitude of change that one is interested in detecting
+            ref_val (float)      : Reference value related to the magnitude of change that one is interested in detecting
 
         Returns:
             tuple[list[float], list[float], list[float]]: Positive cumulative sum, negative cumulative sum, and CUSUM
@@ -130,10 +130,10 @@ class CUSUM:
         # S_hi : sum of positive changes --------------------------
         self.S_hi = np.zeros(num_rows, dtype=float)
         self.S_hi[0] = 0.0  # starts with 0
-        # Increase in mean = x-mu-k ----------------------------
+        # Increase in mean = x-mu-ref_val ----------------------------
         mean_hi = np.zeros(num_rows, dtype=float)
 
-        # Decrease in mean = mu-k-x----------------------------
+        # Decrease in mean = mu-ref_val-x----------------------------
         mean_lo = np.zeros(num_rows, dtype=float)
         # S_lo : sum of negative changes --------------------------
         self.S_lo = np.zeros(num_rows, dtype=float)
@@ -144,9 +144,9 @@ class CUSUM:
 
         for i in range(0, num_rows):
             x_mean[i] = x[i] - mu_0  # x - mean
-            mean_hi[i] = x[i] - mu_0 - k
+            mean_hi[i] = x[i] - mu_0 - ref_val
             self.S_hi[i] = max(0, self.S_hi[i - 1] + mean_hi[i])
-            mean_lo[i] = mu_0 - k - x[i]
+            mean_lo[i] = mu_0 - ref_val - x[i]
             self.S_lo[i] = max(0, self.S_lo[i - 1] + mean_lo[i])
             cusum[i] = cusum[i - 1] + x_mean[i]
 
@@ -173,7 +173,6 @@ class CUSUM:
         """
         self.pre_change_days = self.init_days  # This is the number of baseline observations that we assume to be in-control - user enters or default = 30
 
-        ref_val = normalized_ref_value
         control_limit = normalized_threshold
 
         DetectionTimes = np.array([], dtype=int)
@@ -188,12 +187,12 @@ class CUSUM:
         self.AvgDD = np.array([])  # Average Detection Delay
 
         self.H = control_limit * self.in_std  # Threhold
-        k = ref_val * self.in_std  # Reference value
+        ref_val = normalized_ref_value * self.in_std  # Reference value
 
         x = np.array(self.data)
 
-        # Call compute CUSUM function with x (observatoins), in-control mean (mu) and k (drift or reference value)
-        self.S_hi, self.S_lo, cusum = self.compute_cusum(x, self.in_mu, k)
+        # Call compute CUSUM function with x (observatoins), in-control mean (mu) and ref_val (drift or reference value)
+        self.S_hi, self.S_lo, cusum = self.compute_cusum(x, self.in_mu, ref_val)
 
         # Check the variations in self.S_hi and self.S_lo to determine whether there was a change in the data
         S_hi_last_known_zero = np.where(self.S_hi == 0)[
