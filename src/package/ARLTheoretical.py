@@ -36,6 +36,19 @@ def get_ref_value_k(h: float, ARL_0: float) -> float:
 
     return k
 
+def get_threshold_h(k: float, ARL_0: float) -> float:
+    """
+    Calculation for the threshold h for given k and ARL_0.
+    
+    Args:
+        k (float): Normalized reference value.
+        ARL_0 (float): ARL0 value.
+    
+    Returns:
+        float: Normalized threshold h.
+    """
+    h = np.round(spc.xcusum_crit_(k, ARL_0, mu0=0, hs=0, sided="one", r=30), decimals=4).tolist()[0]
+    return h
 
 def get_ref_value(
     h: float, list_ARL_0: list[float]

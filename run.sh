@@ -3,8 +3,8 @@
 # Required everytime you open the new terminal
 export http_proxy=; export https_proxy=
 
-USER=""
-ENV_NAME="aimcu"
+USER="dhaval.kadia"
+ENV_NAME="aimcu11"
 
 source /home/"$USER"/miniconda3/bin/activate /home/"$USER"/miniconda3/envs/"$ENV_NAME"
 

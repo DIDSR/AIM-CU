@@ -11,7 +11,7 @@ import pandas as pd
 import gradio as gr
 import tomli
 from cusum import CUSUM
-from ARLTheoretical import get_ref_value, get_ref_value_k, get_ARL_1, get_ARL_1_h_mu1_k
+from ARLTheoretical import get_ref_value, get_ref_value_k, get_ARL_1, get_ARL_1_h_mu1_k, get_threshold_h
 from utils import (
     populate_summary_table_ARL0_k,
     populate_summary_table_ARL1_k,
@@ -100,6 +100,24 @@ def calculate_reference_value_k(h: str, arl_0: str) -> float:
 
     return k, k, k
 
+def calculate_threshold_h(k: str, arl_0: str) -> tuple[str, str, str]:
+    """
+    Gets the threshold h for given k and ARL_0.
+
+    Args:
+        k (str): Normalized reference value.
+        arl_0 (str): ARL0 value.
+
+    Returns:
+        tuple[str, str, str]: Normalized threshold h (for output display, h_phase1, h_phase2).
+    """
+    k = float(k)
+    arl_0 = float(arl_0)
+
+    h = get_threshold_h(k=k, ARL_0=arl_0)
+    h = "{:.2f}".format(h)
+
+    return h, h, h
 
 def calculate_arl1_h_k_mu1(h: str, k: str, mu1: str) -> float:
     """
@@ -213,16 +231,11 @@ with gr.Blocks(
                         Parameter choices for detecting change and detection delay estimates (theoretical calculations).
                         """)  # noqa: F541
 
-            gr.Markdown(f"""
-                ### Enter h value:
-                """)  # noqa: F541
+            # gr.Markdown(f"""
+            #     ### Enter h value:
+            #     """)  # noqa: F541
 
-            h_phase1 = gr.Textbox(
-                label="h value =",
-                placeholder="h = normalized threshold, default = 4. Range: between 4 and 5 ([4, 5])",
-                value="3",
-                autofocus=True,
-            )
+            
 
             dataframe_gt_ref_value = gr.HTML(
                 label="Reference Values for an intended ARL0 with normalized threshold h",
@@ -231,10 +244,17 @@ with gr.Blocks(
             )
 
             gr.Markdown(f"""
-                ### Calculate reference value k for a specific value for ARL<sub>0</sub>:
+                ### Calculate reference value k for specific value for h and ARL<sub>0</sub>:
                 """)  # noqa: F541
 
             with gr.Row():
+                h_phase1 = gr.Textbox(
+                label="h value =",
+                placeholder="h = normalized threshold, default = 4. Range: between 4 and 5 ([4, 5])",
+                value="3",
+                autofocus=True,
+                )
+
                 arl_0 = gr.Textbox(
                     label="ARL_0 value =", placeholder="ARL_0", value="100"
                 )
@@ -242,6 +262,22 @@ with gr.Blocks(
                 button_calculate_k = gr.Button("Calculate k")
 
                 output_k = gr.Textbox(label="Calculated k =", visible=False)
+
+            gr.Markdown(f"""
+                ### Calculate threshold h for specific value for k and ARL<sub>0</sub>:
+                """)  # noqa: F541
+
+            with gr.Row():
+                k_for_h = gr.Textbox(
+                    label="k value =", placeholder="k", value="0.5"
+                )
+                arl_0_for_h = gr.Textbox(
+                    label="ARL_0 value =", placeholder="ARL_0", value="100"
+                )
+
+                button_calculate_h = gr.Button("Calculate h")
+
+                output_h = gr.Textbox(label="Calculated h =", visible=False)
 
             dataframe_gt_ARL0 = gr.HTML(
                 label="Estimate of steady state ARL (ARL_1 based on the computed reference values and intended zero-state ARL (ARL_0) with normalized threshold h)",
@@ -341,6 +377,14 @@ with gr.Blocks(
     )
     button_populate_table.click(
         fn=lambda: gr.update(visible=True), inputs=[], outputs=dataframe_gt_ARL0
+    )
+
+    # Calculate specific h for k and ARL_0
+    button_calculate_h.click(
+        fn=calculate_threshold_h, inputs=[k_for_h, arl_0_for_h], outputs=[output_h, h_phase1, h_phase2]
+    )
+    button_calculate_h.click(
+        fn=lambda: gr.update(visible=True), inputs=[], outputs=output_h
     )
 
     # Calculate specific k for ARL_0
