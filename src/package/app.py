@@ -11,7 +11,13 @@ import pandas as pd
 import gradio as gr
 import tomli
 from cusum import CUSUM
-from ARLTheoretical import get_ref_value, get_ref_value_k, get_ARL_1, get_ARL_1_h_mu1_k
+from ARLTheoretical import (
+    get_ref_value,
+    get_ref_value_k,
+    get_ARL_1,
+    get_ARL_1_h_mu1_k,
+    get_threshold_h,
+)
 from utils import (
     populate_summary_table_ARL0_k,
     populate_summary_table_ARL1_k,
@@ -81,7 +87,7 @@ def populate_table(h: str) -> tuple[gt.GT, gt.GT]:
     ), populate_summary_table_ARL1_k(summary_table_df_ARL1_k, dict_ARL0_k, h)
 
 
-def calculate_reference_value_k(h: str, arl_0: str) -> float:
+def calculate_reference_value_k(h: str, arl_0: str) -> tuple[str, str, str, str]:
     """
     Gets the reference value for given h and ARL_0.
 
@@ -90,7 +96,7 @@ def calculate_reference_value_k(h: str, arl_0: str) -> float:
         arl_0 (str): ARL0 value.
 
     Returns:
-        float: Normalized reference value k.
+        tuple[str, str, str, str]: Normalized reference value k (for output, k_phase1, k_phase2, h_phase2).
     """
     h = float(h)
     arl_0 = float(arl_0)
@@ -98,7 +104,27 @@ def calculate_reference_value_k(h: str, arl_0: str) -> float:
     k = get_ref_value_k(h=h, ARL_0=arl_0)
     k = "{:.2f}".format(k)
 
-    return k, k, k
+    return k, k, k, h
+
+
+def calculate_threshold_h(k: str, arl_0: str) -> tuple[str, str, str, str]:
+    """
+    Gets the threshold h for given k and ARL_0.
+
+    Args:
+        k (str): Normalized reference value.
+        arl_0 (str): ARL0 value.
+
+    Returns:
+        tuple[str, str, str, str]: Normalized threshold h (for output, h_phase1, h_phase2, k_phase2).
+    """
+    k_val = float(k)
+    arl_0 = float(arl_0)
+
+    h = get_threshold_h(k=k_val, ARL_0=arl_0)
+    h = "{:.2f}".format(h)
+
+    return h, h, h, k
 
 
 def calculate_arl1_h_k_mu1(h: str, k: str, mu1: str) -> float:
@@ -191,7 +217,11 @@ with gr.Blocks(
 
             with gr.Row():
                 with gr.Column():
-                    init_days = gr.Textbox(label="Number of baseline observations", placeholder="30")
+                    init_days = gr.Textbox(
+                        label="Number of baseline observations",
+                        placeholder="30",
+                        value="30",
+                    )
                 with gr.Column():
                     button_calculate_incontrol_params = gr.Button(
                         "Calculate parameters"
@@ -213,16 +243,9 @@ with gr.Blocks(
                         Parameter choices for detecting change and detection delay estimates (theoretical calculations).
                         """)  # noqa: F541
 
-            gr.Markdown(f"""
-                ### Enter h value:
-                """)  # noqa: F541
-
-            h_phase1 = gr.Textbox(
-                label="h value =",
-                placeholder="h = normalized threshold, default = 4. Range: between 4 and 5 ([4, 5])",
-                value="3",
-                autofocus=True,
-            )
+            # gr.Markdown(f"""
+            #     ### Enter h value:
+            #     """)  # noqa: F541
 
             dataframe_gt_ref_value = gr.HTML(
                 label="Reference Values for an intended ARL0 with normalized threshold h",
@@ -231,17 +254,47 @@ with gr.Blocks(
             )
 
             gr.Markdown(f"""
-                ### Calculate reference value k for a specific value for ARL<sub>0</sub>:
+                ### Calculate parameters:
                 """)  # noqa: F541
 
-            with gr.Row():
-                arl_0 = gr.Textbox(
-                    label="ARL_0 value =", placeholder="ARL_0", value="100"
-                )
+            with gr.Tabs():
+                with gr.Tab("Calculate k from h"):
+                    gr.Markdown(f"""
+                        Calculate reference value k for specific values of h and ARL<sub>0</sub>:
+                        """)  # noqa: F541
 
-                button_calculate_k = gr.Button("Calculate k")
+                    with gr.Row():
+                        h_phase1 = gr.Textbox(
+                            label="h value =",
+                            placeholder="h = normalized threshold, default = 4. Range: between 4 and 5 ([4, 5])",
+                            value="3",
+                            autofocus=True,
+                        )
 
-                output_k = gr.Textbox(label="Calculated k =", visible=False)
+                        arl_0 = gr.Textbox(
+                            label="ARL_0 value =", placeholder="ARL_0", value="100"
+                        )
+
+                        button_calculate_k = gr.Button("Calculate k")
+
+                        output_k = gr.Textbox(label="Calculated k =", visible=False)
+
+                with gr.Tab("Calculate h from k"):
+                    gr.Markdown(f"""
+                        Calculate threshold h for specific values of k and ARL<sub>0</sub>:
+                        """)  # noqa: F541
+
+                    with gr.Row():
+                        k_for_h = gr.Textbox(
+                            label="k value =", placeholder="k", value="0.5"
+                        )
+                        arl_0_for_h = gr.Textbox(
+                            label="ARL_0 value =", placeholder="ARL_0", value="100"
+                        )
+
+                        button_calculate_h = gr.Button("Calculate h")
+
+                        output_h = gr.Textbox(label="Calculated h =", visible=False)
 
             dataframe_gt_ARL0 = gr.HTML(
                 label="Estimate of steady state ARL (ARL_1 based on the computed reference values and intended zero-state ARL (ARL_0) with normalized threshold h)",
@@ -257,8 +310,10 @@ with gr.Blocks(
                 k_phase1 = gr.Textbox(
                     label="k value =", placeholder="k", value="0.2996"
                 )
+
+                # example: if std_in=0.03 and shift in mean (in original data)=0.045, then the value that the user enter will be 0.045/0.03=1.5
                 mu1 = gr.Textbox(
-                    label="Shift in mean value =",
+                    label="Shift in mean value (expressed in term of in-control standard deviation) =",
                     placeholder="Shift in mean value",
                     value="1.2",
                 )
@@ -341,9 +396,21 @@ with gr.Blocks(
         fn=lambda: gr.update(visible=True), inputs=[], outputs=dataframe_gt_ARL0
     )
 
+    # Calculate specific h for k and ARL_0
+    button_calculate_h.click(
+        fn=calculate_threshold_h,
+        inputs=[k_for_h, arl_0_for_h],
+        outputs=[output_h, h_phase1, h_phase2, k_phase2],
+    )
+    button_calculate_h.click(
+        fn=lambda: gr.update(visible=True), inputs=[], outputs=output_h
+    )
+
     # Calculate specific k for ARL_0
     button_calculate_k.click(
-        fn=calculate_reference_value_k, inputs=[h_phase1, arl_0], outputs=[output_k, k_phase1, k_phase2]
+        fn=calculate_reference_value_k,
+        inputs=[h_phase1, arl_0],
+        outputs=[output_k, k_phase1, k_phase2, h_phase2],
     )
     button_calculate_k.click(
         fn=lambda: gr.update(visible=True), inputs=[], outputs=output_k
