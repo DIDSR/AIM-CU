@@ -312,6 +312,7 @@ with gr.Blocks(
                 )
 
                 # example: if std_in=0.03 and shift in mean (in original data)=0.045, then the value that the user enter will be 0.045/0.03=1.5
+                # Shift in mean value is the absolute differece of in-control mean and test mean
                 mu1 = gr.Textbox(
                     label="Shift in mean value (expressed in term of in-control standard deviation) =",
                     placeholder="Shift in mean value",
