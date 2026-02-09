@@ -214,14 +214,14 @@ class CUSUM:
             self.S_lo[S_lo_start_of_change + 10] > self.H
         ):  # check if the changes in the next 10 observations exceed the threshold
             print(
-                f"Change-point with respect to S_lo is: {S_lo_start_of_change}"
+                f"Detected change point with respect to S_lo is: {S_lo_start_of_change}"
             )  # Use this change-point to generate histograms
             self.pre_change_days = S_lo_start_of_change
 
         elif (S_hi_start_of_change < S_lo_start_of_change) and (
             self.S_hi[S_hi_start_of_change + 10] > self.H
         ):
-            print(f"Change-point with respect to S_hi is: {S_hi_start_of_change}")
+            print(f"Detected change point with respect to S_hi is: {S_hi_start_of_change}")
             self.pre_change_days = S_hi_start_of_change
         else:
             print(f"No change")
@@ -413,7 +413,7 @@ class CUSUM:
                 x=[self.pre_change_days, self.pre_change_days],
                 y=[np.min(self.data), np.max(self.data)],
                 mode="lines",
-                name="Change-point",
+                name="Detected change point",
                 line=dict(color="grey", dash="dash"),
                 # textfont=dict(size=18)
             ),
