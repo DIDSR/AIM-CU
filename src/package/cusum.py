@@ -381,7 +381,7 @@ class CUSUM:
                 x=x2,
                 y=y2,
                 mode="markers",
-                name=f"""Out-of-control data""",
+                name=f"""Test data""",
                 marker=dict(color="coral", size=10),
                 opacity=0.4,
             ),
@@ -402,7 +402,7 @@ class CUSUM:
                 x=[min(x2), max(x2)],
                 y=[mean_y2, mean_y2],
                 mode="lines",
-                name="Out-of-control mean",
+                name="Test mean",
                 line=dict(color="coral", dash="dash"),
             ),
         )
@@ -421,7 +421,7 @@ class CUSUM:
 
         fig.update_layout(
             title={
-                "text": "Pre- and post-change observations",
+                "text": "AI model metric versus time",
                 "font": {"size": font_size_title, "weight": "bold"},
             },
             xaxis_title={
