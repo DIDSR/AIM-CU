@@ -339,10 +339,6 @@ with gr.Blocks(
                 - Enter h and k values.
                 - Get CUSUM plots.
                 """)  # noqa: F541
-
-            table_param_description = gr.Dataframe(
-                value=pd.read_csv("../../assets/params.csv")
-            )
         with gr.Column():
             gr.Markdown(f"""
                         ### Monitoring:
@@ -374,6 +370,11 @@ with gr.Blocks(
                 label="AI model performance",
                 visible=False,
             )
+
+    with gr.Row():
+        table_param_description = gr.Dataframe(
+            value=pd.read_csv("../../assets/params.csv"),
+        )
 
     button_calculate_incontrol_params.click(
         fn=set_init_days,
