@@ -368,11 +368,12 @@ with gr.Blocks(
 
             button_csv_metric = gr.Button("Show CUSUM plots")
 
+            plot_cusum_chart = gr.Plot(label="CUSUM Chart", visible=False)
+
             plot_avg_metric = gr.Plot(
                 label="AI model performance",
                 visible=False,
             )
-            plot_cusum_chart = gr.Plot(label="CUSUM Chart", visible=False)
 
     button_calculate_incontrol_params.click(
         fn=set_init_days,
