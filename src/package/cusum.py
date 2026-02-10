@@ -348,7 +348,7 @@ class CUSUM:
         fig = go.Figure()
 
         font_size_title = 20
-        font_size_legend = 18
+        font_size_legend = 14
 
         # add subplots
         fig.add_trace(
@@ -400,7 +400,6 @@ class CUSUM:
                 mode="lines",
                 name="Detected change point",
                 line=dict(color="grey", dash="dash"),
-                # textfont=dict(size=18)
             ),
         )
 
@@ -408,6 +407,10 @@ class CUSUM:
             title={
                 "text": "AI model metric versus time",
                 "font": {"size": font_size_title, "weight": "bold"},
+                "x": 0.5,
+                "xanchor": "center",
+                "y": 0.98,
+                "yanchor": "top"
             },
             xaxis_title={
                 "text": "Time",
@@ -418,12 +421,24 @@ class CUSUM:
                 "font": {"size": font_size_legend, "weight": "bold"},
             },
             xaxis=dict(dtick=20),
+            autosize=True,
+            margin=dict(l=60, r=50, t=50, b=50),
         )
 
         fig.update_layout(plot_bgcolor=self.config["color"]["blue_005"])
 
         fig.update_layout(
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+            legend=dict(
+                orientation="h",
+                yanchor="bottom",
+                y=1.02,
+                xanchor="center",
+                x=0.5,
+                font=dict(size=14),
+                bgcolor="rgba(255, 255, 255, 0.9)",
+                bordercolor="rgba(0, 124, 186, 0.5)",
+                borderwidth=1
+            )
         )
 
         if self.config["control"]["save_figure"] == "true":
@@ -462,7 +477,7 @@ class CUSUM:
         fig = go.Figure()
 
         font_size_title = 20
-        font_size_legend = 18
+        font_size_legend = 14
 
         fig.add_trace(
             go.Scatter(
@@ -498,6 +513,10 @@ class CUSUM:
             title={
                 "text": "CUSUM Chart",
                 "font": {"size": font_size_title, "weight": "bold"},
+                "x": 0.5,
+                "xanchor": "center",
+                "y": 0.98,
+                "yanchor": "top"
             },
             xaxis_title={
                 "text": "Time",
@@ -508,8 +527,9 @@ class CUSUM:
                 "font": {"size": font_size_legend, "weight": "bold"},
             },
             xaxis=dict(dtick=20),
+            autosize=True,
+            margin=dict(l=60, r=50, t=50, b=50),  # Increased bottom margin for legend
         )
-
 
         fig.add_shape(
             type="rect",
@@ -534,7 +554,17 @@ class CUSUM:
         )
 
         fig.update_layout(
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+            legend=dict(
+                orientation="h",
+                yanchor="bottom",
+                y=1.02,
+                xanchor="center",
+                x=0.5,
+                font=dict(size=14),
+                bgcolor="rgba(255, 255, 255, 0.9)",
+                bordercolor="rgba(0, 124, 186, 0.5)",
+                borderwidth=1
+            )
         )
 
         if self.config["control"]["save_figure"] == "true":

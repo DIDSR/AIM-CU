@@ -267,7 +267,7 @@ with gr.Blocks(
                         h_phase1 = gr.Textbox(
                             label="h value =",
                             placeholder="h = normalized threshold, default = 4. Range: between 4 and 5 ([4, 5])",
-                            value="3",
+                            value="4",
                             autofocus=True,
                         )
 
