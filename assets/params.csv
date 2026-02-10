@@ -1,8 +1,8 @@
 Parameter,Description
 μ_in,"The mean of the performance metric when the process is in-control, i.e., when there is no performance drift"
-ARL_0,Expected number of days before the control chart signals a false detection
+ARL₀,Expected number of days before the control chart signals a false detection
 σ_in,The in-control standard deviation of the metric
-ARL_1,Expected number of days before the control chart signals a true detection
+ARL₁,Expected number of days before the control chart signals a true detection
 k,"The normalized reference value, which is related to the magnitude of change that one is interested in detecting. k = 0.5 is the default choice for detecting a unit standard deviation change"
 S_hi,Cumulative sum of positive changes in the metric
 h,The normalized threshold or control limit (default =4). This threshold determines when the control chart signals a detection

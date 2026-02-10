@@ -272,7 +272,7 @@ with gr.Blocks(
                         )
 
                         arl_0 = gr.Textbox(
-                            label="ARL_0 value =", placeholder="ARL_0", value="100"
+                            label="ARL₀ value =", placeholder="ARL₀", value="100"
                         )
 
                         button_calculate_k = gr.Button("Calculate k")
@@ -289,7 +289,7 @@ with gr.Blocks(
                             label="k value =", placeholder="k", value="0.5"
                         )
                         arl_0_for_h = gr.Textbox(
-                            label="ARL_0 value =", placeholder="ARL_0", value="100"
+                            label="ARL₀ value =", placeholder="ARL₀", value="100"
                         )
 
                         button_calculate_h = gr.Button("Calculate h")
@@ -297,7 +297,7 @@ with gr.Blocks(
                         output_h = gr.Textbox(label="Calculated h =", visible=False)
 
             dataframe_gt_ARL0 = gr.HTML(
-                label="Estimate of steady state ARL (ARL_1 based on the computed reference values and intended zero-state ARL (ARL_0) with normalized threshold h)",
+                label="Estimate of steady state ARL (ARL₁ based on the computed reference values and intended zero-state ARL (ARL₀) with normalized threshold h)",
                 show_label=True,
                 visible=False,
             )
@@ -319,12 +319,12 @@ with gr.Blocks(
                     value="1.2",
                 )
 
-                button_calculate_ARL_1 = gr.Button("Calculate ARL_1")
+                button_calculate_ARL_1 = gr.Button("Calculate ARL₁")
 
-                output_ARL_1 = gr.Textbox(label="Calculated ARL_1 =", visible=False)
+                output_ARL_1 = gr.Textbox(label="Calculated ARL₁ =", visible=False)
 
             button_populate_table = gr.Button(
-                "Populate Reference Values and ARL_1 tables for the given h value"
+                "Populate Reference Values and ARL₁ tables for the given h value"
             )
 
             gr.Markdown(f"""
