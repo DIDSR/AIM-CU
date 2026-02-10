@@ -197,7 +197,7 @@ with gr.Blocks(
 
     gr.Markdown(f"""
                 ### AIM-CU Input:
-                AI output (e.g. metrics such as Accuracy, F1-score, Sensitivity etc.)
+                AI output metric (e.g. AUROC, F1-score, Sensitivity, Test Positive Rate, etc.)
                 """)  # noqa: F541
 
     with gr.Row():
@@ -207,7 +207,7 @@ with gr.Blocks(
                         """)  # noqa: F541
 
             gr.Markdown(f"""
-                ### Upload the AI output.
+                ### Upload the AI output metric.
                 """)  # noqa: F541
 
             # load the CSV file with specifities across days

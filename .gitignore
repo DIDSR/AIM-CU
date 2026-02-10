@@ -168,3 +168,8 @@ cython_debug/
 # docs/build/doctrees/
 # docs/build/latex/*
 # !docs/build/latex/aim-cu.pdf
+
+# temp
+repo_dump.py
+*ipynb
+/docs
