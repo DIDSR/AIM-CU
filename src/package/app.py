@@ -353,7 +353,7 @@ with gr.Blocks(
                 h_phase2 = gr.Textbox(
                     label="h value =",
                     placeholder="normalized threshold, default = 4. Range: between 4 and 5 ([4, 5])",
-                    value="3",
+                    value="4",
                 )
 
                 k_phase2 = gr.Textbox(
