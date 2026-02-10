@@ -171,7 +171,7 @@ class CUSUM:
             normalized_ref_value (float, optional): Normalized reference value for detecting a unit standard deviation change in mean of the process. Defaults to 0.5.
             normalized_threshold (float, optional): Normalized threshold. Defaults to 4.
         """
-        self.pre_change_days = self.init_days  # This is the number of baseline observations that we assume to be in-control - user enters or default = 30
+        self.pre_change_days = None # self.init_days  # This is the number of baseline observations that we assume to be in-control - user enters or default = 30
 
         control_limit = normalized_threshold
 
@@ -194,73 +194,58 @@ class CUSUM:
         # Call compute CUSUM function with x (observatoins), in-control mean (mu) and ref_val (drift or reference value)
         self.S_hi, self.S_lo, cusum = self.compute_cusum(x, self.in_mu, ref_val)
 
-        # Check the variations in self.S_hi and self.S_lo to determine whether there was a change in the data
-        S_hi_last_known_zero = np.where(self.S_hi == 0)[
-            0
-        ]  # Find all the indices where self.S_hi was 0
-        S_hi_start_of_change = (
-            S_hi_last_known_zero[-1] + 1
-        )  # Fetch the last entry where self.S_hi was 0
+        # # Check the variations in self.S_hi and self.S_lo to determine whether there was a change in the data
+        # S_hi_last_known_zero = np.where(self.S_hi == 0)[
+        #     0
+        # ]  # Find all the indices where self.S_hi was 0
+        # S_hi_start_of_change = (
+        #     S_hi_last_known_zero[-1] + 1
+        # )  # Fetch the last entry where self.S_hi was 0
 
-        S_lo_last_known_zero = np.where(self.S_lo == 0)[
-            0
-        ]  # Find all the indices where self.S_lo was 0
-        S_lo_start_of_change = (
-            S_lo_last_known_zero[-1] + 1
-        )  # Fetch the last entry where self.S_lo was 0
+        # S_lo_last_known_zero = np.where(self.S_lo == 0)[
+        #     0
+        # ]  # Find all the indices where self.S_lo was 0
+        # S_lo_start_of_change = (
+        #     S_lo_last_known_zero[-1] + 1
+        # )  # Fetch the last entry where self.S_lo was 0
 
-        # Display the print messages in the UI
-        if (S_lo_start_of_change < S_hi_start_of_change) and (
-            self.S_lo[S_lo_start_of_change + 10] > self.H
-        ):  # check if the changes in the next 10 observations exceed the threshold
-            print(
-                f"Detected change point with respect to S_lo is: {S_lo_start_of_change}"
-            )  # Use this change-point to generate histograms
-            self.pre_change_days = S_lo_start_of_change
+        # # Display the print messages in the UI
+        # if (S_lo_start_of_change < S_hi_start_of_change) and (
+        #     self.S_lo[S_lo_start_of_change + 10] > self.H
+        # ):  # check if the changes in the next 10 observations exceed the threshold
+        #     print(
+        #         f"Detected change point with respect to S_lo is: {S_lo_start_of_change}"
+        #     )  # Use this change-point to generate histograms
+        #     self.pre_change_days = S_lo_start_of_change
 
-        elif (S_hi_start_of_change < S_lo_start_of_change) and (
-            self.S_hi[S_hi_start_of_change + 10] > self.H
-        ):
-            print(f"Detected change point with respect to S_hi is: {S_hi_start_of_change}")
-            self.pre_change_days = S_hi_start_of_change
+        # elif (S_hi_start_of_change < S_lo_start_of_change) and (
+        #     self.S_hi[S_hi_start_of_change + 10] > self.H
+        # ):
+        #     print(f"Detected change point with respect to S_hi is: {S_hi_start_of_change}")
+        #     self.pre_change_days = S_hi_start_of_change
+        # else:
+        #     print(f"No change")
+
+        # Find first occurrence where threshold is exceeded
+        S_hi_exceeds = np.where(self.S_hi > self.H)[0]
+        S_lo_exceeds = np.where(self.S_lo > self.H)[0]
+
+        # Take whichever comes first
+        if len(S_hi_exceeds) > 0 and len(S_lo_exceeds) > 0:
+            if S_hi_exceeds[0] < S_lo_exceeds[0]:
+                self.pre_change_days = S_hi_exceeds[0]
+                print(f"(both exceed threshold) Detected upward shift at: {S_hi_exceeds[0]}")
+            else:
+                self.pre_change_days = S_lo_exceeds[0]
+                print(f"(both exceed threshold) Detected downward shift at: {S_lo_exceeds[0]}")
+        elif len(S_hi_exceeds) > 0:
+            self.pre_change_days = S_hi_exceeds[0]
+            print(f"Detected upward shift at: {S_hi_exceeds[0]}")
+        elif len(S_lo_exceeds) > 0:
+            self.pre_change_days = S_lo_exceeds[0]
+            print(f"Detected downward shift at: {S_lo_exceeds[0]}")
         else:
-            print(f"No change")
-
-        # False positives and Total alarms
-        falsePos = 0
-        alarms = 0
-        avddd = 0  # this is the delay from the paper: td-ts (z_k-v) where v is the changepoint and z_k is the time of detection
-
-        for i in range(0, self.pre_change_days):
-            if (self.S_hi[i] > self.H) or (self.S_lo[i] > self.H):
-                falsePos += 1  # False Positives
-                DetectionTimes = np.append(
-                    DetectionTimes, i + 1
-                )  # time at which a false positive is detected
-                Dj = np.append(Dj, 1)
-                Zj = np.append(Zj, min(i, self.pre_change_days))
-                break
-
-        # If there is no false positive, Zj = pre_change_days, Dj = 0
-        if falsePos == 0:
-            Dj = np.append(Dj, 0)
-            Zj = np.append(Zj, self.pre_change_days)
-
-        # Delay to detect the first changepoint
-        # delay = 0
-        for i in range(self.pre_change_days, self.total_days):
-            if (self.S_hi[i] > self.H) or (self.S_lo[i] > self.H):
-                alarms += 1  # True Positive: break after detecting one TP
-                cj = np.append(cj, 1)
-                zj = np.append(zj, min(i, self.total_days) - self.pre_change_days)
-                break
-
-        # If there is no true detection, zj = total simulation days, cj = 0
-        if alarms == 0:
-            cj = np.append(cj, 0)
-            zj = np.append(zj, self.total_days)
-
-        self.AvgDD = np.append(self.AvgDD, avddd)  # ADD estimate from the paper
+            print("No change detected")
 
     def plot_input_metric_plotly_raw(self) -> go.Figure:
         """
