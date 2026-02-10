@@ -104,7 +104,7 @@ def calculate_reference_value_k(h: str, arl_0: str) -> tuple[str, str, str, str]
     k = get_ref_value_k(h=h, ARL_0=arl_0)
     k = "{:.2f}".format(k)
 
-    return k, k, k, h
+    return k, k, k, h, h
 
 
 def calculate_threshold_h(k: str, arl_0: str) -> tuple[str, str, str, str]:
@@ -124,7 +124,7 @@ def calculate_threshold_h(k: str, arl_0: str) -> tuple[str, str, str, str]:
     h = get_threshold_h(k=k_val, ARL_0=arl_0)
     h = "{:.2f}".format(h)
 
-    return h, h, h, k
+    return h, h, h, k, h
 
 
 def calculate_arl1_h_k_mu1(h: str, k: str, mu1: str) -> float:
@@ -258,7 +258,7 @@ with gr.Blocks(
                 """)  # noqa: F541
 
             with gr.Tabs():
-                with gr.Tab("Calculate k from h"):
+                with gr.Tab("Specify h first"):
                     gr.Markdown(f"""
                         Calculate reference value k for specific values of h and ARL<sub>0</sub>:
                         """)  # noqa: F541
@@ -279,7 +279,7 @@ with gr.Blocks(
 
                         output_k = gr.Textbox(label="Calculated k =", visible=False)
 
-                with gr.Tab("Calculate h from k"):
+                with gr.Tab("Specify k first"):
                     gr.Markdown(f"""
                         Calculate threshold h for specific values of k and ARL<sub>0</sub>:
                         """)  # noqa: F541
@@ -303,10 +303,14 @@ with gr.Blocks(
             )
 
             gr.Markdown(f"""
-                ### Calculate ARL<sub>1</sub> for reference value h, value k and shift in mean:
+                ### Calculate ARL<sub>1</sub> for threshold h, reference value k, and shift in mean:
                 """)  # noqa: F541
 
             with gr.Row():
+                h_for_arl1 = gr.Textbox(
+                    label="h value =", placeholder="h", value="4"
+                )
+
                 k_phase1 = gr.Textbox(
                     label="k value =", placeholder="k", value="0.2996"
                 )
@@ -403,7 +407,7 @@ with gr.Blocks(
     button_calculate_h.click(
         fn=calculate_threshold_h,
         inputs=[k_for_h, arl_0_for_h],
-        outputs=[output_h, h_phase1, h_phase2, k_phase2],
+        outputs=[output_h, h_phase1, h_phase2, k_phase2, h_for_arl1],
     )
     button_calculate_h.click(
         fn=lambda: gr.update(visible=True), inputs=[], outputs=output_h
@@ -413,7 +417,7 @@ with gr.Blocks(
     button_calculate_k.click(
         fn=calculate_reference_value_k,
         inputs=[h_phase1, arl_0],
-        outputs=[output_k, k_phase1, k_phase2, h_phase2],
+        outputs=[output_k, k_phase1, k_phase2, h_phase2, h_for_arl1],
     )
     button_calculate_k.click(
         fn=lambda: gr.update(visible=True), inputs=[], outputs=output_k
@@ -422,7 +426,7 @@ with gr.Blocks(
     # Calculate specific ARL_1 for value h, value k and shift in mean
     button_calculate_ARL_1.click(
         fn=calculate_arl1_h_k_mu1,
-        inputs=[h_phase1, k_phase1, mu1],
+        inputs=[h_for_arl1, k_phase1, mu1],
         outputs=[output_ARL_1],
     )
     button_calculate_ARL_1.click(
