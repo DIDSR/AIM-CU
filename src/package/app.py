@@ -258,6 +258,23 @@ with gr.Blocks(
                 """)  # noqa: F541
 
             with gr.Tabs():
+                with gr.Tab("Specify k first"):
+                    gr.Markdown(f"""
+                        Calculate threshold h for specific values of k and ARL<sub>0</sub>:
+                        """)  # noqa: F541
+
+                    with gr.Row():
+                        k_for_h = gr.Textbox(
+                            label="k value =", placeholder="k", value="0.5"
+                        )
+                        arl_0_for_h = gr.Textbox(
+                            label="ARL₀ value =", placeholder="ARL₀", value="100"
+                        )
+
+                        button_calculate_h = gr.Button("Calculate h")
+
+                        output_h = gr.Textbox(label="Calculated h =", visible=False)
+
                 with gr.Tab("Specify h first"):
                     gr.Markdown(f"""
                         Calculate reference value k for specific values of h and ARL<sub>0</sub>:
@@ -278,23 +295,6 @@ with gr.Blocks(
                         button_calculate_k = gr.Button("Calculate k")
 
                         output_k = gr.Textbox(label="Calculated k =", visible=False)
-
-                with gr.Tab("Specify k first"):
-                    gr.Markdown(f"""
-                        Calculate threshold h for specific values of k and ARL<sub>0</sub>:
-                        """)  # noqa: F541
-
-                    with gr.Row():
-                        k_for_h = gr.Textbox(
-                            label="k value =", placeholder="k", value="0.5"
-                        )
-                        arl_0_for_h = gr.Textbox(
-                            label="ARL₀ value =", placeholder="ARL₀", value="100"
-                        )
-
-                        button_calculate_h = gr.Button("Calculate h")
-
-                        output_h = gr.Textbox(label="Calculated h =", visible=False)
 
             dataframe_gt_ARL0 = gr.HTML(
                 label="Estimate of steady state ARL (ARL₁ based on the computed reference values and intended zero-state ARL (ARL₀) with normalized threshold h)",
