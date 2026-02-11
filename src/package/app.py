@@ -124,7 +124,7 @@ def calculate_threshold_h(k: str, arl_0: str) -> tuple[str, str, str, str]:
     h = get_threshold_h(k=k_val, ARL_0=arl_0)
     h = "{:.2f}".format(h)
 
-    return h, h, h, k, h
+    return h, h, h, k, h, k
 
 
 def calculate_arl1_h_k_mu1(h: str, k: str, mu1: str) -> float:
@@ -407,7 +407,7 @@ with gr.Blocks(
     button_calculate_h.click(
         fn=calculate_threshold_h,
         inputs=[k_for_h, arl_0_for_h],
-        outputs=[output_h, h_phase1, h_phase2, k_phase2, h_for_arl1],
+        outputs=[output_h, h_phase1, h_phase2, k_phase2, h_for_arl1, k_phase1],
     )
     button_calculate_h.click(
         fn=lambda: gr.update(visible=True), inputs=[], outputs=output_h
