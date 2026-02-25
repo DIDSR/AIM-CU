@@ -170,7 +170,4 @@ cython_debug/
 # !docs/build/latex/aim-cu.pdf
 
 # temp
-repo_dump.py
-*ipynb
-/docs
 /temp
