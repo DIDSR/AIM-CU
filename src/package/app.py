@@ -40,8 +40,30 @@ def set_init_days(
         tuple[float, float, go.Figure]: In-control mean and standard deviation, and observation data plot.
     """
     init_days = int(init_days)
-
-    data_csv_metric = pd.read_csv(file_csv_metric.name)
+    
+    if file_csv_metric is None:
+        raise ValueError("Please upload a CSV file first")
+    
+    # Extract file path - Gradio stores it in the 'value' attribute
+    file_path = None
+    
+    # Try different attributes in order of likelihood
+    for attr in ['value', 'path', 'name']:
+        if hasattr(file_csv_metric, attr):
+            potential_path = getattr(file_csv_metric, attr)
+            if potential_path and os.path.isfile(str(potential_path)):
+                file_path = potential_path
+                break
+    
+    # If it's a string directly
+    if file_path is None and isinstance(file_csv_metric, str):
+        if os.path.isfile(file_csv_metric):
+            file_path = file_csv_metric
+    
+    if file_path is None:
+        raise ValueError(f"Could not find valid file path. Received: {file_csv_metric}")
+    
+    data_csv_metric = pd.read_csv(file_path)
     obj_cusum.set_df_metric_csv(data_csv_metric)
 
     obj_cusum.set_init_stats(init_days=init_days)
