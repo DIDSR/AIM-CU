@@ -2,15 +2,15 @@
 #  python test_aim_cu.py --csv /scratch/smriti.prathapan/fromOHPC/note1/AIM-CU-package/spec-60-60.csv  --norm_h 5
 
 import argparse
-import numpy as np
+# import numpy as np
 import pandas as pd
 import warnings
 warnings.simplefilter("ignore")
 import aim_cu
-import matplotlib
-from collections import OrderedDict
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
+# import matplotlib
+# from collections import OrderedDict
+# matplotlib.use("Agg")
+# import matplotlib.pyplot as plt
 
 def main():
     parser = argparse.ArgumentParser()

@@ -11,7 +11,7 @@ setup(
         "numpy>=1.23",
         "pandas>=1.5",
         "matplotlib>=3.6",
-        "rpy2>=3.5",
+        # "rpy2>=3.5",
         "tomli; python_version<'3.11'",
     ],
     include_package_data=True,
