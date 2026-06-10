@@ -83,9 +83,9 @@ Usability
 
 Related References
 ------------------
-* Smriti Prathapan, Ravi K. Samala, Nathan Hadjiyski, Pierre‑François D’Haese, Nicholas Petrick, Jana Delfino, Fabien Maldonado, Brandon Nelson, Ghada Zamzmi, Phuong Nguyen, Yelena Yesha, and Berkman Sahiner, "Detecting performance drift in AI models for medical image analysis using CUSUM chart" (Journal Draft in-progress 2025)
+* Smriti Prathapan, Ravi K. Samala, Nathan Hadjiyski, Pierre‑François D’Haese, Nicholas Petrick, Jana Delfino, Fabien Maldonado, Brandon Nelson, Ghada Zamzmi, Phuong Nguyen, Yelena Yesha, and Berkman Sahiner, "Detecting performance drift in AI models for medical image analysis using CUSUM chart" (Journal in press 2026)
 
-* Prathapan, S., Sahiner, B.,  Kadia, D., and Samala, R.K. 2025, "AIM-CU: A statistical tool for AI Monitoring." (Journal Draft in-progress 2025)
+* Prathapan, S., Sahiner, B.,  Kadia, D., and Samala, R.K. 2025, "AIM-CU: A statistical tool for AI Monitoring." (Journal in-press 2026)
 
 * Prathapan, S., Samala, R.K., Hadjiyski, N., D’Haese, P.F., Maldonado, F., Nguyen, P., Yesha, Y. and Sahiner, B., 2024, April. Quantifying input data drift in medical machine learning models by detecting change-points in time-series data. In Medical Imaging 2024: Computer-Aided Diagnosis (Vol. 12927, pp. 67-76). SPIE. https://doi.org/10.1117/12.3008771
 
