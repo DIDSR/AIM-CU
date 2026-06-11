@@ -6,7 +6,7 @@ long_description = (this_dir / "aim_cu" / "README.rst").read_text(encoding="utf-
 
 setup(
     name="aim-cu",
-    version="0.2.0",
+    version="0.2.1",
     description="AIM-CU: A CUSUM-based tool for AI Monitoring",
     long_description=long_description,
     long_description_content_type="text/x-rst",
