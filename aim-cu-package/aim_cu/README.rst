@@ -63,18 +63,6 @@ Demo
 ----
 AIM-CU can also be run through the demo available at https://huggingface.co/spaces/didsr/AIM-CU. If Space is paused, click on Restart button. Note: this Space uses a custom Docker container; build may break due to latest package updates pulled by HuggingFace.
 
-Usability
----------
-* Example AI output CSV file is available as `config/spec-60-60.csv <config/spec-60-60.csv>`_ to be uploaded in monitoring phase.
-
-* Workflow instruction to run the tool is available at bottom-left of UI.
-
-* Sample UI output is available at `assets/ui.png <assets/ui.png>`_.
-
-* Setting ``control:save_figure`` to ``true`` from `config.toml <config/config.toml>`_ will save tables and plots in `figure/ <figure/>`_.
-
-* Running AIM-CU usually only takes a few seconds, and it does not require a GPU to run.
-
 Related References
 ------------------
 * Smriti Prathapan, Ravi K. Samala, Nathan Hadjiyski, Pierre‑François D’Haese, Nicholas Petrick, Jana Delfino, Fabien Maldonado, Brandon Nelson, Ghada Zamzmi, Phuong Nguyen, Yelena Yesha, and Berkman Sahiner, "Detecting performance drift in AI models for medical image analysis using CUSUM chart" (Journal in press 2026)
