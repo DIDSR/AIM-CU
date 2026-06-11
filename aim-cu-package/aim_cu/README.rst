@@ -1,5 +1,5 @@
 AIM-CU: A CUSUM-based tool for AI Monitoring
-======
+============================================
 Monitoring a clinically deployed AI device to detect performance drift is an essential step to ensure the safety and effectiveness of AI. 
 
 AIM-CU is a statistical tool for AI monitoring based on a cumulative sum (AIM-CU) approach.
