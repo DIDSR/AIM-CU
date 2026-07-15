@@ -83,7 +83,7 @@ Usability
 
 Related References
 ------------------
-* Smriti Prathapan, Ravi K. Samala, Nathan Hadjiyski, Pierre‑François D’Haese, Nicholas Petrick, Jana Delfino, Fabien Maldonado, Brandon Nelson, Ghada Zamzmi, Phuong Nguyen, Yelena Yesha, and Berkman Sahiner, "Detecting performance drift in AI models for medical image analysis using CUSUM chart" (Journal in press 2026)
+* Prathapan, S., Samala, R., Hadjiyski, N. et al. Detecting Performance Drift in AI Models for Medical Image Analysis Using CUSUM Chart. J Digit Imaging. Inform. med. (2026). https://doi.org/10.1007/s10278-026-02113-9
 
 * Prathapan, S., Sahiner, B.,  Kadia, D., and Samala, R.K. 2025, "AIM-CU: A statistical tool for AI Monitoring." (Journal in-press 2026)
 
