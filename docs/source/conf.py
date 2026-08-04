@@ -59,4 +59,15 @@ latex_elements = {
     \DeclareUnicodeCharacter{03C3}{\ensuremath{\sigma}}
     ''',
     'classoptions': ',oneside',
+    "preamble": r"""
+    \usepackage{newunicodechar}
+    \newunicodechar{μ}{\ensuremath{\mu}}
+    \newunicodechar{σ}{\ensuremath{\sigma}}
+    \newunicodechar{ᵢ}{\textsubscript{i}}
+    \newunicodechar{ₙ}{\textsubscript{n}}
+    \newunicodechar{₀}{\textsubscript{0}}
+    \newunicodechar{₁}{\textsubscript{1}}
+    \newunicodechar{ₕ}{\textsubscript{h}}
+    \newunicodechar{ₗ}{\textsubscript{l}}
+    """
 }

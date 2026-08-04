@@ -62,12 +62,19 @@
 \setcounter{tocdepth}{1}
 
 
-    \DeclareUnicodeCharacter{03BC}{\textmu}
-    \DeclareUnicodeCharacter{03C3}{\ensuremath{\sigma}}
+    \usepackage{newunicodechar}
+    \newunicodechar{μ}{\ensuremath{\mu}}
+    \newunicodechar{σ}{\ensuremath{\sigma}}
+    \newunicodechar{ᵢ}{\textsubscript{i}}
+    \newunicodechar{ₙ}{\textsubscript{n}}
+    \newunicodechar{₀}{\textsubscript{0}}
+    \newunicodechar{₁}{\textsubscript{1}}
+    \newunicodechar{ₕ}{\textsubscript{h}}
+    \newunicodechar{ₗ}{\textsubscript{l}}
     
 
 \title{AIM\sphinxhyphen{}CU}
-\date{Jul 25, 2025}
+\date{Aug 04, 2026}
 \release{1.0.0}
 \author{Smriti Prathapan, Berkman Sahiner, Dhaval Kadia, Ravi K.\@{} Samala}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -230,31 +237,31 @@ Description
 \sphinxmidrule
 \sphinxtableatstartofbodyhook
 \sphinxAtStartPar
-μ\_in
+μᵢₙ
 &
 \sphinxAtStartPar
 The mean of the performance metric when the process is in\sphinxhyphen{}control, i.e., when there is no performance drift
 \\
 \sphinxhline
 \sphinxAtStartPar
-ARL\_0
+ARL\(\sb{\text{0}}\)
 &
 \sphinxAtStartPar
-Number of observations before the control chart signals a false detection
+Expected number of days before the control chart signals a false detection
 \\
 \sphinxhline
 \sphinxAtStartPar
-σ\_in
+σᵢₙ
 &
 \sphinxAtStartPar
 The in\sphinxhyphen{}control standard deviation of the metric
 \\
 \sphinxhline
 \sphinxAtStartPar
-ARL\_1
+ARL\(\sb{\text{1}}\)
 &
 \sphinxAtStartPar
-Number of observations before the control chart signals a true detection
+Expected number of days before the control chart signals a true detection
 \\
 \sphinxhline
 \sphinxAtStartPar
@@ -265,7 +272,7 @@ The normalized reference value, which is related to the magnitude of change that
 \\
 \sphinxhline
 \sphinxAtStartPar
-S\_hi
+Sₕᵢ
 &
 \sphinxAtStartPar
 Cumulative sum of positive changes in the metric
@@ -275,11 +282,11 @@ Cumulative sum of positive changes in the metric
 h
 &
 \sphinxAtStartPar
-The normalized threshold or control limit (default =4). This threshold determines when the control chart signals a detection
+The normalized threshold or control limit (default = 4). This threshold determines when the control chart signals a detection
 \\
 \sphinxhline
 \sphinxAtStartPar
-S\_lo
+Sₗₒ
 &
 \sphinxAtStartPar
 Cumulative sum of negative changes in the metric
@@ -371,7 +378,7 @@ Detects a change in the process.
 \pysigstartsignatures
 \pysiglinewithargsret
 {\sphinxbfcode{\sphinxupquote{compute\_cusum}}}
-{\sphinxparam{\DUrole{n}{x}\DUrole{p}{:}\DUrole{w}{ }\DUrole{n}{list\DUrole{p}{{[}}float\DUrole{p}{{]}}}}\sphinxparamcomma \sphinxparam{\DUrole{n}{mu\_0}\DUrole{p}{:}\DUrole{w}{ }\DUrole{n}{float}}\sphinxparamcomma \sphinxparam{\DUrole{n}{k}\DUrole{p}{:}\DUrole{w}{ }\DUrole{n}{float}}}
+{\sphinxparam{\DUrole{n}{x}\DUrole{p}{:}\DUrole{w}{ }\DUrole{n}{list\DUrole{p}{{[}}float\DUrole{p}{{]}}}}\sphinxparamcomma \sphinxparam{\DUrole{n}{mu\_0}\DUrole{p}{:}\DUrole{w}{ }\DUrole{n}{float}}\sphinxparamcomma \sphinxparam{\DUrole{n}{ref\_val}\DUrole{p}{:}\DUrole{w}{ }\DUrole{n}{float}}}
 {{ $\rightarrow$ tuple\DUrole{p}{{[}}list\DUrole{p}{{[}}float\DUrole{p}{{]}}\DUrole{p}{,}\DUrole{w}{ }list\DUrole{p}{{[}}float\DUrole{p}{{]}}\DUrole{p}{,}\DUrole{w}{ }list\DUrole{p}{{[}}float\DUrole{p}{{]}}\DUrole{p}{{]}}}}
 \pysigstopsignatures
 \sphinxAtStartPar
@@ -388,7 +395,7 @@ Compute CUSUM for the observations in x
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{k}} (\sphinxstyleliteralemphasis{\sphinxupquote{float}}) \textendash{} Reference value related to the magnitude of change that one is interested in detecting
+\sphinxstyleliteralstrong{\sphinxupquote{ref\_val}} (\sphinxstyleliteralemphasis{\sphinxupquote{float}}) \textendash{} Reference value related to the magnitude of change that one is interested in detecting
 
 \end{itemize}
 
@@ -729,6 +736,42 @@ Calculation for the reference value for given h and ARL\_0.
 \sphinxlineitem{Returns}
 \sphinxAtStartPar
 Normalized reference value k.
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+float
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{get\_threshold\_h() (in module package.ARLTheoretical)@\spxentry{get\_threshold\_h()}\spxextra{in module package.ARLTheoretical}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{ref_theoretical:package.ARLTheoretical.get_threshold_h}}
+\pysigstartsignatures
+\pysiglinewithargsret
+{\sphinxcode{\sphinxupquote{package.ARLTheoretical.}}\sphinxbfcode{\sphinxupquote{get\_threshold\_h}}}
+{\sphinxparam{\DUrole{n}{k}\DUrole{p}{:}\DUrole{w}{ }\DUrole{n}{float}}\sphinxparamcomma \sphinxparam{\DUrole{n}{ARL\_0}\DUrole{p}{:}\DUrole{w}{ }\DUrole{n}{float}}}
+{{ $\rightarrow$ float}}
+\pysigstopsignatures
+\sphinxAtStartPar
+Calculation for the threshold h for given k and ARL\_0.
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{k}} (\sphinxstyleliteralemphasis{\sphinxupquote{float}}) \textendash{} Normalized reference value.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{ARL\_0}} (\sphinxstyleliteralemphasis{\sphinxupquote{float}}) \textendash{} ARL0 value.
+
+\end{itemize}
+
+\sphinxlineitem{Returns}
+\sphinxAtStartPar
+Normalized threshold h.
 
 \sphinxlineitem{Return type}
 \sphinxAtStartPar
