@@ -12,4 +12,5 @@ selenium
 sphinx
 sphinxcontrib-napoleon
 sphinx-simplepdf
+sphinx-tabs
 jupyter
