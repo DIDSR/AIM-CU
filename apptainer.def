@@ -5,10 +5,10 @@ From: ubuntu:24.04
 #     . /app
 
 %environment
-    export PATH="/opt/conda/envs/aimcu1/bin:/opt/conda/bin:$PATH"
-    export CONDA_DEFAULT_ENV="aimcu1"
-    export CONDA_PREFIX="/opt/conda/envs/aimcu1"
-    export R_HOME="/opt/conda/envs/aimcu1/lib/R"
+    export PATH="/opt/conda/envs/aimcu/bin:/opt/conda/bin:$PATH"
+    export CONDA_DEFAULT_ENV="aimcu"
+    export CONDA_PREFIX="/opt/conda/envs/aimcu"
+    export R_HOME="/opt/conda/envs/aimcu/lib/R"
     export LANG=C
     export LC_ALL=C
     export R_LIBS_USER=/tmp/aimcu-r-library
@@ -34,7 +34,7 @@ From: ubuntu:24.04
     . /opt/conda/etc/profile.d/conda.sh
 
     # Create a conda environment
-    conda create -n aimcu1 --override-channels -c conda-forge -y \
+    conda create -n aimcu --override-channels -c conda-forge -y \
         python=3.10 \
         pip \
         r-base \
@@ -46,7 +46,7 @@ From: ubuntu:24.04
         pkg-config \
         zlib
 
-    conda activate aimcu1
+    conda activate aimcu
     export R_HOME="$CONDA_PREFIX/lib/R"
 
     # setup R configs
@@ -75,4 +75,4 @@ From: ubuntu:24.04
     export R_LIBS_USER=/tmp/aimcu-r-library
     mkdir -p "$R_LIBS_USER"
     cd /app/src/package
-    exec /opt/conda/envs/aimcu1/bin/python app.py "$@"
+    exec /opt/conda/envs/aimcu/bin/python app.py "$@"
